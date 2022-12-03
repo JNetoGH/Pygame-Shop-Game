@@ -2,6 +2,7 @@ import pygame
 
 from player import Player
 from settings import *
+from test_obj import TestObj
 
 
 class Level:
@@ -23,6 +24,7 @@ class Level:
 
     def start(self):
         self.player = Player(pygame.math.Vector2(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT), self.all_sprites, self)
+        self.testObj = TestObj(pygame.math.Vector2(700, 300), self.all_sprites, self)
 
     def tick(self):
         for gm in self.all_game_obj:
@@ -35,5 +37,8 @@ class Level:
 
         for gm in self.all_game_obj:
             gm.render()
+
+        for gm in self.all_game_obj:
+            gm.debug_render()
 
 

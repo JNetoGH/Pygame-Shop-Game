@@ -1,10 +1,11 @@
 import pygame
 import numpy
 
-from systems.animation.animation_clip import AnimationClip
-from systems.animation.animation_controller import AnimationController
-from gameobjs.game_obj import GameObject
-from systems.input.input_manager import InputManager
+from _1systems.input.input_manager import InputManager
+from _1systems.time.time import Time
+from _2components.animation.animation_clip import AnimationClip
+from _2components.animation.animation_controller import AnimationController
+from _3gameobjs.game_obj import GameObject
 
 
 class Player(GameObject):
@@ -12,23 +13,28 @@ class Player(GameObject):
         super().__init__(position, group, level)
 
         # movement related
-        self.non_normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
-        self.normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
         self.move_speed = 200
+        self.normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
+        self.non_normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
 
         # animations and controller
-        self.animation_walk_down = AnimationClip("walk_down", "0resources/graphics/character/down_walk")
-        self.animation_walk_right = AnimationClip("walk_right", "0resources/graphics/character/right_walk")
-        self.animation_walk_up = AnimationClip("walk_up", "0resources/graphics/character/up_walk")
-        self.animation_walk_left = AnimationClip("walk_left", "0resources/graphics/character/left_walk")
-        self.animation_controller = AnimationController(self.animation_walk_down)
-        self.animation_controller.add_animation(self.animation_walk_right, self.animation_walk_up, self.animation_walk_left)
+        self.animation_walk_down = AnimationClip("walk_down", "_0resources/graphics/character/down_walk")
+        self.animation_walk_right = AnimationClip("walk_right", "_0resources/graphics/character/right_walk")
+        self.animation_walk_up = AnimationClip("walk_up", "_0resources/graphics/character/up_walk")
+        self.animation_walk_left = AnimationClip("walk_left", "_0resources/graphics/character/left_walk")
+        self.animation_idle_down = AnimationClip("idle_down", "_0resources/graphics/character/down_idle")
+        self.animation_idle_right = AnimationClip("idle_right", "_0resources/graphics/character/right_idle")
+        self.animation_idle_up = AnimationClip("idle_up", "_0resources/graphics/character/up_idle")
+        self.animation_idle_left = AnimationClip("idle_left", "_0resources/graphics/character/left_idle")
+        # animation controller
+        animation_clips = [self.animation_walk_right, self.animation_walk_up, self.animation_walk_left, self.animation_walk_down]
+        self.animation_controller = AnimationController(animation_clips, self)
+        self.animation_controller.add_animation(self.animation_idle_right, self.animation_idle_up, self.animation_idle_left, self.animation_idle_down)
 
         # the image itself
-        self.image = self.animation_walk_right.images[0]
-
-        # the rectangle that represent the game object: the center pos of the rect is the same of the player pos
-        self.rect = self.image.get_rect(center=self.position)
+        self.image = self.animation_idle_down.images[0]
+        # the rectangle that carries: the center pos of the rect is the same of the player pos
+        self.rect = self.image.get_rect(center=self.transform.position)
 
     def start(self) -> None:
         print("oi")
@@ -37,32 +43,64 @@ class Player(GameObject):
         self.move()
 
     def render(self) -> None:
-        if InputManager.Horizontal_Axis == -1:
-            self.animation_controller.set_current_animation("walk_left")
-        if InputManager.Horizontal_Axis == 1:
-            self.animation_controller.set_current_animation("walk_right")
-        if InputManager.Vertical_Axis == -1:
-            self.animation_controller.set_current_animation("walk_up")
-        if InputManager.Vertical_Axis == 1:
-            self.animation_controller.set_current_animation("walk_down")
-        self.animation_controller.animate(self)
+        super().render()
+        self.animate()
+
+    def animate(self):
+
+        isMoving = not(InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0)
+
+        if isMoving:  # animacoes de cima e baixo tem pioridade sobre as laterais
+            if InputManager.Horizontal_Axis == -1:
+                self.animation_controller.set_current_animation("walk_left")
+            elif InputManager.Horizontal_Axis == 1:
+                self.animation_controller.set_current_animation("walk_right")
+            if InputManager.Vertical_Axis == -1:
+                self.animation_controller.set_current_animation("walk_up")
+            elif InputManager.Vertical_Axis == 1:
+                self.animation_controller.set_current_animation("walk_down")
+        else:
+            if self.animation_controller.current_animation_clip == self.animation_walk_down:
+                self.animation_controller.set_current_animation("idle_down")
+            elif self.animation_controller.current_animation_clip == self.animation_walk_up:
+                self.animation_controller.set_current_animation("idle_up")
+            elif self.animation_controller.current_animation_clip == self.animation_walk_left:
+                self.animation_controller.set_current_animation("idle_left")
+            elif self.animation_controller.current_animation_clip == self.animation_walk_right:
+                self.animation_controller.set_current_animation("idle_right")
+
+        self.animation_controller.animate()
 
     def move(self) -> None:
-        # generates a new move direction and normalizes it
-        self.normalized_direction = pygame.math.Vector2(0, 0)
+        # generates a direction based on players input
         self.non_normalized_direction = pygame.math.Vector2(InputManager.Horizontal_Axis, InputManager.Vertical_Axis)
-        # avoids division by 0 exception: extracts the MAGNITUDE of the non-normalized direction
+        # normalizes the direction, but checks before if the Magnitude is not 0, otherwise it will launch an exception
         if numpy.linalg.norm(self.non_normalized_direction) != 0:
-            # normalizes the new direction
             self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
-        # moves frame-rate independent
-        self.position.x += self.normalized_direction.x * self.move_speed * self.level.game.delta_time
-        self.position.y += self.normalized_direction.y * self.move_speed * self.level.game.delta_time
-        self.rect.center = self.position  # updates the rect position
+        else:
+            self.normalized_direction = pygame.math.Vector2(0, 0)
+
+        # creates a new position with the new direction
+        new_position: pygame.math.Vector2 = self.transform.position
+        new_position.x += self.normalized_direction.x * self.move_speed * Time.DeltaTime
+        new_position.y += self.normalized_direction.y * self.move_speed * Time.DeltaTime
+        self.transform.move_position(new_position)
 
     def get_status(self) -> str:
+
+        in_memory_animation_clips_names = ""
+        for clip in self.animation_controller.animation_clips_list:
+            in_memory_animation_clips_names += clip.name + " "
+
         return f"Index in Level list = {self.get_index_in_level_list()}\n" \
                f"Speed: {self.move_speed}\n" \
-               f"Position: {self.position}\n" \
-               f"Normalized Direction: {self.normalized_direction}, magnitude={numpy.linalg.norm(self.normalized_direction)}\n" \
-               f"Non-Normalized Direction: {self.non_normalized_direction}, magnitude={numpy.linalg.norm(self.non_normalized_direction)}"
+               f"Normalized Direction: {self.normalized_direction}\n" \
+               f"Normalized Direction Magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
+               f"Non-Normalized Direction: {self.non_normalized_direction}\n" \
+               f"Non-Normalized Direction Magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
+               f"\nPlayer's Transform\n" \
+               f"Position: {self.transform.position}\n" \
+               f"\nPlayer's AnimationController\n" \
+               f"Current AnimationClip: {self.animation_controller.current_animation_clip.name}\n" \
+               f"Current AnimationClip's Frame: {int(self.animation_controller.current_frame_index)}\n" \
+               f"AnimationClips in Memory: \n{in_memory_animation_clips_names}"
