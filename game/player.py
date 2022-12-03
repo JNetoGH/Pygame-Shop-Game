@@ -47,9 +47,7 @@ class Player(GameObject):
         self.animate()
 
     def animate(self):
-
         isMoving = not(InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0)
-
         if isMoving:  # animacoes de cima e baixo tem pioridade sobre as laterais
             if InputManager.Horizontal_Axis == -1:
                 self.animation_controller.set_current_animation("walk_left")
@@ -68,7 +66,6 @@ class Player(GameObject):
                 self.animation_controller.set_current_animation("idle_left")
             elif self.animation_controller.current_animation_clip == self.animation_walk_right:
                 self.animation_controller.set_current_animation("idle_right")
-
         self.animation_controller.animate()
 
     def move(self) -> None:

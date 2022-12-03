@@ -28,7 +28,7 @@ class Game:
 
     def print_status(self):
         font = pygame.font.Font('freesansbold.ttf', 15)  # create a text surface object,
-        msgs = "JNETO PRODUCTIONS GAME ENGINE DEBUGGING STATUS\n" + \
+        msgs = "JNETO PRODUCTIONS GAME ENGINE DEBUGGING SYSTEM\n" + \
                "\nTIME\n" + "delta time: " + str(Time.DeltaTime) + "\n" + \
                "\nINPUT MANAGER\n" + InputManager.get_status() + "\n" + \
                "\nPLAYER\n" + self.level.player.get_status()  #  player is 0 in the list of objects as well
