@@ -8,6 +8,8 @@ class GameObject(pygame.sprite.Sprite):
     def __init__(self, level):
         super().__init__(level.all_sprites)
 
+        # when a component is instantiated, it is automatically stored here
+        self.components_list = []
         self.level = level
 
         # sets the transform
@@ -43,4 +45,4 @@ class GameObject(pygame.sprite.Sprite):
 
     def debug_late_render(self) -> None:
         # img rect
-        pygame.draw.rect(Screen.GameScreenSurface, "red", self.rect, 1)
+        pygame.draw.rect(Screen.GameScreenDummySurface, "red", self.rect, 1)

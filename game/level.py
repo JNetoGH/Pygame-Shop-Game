@@ -27,8 +27,8 @@ class Level:
             gm.tick()
 
     def render(self):
-        Screen.GameScreenSurface.fill((0, 0, 0))  # clears the screen for rendering
-        self.all_sprites.draw(Screen.GameScreenSurface)
+        Screen.GameScreenDummySurface.fill((0, 0, 0))  # clears the screen for rendering
+        self.all_sprites.draw(Screen.GameScreenDummySurface)
         self.all_sprites.update()
         for gm in self.all_game_obj:
             gm.render()

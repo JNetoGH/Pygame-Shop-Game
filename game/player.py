@@ -12,7 +12,6 @@ from _3gameobjs.game_obj import GameObject
 class Player(GameObject):
     def __init__(self, level):
         super().__init__(level)
-
         # movement related
         self.move_speed = 200 * Screen.SCALE_FROM_REFERENCE
         self.normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
@@ -31,13 +30,13 @@ class Player(GameObject):
         animation_clips = [self.animation_walk_right, self.animation_walk_up, self.animation_walk_left, self.animation_walk_down]
         self.animation_controller = AnimationController(animation_clips, self)
         self.animation_controller.add_animation(self.animation_idle_right, self.animation_idle_up, self.animation_idle_left, self.animation_idle_down)
-        self.animation_controller.scale_all_animations_of_this_controller(2)
         # the image itself
         self.image = self.animation_idle_down.images[0]
 
 
     def start(self) -> None:
-        print("oi")
+        pass
+
 
     def tick(self) -> None:
         self.move()
@@ -76,7 +75,6 @@ class Player(GameObject):
             self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
         else:
             self.normalized_direction = pygame.Vector2(0, 0)
-
         # creates a new position with the new direction
         new_position: pygame.Vector2 = self.transform.position
         new_position.x += self.normalized_direction.x * self.move_speed * Time.DeltaTime
@@ -87,7 +85,15 @@ class Player(GameObject):
 
         in_memory_animation_clips_names = ""
         for clip in self.animation_controller.animation_clips_list:
-            in_memory_animation_clips_names += clip.name + "/"
+            in_memory_animation_clips_names += clip.name + ", "
+        in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
+        in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
+
+        components_names = ""
+        for component in self.components_list:
+            components_names += type(component).__name__ + ", "
+        components_names = components_names[:-1]
+        components_names = components_names[:-1]
 
         return f"Index in Level list = {self.get_index_in_level_list()}\n" \
                f"Speed: {self.move_speed}\n" \
@@ -95,9 +101,10 @@ class Player(GameObject):
                f"Normalized Direction Magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
                f"Non-Normalized Direction: {self.non_normalized_direction}\n" \
                f"Non-Normalized Direction Magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
+               f"\nPlayer's Components: [{components_names}]\n" \
                f"\nPlayer's Transform\n" \
                f"Position: {self.transform.position}\n" \
                f"\nPlayer's AnimationController\n" \
                f"Current AnimationClip: {self.animation_controller.current_animation_clip.name}\n" \
                f"Current AnimationClip's Frame: {int(self.animation_controller.current_frame_index)}\n" \
-               f"AnimationClips in Memory: \n{in_memory_animation_clips_names}"
+               f"AnimationClips in Memory: [{in_memory_animation_clips_names}]"
