@@ -1,16 +1,13 @@
 import pygame
-
 from player import Player
-from settings import *
+from _1systems.screen.screen import Screen
 from test_obj import TestObj
 
 
 class Level:
     def __init__(self, game):
         self.game = game
-        self.screen = game.screen  # get the display surface for rendering
         self.all_sprites = pygame.sprite.Group()  # sprite group, used to draw then all
-
         """ 
         LIST USED FOR TICKS:
             - I had to call it tick() because pygame is stupid and already has a method called update, used for sprites
@@ -19,7 +16,6 @@ class Level:
               its constructor
         """
         self.all_game_obj = []
-
         self.start()  # called once
 
     def start(self):
@@ -31,14 +27,10 @@ class Level:
             gm.tick()
 
     def render(self):
-        self.screen.fill((0, 0, 0)) # clears the screen
-        self.all_sprites.draw(self.screen)
+        Screen.GameScreenSurface.fill((0, 0, 0))  # clears the screen for rendering
+        self.all_sprites.draw(Screen.GameScreenSurface)
         self.all_sprites.update()
-
         for gm in self.all_game_obj:
             gm.render()
-
         for gm in self.all_game_obj:
-            gm.debug_render()
-
-
+            gm.debug_late_render()

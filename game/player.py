@@ -2,6 +2,7 @@ import pygame
 import numpy
 
 from _1systems.input.input_manager import InputManager
+from _1systems.screen.screen import Screen
 from _1systems.time.time import Time
 from _2components.animation.animation_clip import AnimationClip
 from _2components.animation.animation_controller import AnimationController
@@ -13,7 +14,7 @@ class Player(GameObject):
         super().__init__(level)
 
         # movement related
-        self.move_speed = 200
+        self.move_speed = 200 * Screen.SCALE_FROM_REFERENCE
         self.normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
         self.non_normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
 
@@ -30,7 +31,7 @@ class Player(GameObject):
         animation_clips = [self.animation_walk_right, self.animation_walk_up, self.animation_walk_left, self.animation_walk_down]
         self.animation_controller = AnimationController(animation_clips, self)
         self.animation_controller.add_animation(self.animation_idle_right, self.animation_idle_up, self.animation_idle_left, self.animation_idle_down)
-
+        self.animation_controller.scale_all_animations_of_this_controller(2)
         # the image itself
         self.image = self.animation_idle_down.images[0]
 
