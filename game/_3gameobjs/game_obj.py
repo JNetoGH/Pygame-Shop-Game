@@ -5,8 +5,9 @@ from _2components.transform.transform import Transform
 
 class GameObject(pygame.sprite.Sprite):
 
-    def __init__(self, pos: pygame.math.Vector2, group, level):
-        super().__init__(group)
+    def __init__(self, pos: pygame.Vector2, level):
+        super().__init__(level.all_sprites)
+
         self.level = level
 
         self.transform = Transform(self)

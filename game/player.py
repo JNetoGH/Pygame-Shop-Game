@@ -9,13 +9,13 @@ from _3gameobjs.game_obj import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, position: pygame.math.Vector2, group, level):
-        super().__init__(position, group, level)
+    def __init__(self, position: pygame.Vector2, level):
+        super().__init__(position, level)
 
         # movement related
         self.move_speed = 200
-        self.normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
-        self.non_normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
+        self.normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
+        self.non_normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
 
         # animations and controller
         self.animation_walk_down = AnimationClip("walk_down", "_0resources/graphics/character/down_walk")
@@ -70,15 +70,15 @@ class Player(GameObject):
 
     def move(self) -> None:
         # generates a direction based on players input
-        self.non_normalized_direction = pygame.math.Vector2(InputManager.Horizontal_Axis, InputManager.Vertical_Axis)
+        self.non_normalized_direction = pygame.Vector2(InputManager.Horizontal_Axis, InputManager.Vertical_Axis)
         # normalizes the direction, but checks before if the Magnitude is not 0, otherwise it will launch an exception
         if numpy.linalg.norm(self.non_normalized_direction) != 0:
             self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
         else:
-            self.normalized_direction = pygame.math.Vector2(0, 0)
+            self.normalized_direction = pygame.Vector2(0, 0)
 
         # creates a new position with the new direction
-        new_position: pygame.math.Vector2 = self.transform.position
+        new_position: pygame.Vector2 = self.transform.position
         new_position.x += self.normalized_direction.x * self.move_speed * Time.DeltaTime
         new_position.y += self.normalized_direction.y * self.move_speed * Time.DeltaTime
         self.transform.move_position(new_position)
@@ -87,7 +87,7 @@ class Player(GameObject):
 
         in_memory_animation_clips_names = ""
         for clip in self.animation_controller.animation_clips_list:
-            in_memory_animation_clips_names += clip.name + " "
+            in_memory_animation_clips_names += clip.name + "/"
 
         return f"Index in Level list = {self.get_index_in_level_list()}\n" \
                f"Speed: {self.move_speed}\n" \
