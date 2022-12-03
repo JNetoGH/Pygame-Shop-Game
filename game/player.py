@@ -7,6 +7,38 @@ from systems.input_manager import InputManager
 from os import walk
 
 
+# it's basically a list of images
+class Animation:
+
+    def __init__(self, name: str, folder_path: str):
+        self.name = name
+        self.images = []
+        self.import_images_from_folder(folder_path)
+
+    # imports every image inside a folder
+    def import_images_from_folder(self, folder_path) -> None:
+        surface_list = []
+        print("importing ", end="")
+        for folder_name, sub_folder, img_files_list in walk(folder_path):
+            print(f"{folder_name} => {img_files_list}:")
+            for img_name in img_files_list:
+                img_path = folder_path + "/" + img_name
+                print(f"{img_path}")
+                img_surface = pygame.image.load(img_path).convert_alpha()
+                surface_list.append(img_surface)
+            print()
+        for img in surface_list:
+            self.images.append(img)
+
+    def add_unitary_and_manually(self, image_path) -> None:
+        image_surface = pygame.image.load(image_path).convert_alpha()
+        self.images.append(image_surface)
+
+
+class AnimationController:
+    pass
+
+
 class Player(GameObject):
     def __init__(self, position: pygame.math.Vector2, group, level):
         super().__init__(position, group, level)
@@ -19,12 +51,12 @@ class Player(GameObject):
         # sprites
         # a dictionary that holds all sprites of this GameObject as a list for each position
         self.animations_dictionary = self.import_sprites_as_dictionary()
-        self.animation_status = "down_idle"
-        # the current img of the list of the dictionary
-        self.frame_index = 0
+        self.animation_status = "down"  # the key to a animation list in the dictionary
+        self.current_frame_index = 0  # the current img of the list of the dictionary
+        self.animation_speed = 4
 
         # the image itself
-        self.image = self.animations_dictionary[self.animation_status][self.frame_index]
+        self.image = self.animations_dictionary[self.animation_status][self.current_frame_index]
 
         # the rectangle that represent the game object: the center pos of the rect is the same of the player pos
         self.rect = self.image.get_rect(center=self.position)
@@ -53,8 +85,20 @@ class Player(GameObject):
         self.rect.center = self.position  # updates the rect position
 
     def render(self) -> None:
-        pass
+        self.animate()
 
+        
+    # ANIMATE
+    def animate(self):
+        # jump from frame to frame
+        self.current_frame_index += self.animation_speed * self.level.game.delta_time
+        # sets back to the first frame if it's bigger than the size of the animation
+        if self.current_frame_index >= len(self.animations_dictionary[self.animation_status]):
+            self.current_frame_index = 0
+        self.image = self.animations_dictionary[self.animation_status][int(self.current_frame_index)]
+
+
+    # ANIMATION SPRITES DITIONARY
     def import_sprites_as_dictionary(self):
         animations_dictionary = {
                         "up": [],       "down": [],       "left": [],       "right": [],
@@ -67,12 +111,12 @@ class Player(GameObject):
         # adds the images to the dictionaries lists, searching for a folder with its key name
         for animation_folder_name in animations_dictionary.keys():
             path = "resources/graphics/character/" + animation_folder_name
-            animations_dictionary[animation_folder_name] = self.import_folder_imgs(path)
+            animations_dictionary[animation_folder_name] = self.import_imgs_from_folder(path)
 
         return animations_dictionary
 
     # imports every image inside a folder
-    def import_folder_imgs(self, path):
+    def import_imgs_from_folder(self, path):
         surface_list = []
 
         print("importing ", end="")
