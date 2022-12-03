@@ -22,7 +22,7 @@ class Level:
         self.start()  # called once
 
     def start(self):
-        player = Player(pygame.math.Vector2(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT), self.all_sprites, self)
+        self.player = Player(pygame.math.Vector2(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT), self.all_sprites, self)
 
     def tick(self):
         for gm in self.all_game_obj:

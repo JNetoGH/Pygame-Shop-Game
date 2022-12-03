@@ -1,7 +1,7 @@
 import pygame
 
-from systems.debugging_canvas import DebuggingCanvas
-from systems.input_manager import InputManager
+from systems.debug.debugging_canvas import DebuggingCanvas
+from systems.input.input_manager import InputManager
 from level import Level
 from settings import *
 
@@ -26,10 +26,10 @@ class Game:
             pygame.display.update()
 
     def print_status(self):
-        font = pygame.font.Font('freesansbold.ttf', 20)# create a text surface object,
+        font = pygame.font.Font('freesansbold.ttf', 20)  # create a text surface object,
         msgs = "JNETO PRODUCTIONS GAME ENGINE DEBUGGING STATUS" "\n" + \
                "\nINPUT MANAGER\n" + InputManager.get_status() + "\n" + \
-               "\nPLAYER\n" + self.level.all_game_obj[0].get_status() #player is 0
+               "\nPLAYER\n" + self.level.player.get_status()  #player is 0 in the list of objects as well
         # calls the method that displays text on screen
         DebuggingCanvas.blit_text(self.screen, msgs, (20, 20), font, color="cyan")
 
