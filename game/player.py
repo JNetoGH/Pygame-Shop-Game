@@ -9,8 +9,8 @@ from _3gameobjs.game_obj import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, position: pygame.Vector2, level):
-        super().__init__(position, level)
+    def __init__(self, level):
+        super().__init__(level)
 
         # movement related
         self.move_speed = 200
@@ -33,8 +33,7 @@ class Player(GameObject):
 
         # the image itself
         self.image = self.animation_idle_down.images[0]
-        # the rectangle that carries: the center pos of the rect is the same of the player pos
-        self.rect = self.image.get_rect(center=self.transform.position)
+
 
     def start(self) -> None:
         print("oi")

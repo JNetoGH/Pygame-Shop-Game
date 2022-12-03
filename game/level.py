@@ -23,8 +23,8 @@ class Level:
         self.start()  # called once
 
     def start(self):
-        self.player = Player(pygame.Vector2(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT), self)
-        self.testObj = TestObj(pygame.Vector2(700, 300), self)
+        self.player = Player(self)
+        self.testObj = TestObj(self)
 
     def tick(self):
         for gm in self.all_game_obj:

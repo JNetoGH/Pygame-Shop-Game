@@ -6,8 +6,8 @@ from _3gameobjs.game_obj import GameObject
 
 
 class TestObj(GameObject):
-    def __init__(self, pos: pygame.Vector2, level):
-        super().__init__(pos, level)
+    def __init__(self, level):
+        super().__init__(level)
 
     # called just once
     def start(self) -> None:

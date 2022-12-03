@@ -33,7 +33,6 @@ class AnimationController(Component):
                 self.current_animation_clip = animation_clip
                 self.current_animation_clip_name = animation_clip_name
 
-
     def stop_animation(self, true_false):
         self.stop_animation_clip = true_false
 
@@ -45,4 +44,5 @@ class AnimationController(Component):
             if self.current_frame_index >= len(self.current_animation_clip.images):
                 self.current_frame_index = 0
             self.game_object_owner.image = self.current_animation_clip.images[int(self.current_frame_index)]
-
+            # the rectangle that carries the image: the center pos of the rect is the same of the player pos
+            self.game_object_owner.rect = self.game_object_owner.image.get_rect(center=self.game_object_owner.transform.position)

@@ -5,13 +5,13 @@ from _2components.transform.transform import Transform
 
 class GameObject(pygame.sprite.Sprite):
 
-    def __init__(self, pos: pygame.Vector2, level):
+    def __init__(self, level):
         super().__init__(level.all_sprites)
 
         self.level = level
 
+        # sets the transform
         self.transform = Transform(self)
-        self.transform.position = pos
 
         # adds itself to the level game object list
         level.all_game_obj.append(self)
