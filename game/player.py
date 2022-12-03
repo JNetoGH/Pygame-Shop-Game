@@ -3,6 +3,9 @@ import numpy
 from gameobjs.game_obj import GameObject
 from systems.input_manager import InputManager
 
+#  allows us to walk through folders
+from os import walk
+
 
 class Player(GameObject):
     def __init__(self, position: pygame.math.Vector2, group, level):
@@ -20,6 +23,10 @@ class Player(GameObject):
         self.normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
         self.speed = 200
 
+        # sprites
+        # a dictionary that holds all sprites of this GameObject as a list for each position
+        self.animations = self.import_sprites()
+
     def start(self) -> None:
         print("oi")
 
@@ -36,11 +43,35 @@ class Player(GameObject):
             self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
 
         # moves frame-rate independent
-        self.position += self.normalized_direction * self.speed * self.level.game.delta_time
+        self.position.x += self.normalized_direction.x * self.speed * self.level.game.delta_time
+        self.position.y += self.normalized_direction.y * self.speed * self.level.game.delta_time
         self.rect.center = self.position  # updates the rect position
 
     def render(self) -> None:
         pass
+
+    def import_sprites(self):
+        animations = {
+                        "up": [],       "down": [],       "left": [],       "right": [],
+                        "up_idle": [],  "down_idle": [],  "left_idle": [],  "right_idle": [],
+                        "up_hoe": [],   "down_hoe": [],   "left_hoe": [],   "right_hoe": [],
+                        "up_axe": [],   "down_axe": [],   "left_axe": [],   "right_axe": [],
+                        "up_water": [], "down_water": [], "left_water": [], "right_water": []
+                     }
+        for animation_name in animations.keys():
+            path = "resources/graphics/character/" + animation_name
+            animations[animation_name] = self.import_folder(path)
+
+        return animations
+
+    def import_folder(self, path):
+        surface_list = []
+
+        for folder in walk(path):
+            print(folder)
+
+        return surface_list
+
 
     def get_status(self) -> str:
         return f"Index in Level list = {self.get_index_in_level_list()}\n" \

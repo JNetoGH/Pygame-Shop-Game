@@ -1,6 +1,6 @@
 import pygame
 
-from gameobjs.player import Player
+from player import Player
 from settings import *
 
 
