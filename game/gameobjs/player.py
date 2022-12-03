@@ -31,8 +31,9 @@ class Player(GameObject):
         self.normalized_direction = pygame.math.Vector2(0, 0)
         self.non_normalized_direction = pygame.math.Vector2(InputManager.Horizontal_Axis, InputManager.Vertical_Axis)
         # avoids division by 0 exception: extracts the MAGNITUDE of the non-normalized direction
-        if self.non_normalized_direction.magnitude() > 0:
-            self.normalized_direction = self.non_normalized_direction.normalize()  # normalizes the new direction
+        if numpy.linalg.norm(self.non_normalized_direction) != 0:
+            # normalizes the new direction
+            self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
 
         # moves frame-rate independent
         self.position += self.normalized_direction * self.speed * self.level.game.delta_time
