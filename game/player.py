@@ -11,13 +11,6 @@ class Player(GameObject):
     def __init__(self, position: pygame.math.Vector2, group, level):
         super().__init__(position, group, level)
 
-        # the image itself
-        self.image = pygame.Surface((64, 32))
-        self.image.fill((255, 255, 255))
-
-        # the rectangle that represent the game object: the center pos of the rect is the same of the player pos
-        self.rect = self.image.get_rect(center=self.position)
-
         # movement related
         self.non_normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
         self.normalized_direction: pygame.math.Vector2 = pygame.math.Vector2(0, 0)
@@ -25,7 +18,19 @@ class Player(GameObject):
 
         # sprites
         # a dictionary that holds all sprites of this GameObject as a list for each position
-        self.animations = self.import_sprites()
+        self.animations_dictionary = self.import_sprites_as_dictionary()
+        self.animation_status = "down_idle"
+        # the current img of the list of the dictionary
+        self.frame_index = 0
+
+        # the image itself
+        self.image = self.animations_dictionary[self.animation_status][self.frame_index]
+
+        # the rectangle that represent the game object: the center pos of the rect is the same of the player pos
+        self.rect = self.image.get_rect(center=self.position)
+
+
+
 
     def start(self) -> None:
         print("oi")
@@ -50,25 +55,35 @@ class Player(GameObject):
     def render(self) -> None:
         pass
 
-    def import_sprites(self):
-        animations = {
+    def import_sprites_as_dictionary(self):
+        animations_dictionary = {
                         "up": [],       "down": [],       "left": [],       "right": [],
                         "up_idle": [],  "down_idle": [],  "left_idle": [],  "right_idle": [],
                         "up_hoe": [],   "down_hoe": [],   "left_hoe": [],   "right_hoe": [],
                         "up_axe": [],   "down_axe": [],   "left_axe": [],   "right_axe": [],
                         "up_water": [], "down_water": [], "left_water": [], "right_water": []
                      }
-        for animation_name in animations.keys():
-            path = "resources/graphics/character/" + animation_name
-            animations[animation_name] = self.import_folder(path)
 
-        return animations
+        # adds the images to the dictionaries lists, searching for a folder with its key name
+        for animation_folder_name in animations_dictionary.keys():
+            path = "resources/graphics/character/" + animation_folder_name
+            animations_dictionary[animation_folder_name] = self.import_folder_imgs(path)
 
-    def import_folder(self, path):
+        return animations_dictionary
+
+    # imports every image inside a folder
+    def import_folder_imgs(self, path):
         surface_list = []
 
-        for folder in walk(path):
-            print(folder)
+        print("importing ", end="")
+        for folder_name, sub_folder, img_files_list in walk(path):
+            print(f"{folder_name} => {img_files_list}:")
+            for img_name in img_files_list:
+                img_path = path + "/" + img_name
+                print(f"{img_path}")
+                img_surface = pygame.image.load(img_path).convert_alpha()
+                surface_list.append(img_surface)
+            print()
 
         return surface_list
 
