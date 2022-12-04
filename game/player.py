@@ -13,8 +13,8 @@ from _3gameobjs.game_obj import GameObject
 
 class Player(GameObject):
 
-    def __init__(self, scene):
-        super().__init__("player", scene)
+    def __init__(self, name: str, scene):
+        super().__init__(name, scene)
 
         # movement related
         self.move_speed = 200

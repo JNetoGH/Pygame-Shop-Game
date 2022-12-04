@@ -18,8 +18,8 @@ class Scene:
         self.start()  # called once
 
     def start(self):
-        Player(self)
-        TestObj(self)
+        Player("game_player", self)
+        TestObj("test_obj_1", self)
 
     def update(self):
         # first is called the components update of the object, and then the game object itself
