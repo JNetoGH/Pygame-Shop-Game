@@ -7,7 +7,7 @@ from scene import Scene
 
 class InspectorDebuggingCanvas:
 
-    def __init__(self, scene: Scene, font_size):
+    def __init__(self, scene: Scene, font_size = 10):
         self.current_game_object_index = 0
         self.current_scene = scene
         self.font_size = font_size
@@ -23,14 +23,15 @@ class InspectorDebuggingCanvas:
                f"\n{InputManager.get_inspector_debugging_status()}" + \
                f"\n{self.current_scene.all_game_obj[0].get_inspector_debugging_status()}"  # player is 0 in the list of objects as well
         # calls the method that displays text on the dummy screen
-        InspectorDebuggingCanvas._blit_text(ScalableGameScreen.GameScreenDummySurface, msgs, (20, 20), font, color="cyan")
+        InspectorDebuggingCanvas._blit_text(ScalableGameScreen.GameScreenDummySurface,
+                                            ScalableGameScreen.DummyScreenWidth//3, ScalableGameScreen.DummyScreenHeight,
+                                            msgs, (20, 20), font, color=pygame.Color("white"))
 
     @staticmethod
     # print text on screen with \n
-    def _blit_text(surface, text, pos, font, color=pygame.Color('blue')):
+    def _blit_text(surface, max_width, max_height, text, pos, font, color=pygame.Color('blue')):
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
         space = font.size(' ')[0]  # The width of a space.
-        max_width, max_height = surface.get_size()
         x, y = pos
         for line in words:
             for word in line:

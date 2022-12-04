@@ -1,7 +1,3 @@
-import inspect
-
-import pygame
-
 from _1systems.input_manager_system import InputManager
 from _2components.component_base_class.component import Component
 
