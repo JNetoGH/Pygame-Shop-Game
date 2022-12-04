@@ -7,9 +7,10 @@ from _2components.single_sprite.single_sprite import SingleSprite
 # it's basically a list of images
 class AnimationClip:
 
-    def __init__(self, name: str, folder_path: str):
+    def __init__(self, name: str, animation_speed, folder_path: str):
         self.name = name
         self.images = []
+        self.animation_speed = animation_speed
         self.import_images_from_folder(folder_path)
 
     # imports every image inside a folder

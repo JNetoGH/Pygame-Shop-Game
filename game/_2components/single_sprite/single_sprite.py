@@ -8,8 +8,8 @@ class SingleSprite(Component):
         super().__init__(game_object_owner)
         self._img_path = img_path
         self.sprite_img_as_surface = pygame.image.load(self._img_path).convert_alpha()
-        self._game_object_owner.rect = self._game_object_owner.image.get_rect(center=self._game_object_owner.transform.position_read_only)
         self._game_object_owner.image = self.sprite_img_as_surface
+        self._game_object_owner.rect = self._game_object_owner.image.get_rect(center=self._game_object_owner.transform.position_read_only)
 
     def change_image(self, new_img_path):
         self._img_path = new_img_path

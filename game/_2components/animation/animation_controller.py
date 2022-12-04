@@ -15,7 +15,7 @@ class AnimationController(Component):
         self.current_animation_clip_name = self.current_animation_clip.name
 
         self.current_frame_index = 0  # the current img of the animation clip
-        self.animation_speed = 4
+        self.animation_speed = 0
         self._stop_animation_clip = False
 
     def add_animation(self, *animations: AnimationClip) -> None:
@@ -39,6 +39,7 @@ class AnimationController(Component):
         if not self._stop_animation_clip and self.animation_clips_list != []:
             # jump from frame to frame
             self.current_frame_index += self.animation_speed * GameTime.DeltaTime
+            self.animation_speed = self.current_animation_clip.animation_speed
             # sets back to the first frame if it's bigger than the size of the animation
             if self.current_frame_index >= len(self.current_animation_clip.images):
                 self.current_frame_index = 0

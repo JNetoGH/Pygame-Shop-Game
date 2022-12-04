@@ -67,7 +67,7 @@ class ScalableGameScreen:
             scaled_surface = ScalableGameScreen._get_up_scaled_surface_to_target_resolution(ScalableGameScreen.GameScreenDummySurface)
             scaled_surface_centralized_rect = ScalableGameScreen._get_centralized_surface_in_real_screen_rect(scaled_surface)
             ScalableGameScreen.GameScreenRealSurface.blit(scaled_surface, scaled_surface_centralized_rect)
-        pygame.display.update()
+        pygame.display.flip()
 
     @staticmethod
     def _get_centralized_surface_in_real_screen_rect(surface):
