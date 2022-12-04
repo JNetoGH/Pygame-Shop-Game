@@ -21,7 +21,7 @@ class GameObject(pygame.sprite.Sprite):
         # - The rectangle that holds the game object's image
         # - The center pos of the rect is the same of the gm obj pos by default, but needs to be set back to the
         #   object pos at every movement, it's automatically made by the transform bia the move_position method
-        self.rect = self.image.get_rect(center=self.transform.position)
+        self.rect = self.image.get_rect(center=self.transform.position_read_only)
 
         # adds itself to the scene game object list
         scene.all_game_obj.append(self)

@@ -76,7 +76,7 @@ class Player(GameObject):
         else:
             self.normalized_direction = pygame.Vector2(0, 0)
         # creates a new position with the new direction
-        new_position: pygame.Vector2 = self.transform.position
+        new_position: pygame.Vector2 = self.transform.position_read_only
         new_position.x += self.normalized_direction.x * self.move_speed * GameTime.DeltaTime
         new_position.y += self.normalized_direction.y * self.move_speed * GameTime.DeltaTime
         self.transform.move_position(new_position)

@@ -8,6 +8,7 @@ class OPERATION(enum.Enum):
     UP_SCALE = 1
     DOWN_SCALE = 2
 
+
 class ScalableGameScreen:
 
     # not used til now
@@ -30,7 +31,7 @@ class ScalableGameScreen:
     GameScreenDummySurface: pygame.Surface = None
     GameScreenRealSurface: pygame.Surface = None
 
-    CurrentOperation = OPERATION.NULL
+    _CurrentOperation = OPERATION.NULL
 
     @staticmethod
     def init_screens(dummy_screen_resolution: list[int], real_screen_resolution: list[int], up_scaling_target_resolution):
@@ -58,7 +59,7 @@ class ScalableGameScreen:
     @staticmethod
     def render_final_scaled_result():
         # only up/down scales if it needs to, because it cost a lot in performance
-        if ScalableGameScreen.CurrentOperation == OPERATION.DISPLAY_NATIVE:
+        if ScalableGameScreen._CurrentOperation == OPERATION.DISPLAY_NATIVE:
             native_surface = ScalableGameScreen.GameScreenDummySurface
             native_surface_rect = ScalableGameScreen._get_centralized_surface_in_real_screen_rect(native_surface)
             ScalableGameScreen.GameScreenRealSurface.blit(native_surface, native_surface_rect)
@@ -84,11 +85,11 @@ class ScalableGameScreen:
     @staticmethod
     def _generate_current_operation() -> None:
         if ScalableGameScreen.DummyScreenWidth == ScalableGameScreen.TargetResolutionForUpScaling[0] and ScalableGameScreen.DummyScreenHeight == ScalableGameScreen.TargetResolutionForUpScaling[1]:
-            ScalableGameScreen.CurrentOperation = OPERATION.DISPLAY_NATIVE
+            ScalableGameScreen._CurrentOperation = OPERATION.DISPLAY_NATIVE
         elif ScalableGameScreen.DummyScreenWidth < ScalableGameScreen.TargetResolutionForUpScaling[0] and ScalableGameScreen.DummyScreenHeight < ScalableGameScreen.TargetResolutionForUpScaling[1]:
-            ScalableGameScreen.CurrentOperation = OPERATION.UP_SCALE
+            ScalableGameScreen._CurrentOperation = OPERATION.UP_SCALE
         else:
-            ScalableGameScreen.CurrentOperation = OPERATION.DOWN_SCALE
+            ScalableGameScreen._CurrentOperation = OPERATION.DOWN_SCALE
 
     @staticmethod
     def get_inspector_debugging_status() -> str:
@@ -96,6 +97,6 @@ class ScalableGameScreen:
                f"rendering screen resolution (dummy surface):     {ScalableGameScreen.DummyScreenWidth} x {ScalableGameScreen.DummyScreenHeight}\n" \
                f"real screen resolution (real surface):           {ScalableGameScreen.RealScreenWidth} x {ScalableGameScreen.RealScreenHeight}\n" \
                f"target up/downscale resolution (produced frame): {ScalableGameScreen.TargetResolutionForUpScaling[0]} x {ScalableGameScreen.TargetResolutionForUpScaling[1]}\n" \
-               f"current operation: {ScalableGameScreen.CurrentOperation}\n"
+               f"current operation: {ScalableGameScreen._CurrentOperation}\n"
 
 

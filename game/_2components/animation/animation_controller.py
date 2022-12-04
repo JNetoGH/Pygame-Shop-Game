@@ -9,7 +9,6 @@ class AnimationController(Component):
 
     def __init__(self, animation_clips, game_object_owner: GameObject):
         super().__init__(game_object_owner)
-        self.game_object_owner = game_object_owner
 
         self.animation_clips_list: list[AnimationClip] = animation_clips
         self.current_animation_clip: AnimationClip = self.animation_clips_list[0]
@@ -17,7 +16,7 @@ class AnimationController(Component):
 
         self.current_frame_index = 0  # the current img of the animation clip
         self.animation_speed = 4
-        self.stop_animation_clip = False
+        self._stop_animation_clip = False
 
     def add_animation(self, *animations: AnimationClip) -> None:
         for animation in animations:
@@ -34,18 +33,18 @@ class AnimationController(Component):
                 self.current_animation_clip_name = animation_clip_name
 
     def stop_animation(self, true_false) -> None:
-        self.stop_animation_clip = true_false
+        self._stop_animation_clip = true_false
 
     def animate(self) -> None:
-        if not self.stop_animation_clip and self.animation_clips_list != []:
+        if not self._stop_animation_clip and self.animation_clips_list != []:
             # jump from frame to frame
             self.current_frame_index += self.animation_speed * GameTime.DeltaTime
             # sets back to the first frame if it's bigger than the size of the animation
             if self.current_frame_index >= len(self.current_animation_clip.images):
                 self.current_frame_index = 0
-            self.game_object_owner.image = self.current_animation_clip.images[int(self.current_frame_index)]
+            self._game_object_owner.image = self.current_animation_clip.images[int(self.current_frame_index)]
             # the rectangle that carries the image: the center pos of the rect is the same of the player pos and the size is remade every time the sprite is animated
-            self.game_object_owner.rect = self.game_object_owner.image.get_rect(center=self.game_object_owner.transform.position)
+            self._game_object_owner.rect = self._game_object_owner.image.get_rect(center=self._game_object_owner.transform.position_read_only)
 
     def scale_all_animations_of_this_controller(self, scale) -> None:
         for animation in self.animation_clips_list:
