@@ -59,6 +59,7 @@ class AnimationController(Component):
         return f"AnimationController\n" \
                f"current animation clip: {self.current_animation_clip.name}\n" \
                f"current animation clip frame: {int(self.current_frame_index)}\n" \
+               f"animation speed: {self.animation_speed}\n" \
                f"animation clips in memory: [{in_memory_animation_clips_names}]\n"
 
 
