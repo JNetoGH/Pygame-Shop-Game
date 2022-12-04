@@ -1,6 +1,6 @@
 import pygame
 from player import Player
-from _1systems.screen.screen import Screen
+from _1systems.screen.scalable_game_screen import ScalableGameScreen
 from test_obj import TestObj
 
 
@@ -27,8 +27,8 @@ class Level:
             gm.tick()
 
     def render(self):
-        Screen.GameScreenDummySurface.fill((0, 0, 0))  # clears the screen for rendering
-        self.all_sprites.draw(Screen.GameScreenDummySurface)
+        ScalableGameScreen.GameScreenDummySurface.fill("darkgreen")  # clears the screen for rendering
+        self.all_sprites.draw(ScalableGameScreen.GameScreenDummySurface)
         self.all_sprites.update()
         for gm in self.all_game_obj:
             gm.render()

@@ -1,7 +1,7 @@
 import pygame
 
 
-class DebuggingCanvas:
+class InspectorDebuggingCanvas:
 
     @staticmethod
     # print text on screen with \n

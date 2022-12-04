@@ -2,7 +2,7 @@ import pygame
 import numpy
 
 from _1systems.input.input_manager import InputManager
-from _1systems.screen.screen import Screen
+from _1systems.screen.scalable_game_screen import ScalableGameScreen
 from _1systems.time.time import Time
 from _2components.animation.animation_clip import AnimationClip
 from _2components.animation.animation_controller import AnimationController
@@ -13,7 +13,7 @@ class Player(GameObject):
     def __init__(self, level):
         super().__init__(level)
         # movement related
-        self.move_speed = 200 * Screen.SCALE_FROM_REFERENCE
+        self.move_speed = 200
         self.normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
         self.non_normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
 

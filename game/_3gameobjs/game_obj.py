@@ -1,5 +1,5 @@
 import pygame
-from _1systems.screen.screen import Screen
+from _1systems.screen.scalable_game_screen import ScalableGameScreen
 from _2components.transform.transform import Transform
 
 
@@ -45,4 +45,4 @@ class GameObject(pygame.sprite.Sprite):
 
     def debug_late_render(self) -> None:
         # img rect
-        pygame.draw.rect(Screen.GameScreenDummySurface, "red", self.rect, 1)
+        pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, "red", self.rect, 1)

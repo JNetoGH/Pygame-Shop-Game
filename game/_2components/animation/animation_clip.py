@@ -1,7 +1,7 @@
 from os import walk   # allow us to walk through folders
 import pygame
-from _1systems.screen.screen import Screen
-from _2components.single_sprite.single_sprite import SingleScaledSprite
+from _1systems.screen.scalable_game_screen import ScalableGameScreen
+from _2components.single_sprite.single_sprite import SingleSprite
 
 
 # it's basically a list of images
@@ -25,8 +25,6 @@ class AnimationClip:
                 surface_list.append(img_surface)
             print()
         for surface_img in surface_list:
-            # surface_img scaling
-            surface_img = SingleScaledSprite.return_scaled_sprite(surface_img, Screen.SCALE_FROM_REFERENCE)
             self.images.append(surface_img)
 
     def add_unitary_and_manually(self, image_path) -> None:
@@ -35,4 +33,4 @@ class AnimationClip:
 
     def scale_all_frames_of_this_animation(self, scale):
         for i in range(0, len(self.images)):
-            self.images[i] = SingleScaledSprite.return_scaled_sprite(self.images[i], scale)
+            self.images[i] = SingleSprite.return_scaled_image_surface(self.images[i], scale)
