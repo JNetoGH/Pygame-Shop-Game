@@ -21,6 +21,9 @@ class Player(GameObject):
         self.normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
         self.non_normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
 
+        # used everywhere
+        self.is_moving = False
+
         # game object default sprite
         self.single_sprite = SingleSprite("_0resources/graphics/character/down_idle/0.png", self)
 
@@ -70,9 +73,10 @@ class Player(GameObject):
         self.selected_tool = self.available_tools[self.current_tool_index]
 
     def update(self) -> None:
-        # allows moving only if there is no tool being used
-        if not self.is_using_tool:
-            self.move_player()
+
+        self.is_moving = not (InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0) and not self.is_using_tool
+
+        # TOOLS
         # tool timer activation Press Space to use a tool
         if InputManager.is_key_pressed(pygame.K_SPACE):
             if not self.is_using_tool:
@@ -92,6 +96,11 @@ class Player(GameObject):
                 if self.current_tool_index == len(self.available_tools):
                     self.current_tool_index = 0
 
+        # MOVE
+        # allows moving only if there is no tool being used
+        if not self.is_using_tool and self.is_moving:
+            self.move_player()
+
     def render(self) -> None:
         super().render()
         self.animate_player()
@@ -99,8 +108,7 @@ class Player(GameObject):
     def animate_player(self):
         # can oly make the movement stuff then ther e is no tool being used
         if not self.is_using_tool:
-            isMoving = not (InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0)
-            if isMoving:
+            if self.is_moving:
                 if InputManager.Horizontal_Axis == -1:
                     self.animation_controller.set_current_animation("walk_left")
                     self.last_direction_before_stop = "left"
