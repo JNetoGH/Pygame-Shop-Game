@@ -1,8 +1,9 @@
 import pygame
 import numpy
 
-from _1systems.input_manager_system import InputManager
 from _1systems.game_time_system import GameTime
+from _1systems.input_manager_system import InputManager
+from _2components.key_tracker.key_tracker import KeyTracker
 from _2components.timer.timer import Timer
 from _2components.animation.animation_clip import AnimationClip
 from _2components.animation.animation_controller import AnimationController
@@ -35,23 +36,35 @@ class Player(GameObject):
         self.animation_idle_right = AnimationClip("idle_right", 4, "_0resources/graphics/character/right_idle")
         self.animation_idle_up = AnimationClip("idle_up", 4, "_0resources/graphics/character/up_idle")
         self.animation_idle_left = AnimationClip("idle_left", 4, "_0resources/graphics/character/left_idle")
-
         # tools animations
         self.animation_axe_down = AnimationClip("axe_down", 3, "_0resources/graphics/character/down_axe")
         self.animation_axe_right = AnimationClip("axe_right", 3, "_0resources/graphics/character/right_axe")
         self.animation_axe_up = AnimationClip("axe_up", 3, "_0resources/graphics/character/up_axe")
         self.animation_axe_left = AnimationClip("axe_left", 3, "_0resources/graphics/character/left_axe")
-
-        # animation controller
+        self.animation_hoe_down = AnimationClip("hoe_down", 3, "_0resources/graphics/character/down_hoe")
+        self.animation_hoe_right = AnimationClip("hoe_right", 3, "_0resources/graphics/character/right_hoe")
+        self.animation_hoe_up = AnimationClip("hoe_up", 3, "_0resources/graphics/character/up_hoe")
+        self.animation_hoe_left = AnimationClip("hoe_left", 3, "_0resources/graphics/character/left_hoe")
+        self.animation_water_down = AnimationClip("water_down", 3, "_0resources/graphics/character/down_water")
+        self.animation_water_right = AnimationClip("water_right", 3, "_0resources/graphics/character/right_water")
+        self.animation_water_up = AnimationClip("water_up", 3, "_0resources/graphics/character/up_water")
+        self.animation_water_left = AnimationClip("water_left", 3, "_0resources/graphics/character/left_water")
+        # putting clips in a list
         animation_clips = [self.animation_walk_right, self.animation_walk_up, self.animation_walk_left,
                            self.animation_walk_down, self.animation_idle_right, self.animation_idle_up,
                            self.animation_idle_left, self.animation_idle_down, self.animation_axe_up,
-                           self.animation_axe_down, self.animation_axe_left, self.animation_axe_right]
+                           self.animation_axe_down, self.animation_axe_left, self.animation_axe_right,
+                           self.animation_hoe_up, self.animation_hoe_down, self.animation_hoe_left,
+                           self.animation_hoe_right, self.animation_water_up, self.animation_water_down,
+                           self.animation_water_left, self.animation_water_right]
+        # animation controller
         self.animation_controller = AnimationController(animation_clips, self)
 
         # tooling player timer system
         self.is_using_tool = False
         self.tool_use_exit_timer = Timer(600, self)
+        # gonna use p key to switch tools when fired
+        self.key_tracker_p = KeyTracker(pygame.K_p, self)
         self.available_tools = ["axe", "water", "hoe"]
         self.current_tool_index = 0
         self.selected_tool = self.available_tools[self.current_tool_index]
@@ -60,8 +73,7 @@ class Player(GameObject):
         # allows moving only if there is no tool being used
         if not self.is_using_tool:
             self.move_player()
-
-        # tool timer activation
+        # tool timer activation Press Space to use a tool
         if InputManager.is_key_pressed(pygame.K_SPACE):
             if not self.is_using_tool:
                 self.animation_controller.current_frame_index = 0
@@ -73,7 +85,12 @@ class Player(GameObject):
             if self.is_using_tool:
                 self.animation_controller.current_frame_index = 0
                 self.is_using_tool = False
-        # changes the current tool
+        # switches tool: can only switch a tool if is not using a tool at the moment
+        if not self.is_using_tool:
+            if self.key_tracker_p.has_key_been_fired_at_this_frame:
+                self.current_tool_index += 1
+                if self.current_tool_index == len(self.available_tools):
+                    self.current_tool_index = 0
 
     def render(self) -> None:
         super().render()
@@ -105,17 +122,16 @@ class Player(GameObject):
                     self.animation_controller.set_current_animation("idle_left")
                 elif self.last_direction_before_stop == "right":
                     self.animation_controller.set_current_animation("idle_right")
-        # using tool
+        # using tool: simply concatenates the tool name, it will be the same as the clip folders names
         else:
             if self.last_direction_before_stop == "down":
-                self.animation_controller.set_current_animation("axe_down")
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_down")
             elif self.last_direction_before_stop == "up":
-                self.animation_controller.set_current_animation("axe_up")
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_up")
             elif self.last_direction_before_stop == "left":
-                self.animation_controller.set_current_animation("axe_left")
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_left")
             elif self.last_direction_before_stop == "right":
-                self.animation_controller.set_current_animation("axe_right")
-
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_right")
 
     def move_player(self) -> None:
         # generates a direction based on players input
@@ -133,12 +149,13 @@ class Player(GameObject):
 
     def get_inspector_debugging_status(self) -> str:
         return super().get_inspector_debugging_status() + \
-               f"Player Self Implemented Debugging Stats\n" \
+               f"PLAYER SELF IMPLEMENTED DEBUGGING STATS\n" \
                f"speed: {self.move_speed}\n" \
                f"normalized direction: {self.normalized_direction}\n" \
                f"normalized direction magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
                f"non-normalized direction: {self.non_normalized_direction}\n" \
                f"non-normalized direction magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
+               f"current set tool: {self.available_tools[self.current_tool_index]}\n" \
                f"is using tool: {self.is_using_tool}\n" \
                f"is tool use exit timer active: {self.tool_use_exit_timer.is_timer_active_read_only}\n" \
 

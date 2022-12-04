@@ -29,7 +29,7 @@ class Timer(Component):
         self._is_active = False
         self.start_time = 0
 
-    def update(self):
+    def component_update(self):
         self.tot_time_elapsed_since_game_started = pygame.time.get_ticks()
         if self.tot_time_elapsed_since_game_started - self.start_time > self.duration_in_ms:
             self.deactivate()

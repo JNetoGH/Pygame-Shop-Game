@@ -11,7 +11,8 @@ class Component:
     def game_object_owner_read_only(self):
         return self._game_object_owner
 
-    def update(self):
+    # called before the game object update
+    def component_update(self):
         pass
 
     @abstractmethod

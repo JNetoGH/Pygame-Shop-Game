@@ -1,7 +1,6 @@
 import pygame
 import sys
 
-
 class InputManager:
 
     Horizontal_Axis = 0

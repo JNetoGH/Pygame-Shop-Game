@@ -22,9 +22,10 @@ class Scene:
         TestObj(self)
 
     def update(self):
+        # first is called the components update of the object, and then the game object itself
         for gm in self.all_game_obj:
             for component in gm.components_list:
-                component.update()
+                component.component_update()
             gm.update()
 
     def render(self):
@@ -33,5 +34,6 @@ class Scene:
         self.all_sprites.update()
         for gm in self.all_game_obj:
             gm.render()
+        # used to see lines and squares mainly
         for gm in self.all_game_obj:
             gm.debug_late_render()

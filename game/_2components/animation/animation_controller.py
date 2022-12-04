@@ -36,7 +36,7 @@ class AnimationController(Component):
     def stop_animation(self, true_false) -> None:
         self._stop_animation_clip = true_false
 
-    def update(self) -> None:
+    def component_update(self) -> None:
         if not self._stop_animation_clip and self.animation_clips_list != []:
             # jump from frame to frame
             self.current_frame_index += self.animation_speed * GameTime.DeltaTime
