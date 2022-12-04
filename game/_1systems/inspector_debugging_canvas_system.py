@@ -1,7 +1,7 @@
 import pygame
-from _1systems.input.input_manager import InputManager
-from _1systems.screen.scalable_game_screen import ScalableGameScreen
-from _1systems.time.game_time import GameTime
+from _1systems.input_manager_system import InputManager
+from _1systems.scalable_game_screen_system import ScalableGameScreen
+from _1systems.game_time_system import GameTime
 from scene import Scene
 
 

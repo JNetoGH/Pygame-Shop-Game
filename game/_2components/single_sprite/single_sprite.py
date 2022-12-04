@@ -27,5 +27,5 @@ class SingleSprite(Component):
         return pygame.transform.scale(surface_img, (surface_img.get_width() * scale, surface_img.get_height() * scale))
 
     def get_inspector_debugging_status(self) -> str:
-        return f"SingleSprite\n" \
+        return f"COMPONENT(SingleSprite)\n" \
                f"path: {self._img_path}\n"

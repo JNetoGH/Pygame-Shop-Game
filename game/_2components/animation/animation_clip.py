@@ -1,6 +1,5 @@
 from os import walk   # allow us to walk through folders
 import pygame
-from _1systems.screen.scalable_game_screen import ScalableGameScreen
 from _2components.single_sprite.single_sprite import SingleSprite
 
 

@@ -1,6 +1,6 @@
 import pygame
 from player import Player
-from _1systems.screen.scalable_game_screen import ScalableGameScreen
+from _1systems.scalable_game_screen_system import ScalableGameScreen
 from test_obj import TestObj
 
 
@@ -23,6 +23,8 @@ class Scene:
 
     def update(self):
         for gm in self.all_game_obj:
+            for component in gm.components_list:
+                component.update()
             gm.update()
 
     def render(self):

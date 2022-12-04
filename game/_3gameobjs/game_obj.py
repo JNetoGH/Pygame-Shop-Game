@@ -1,5 +1,5 @@
 import pygame
-from _1systems.screen.scalable_game_screen import ScalableGameScreen
+from _1systems.scalable_game_screen_system import ScalableGameScreen
 from _2components.transform.transform import Transform
 from abc import abstractmethod
 

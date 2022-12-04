@@ -44,7 +44,13 @@ class InputManager:
             InputManager.Vertical_Axis = 0
 
     @staticmethod
+    def is_key_pressed(key_pygame_code):
+        keys = pygame.key.get_pressed()
+        return keys[key_pygame_code]
+
+    @staticmethod
     def get_inspector_debugging_status() -> str:
         return f"INPUT MANAGER SYSTEM\n" \
                f"horizontal: {InputManager.Horizontal_Axis}\n" \
-               f"vertical:   {InputManager.Vertical_Axis}\n"
+               f"vertical:   {InputManager.Vertical_Axis}\n" \
+

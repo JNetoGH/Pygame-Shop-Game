@@ -1,5 +1,5 @@
 import pygame
-from _1systems.screen.scalable_game_screen import ScalableGameScreen
+from _1systems.scalable_game_screen_system import ScalableGameScreen
 from _2components.component_base_class.component import Component
 
 
@@ -24,5 +24,5 @@ class Transform(Component):
         self._game_object_owner.rect.center = self.position_read_only
 
     def get_inspector_debugging_status(self) -> str:
-        return f"Transform\n" \
+        return f"COMPONENT(Transform)\n" \
                f"position: {self.position_read_only}\n"
