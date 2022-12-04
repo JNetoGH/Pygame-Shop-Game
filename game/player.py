@@ -3,7 +3,7 @@ import numpy
 
 from _1systems.input.input_manager import InputManager
 from _1systems.screen.scalable_game_screen import ScalableGameScreen
-from _1systems.time.time import Time
+from _1systems.time.game_time import GameTime
 from _2components.animation.animation_clip import AnimationClip
 from _2components.animation.animation_controller import AnimationController
 from _3gameobjs.game_obj import GameObject
@@ -77,34 +77,16 @@ class Player(GameObject):
             self.normalized_direction = pygame.Vector2(0, 0)
         # creates a new position with the new direction
         new_position: pygame.Vector2 = self.transform.position
-        new_position.x += self.normalized_direction.x * self.move_speed * Time.DeltaTime
-        new_position.y += self.normalized_direction.y * self.move_speed * Time.DeltaTime
+        new_position.x += self.normalized_direction.x * self.move_speed * GameTime.DeltaTime
+        new_position.y += self.normalized_direction.y * self.move_speed * GameTime.DeltaTime
         self.transform.move_position(new_position)
 
-    def get_status(self) -> str:
+    def get_inspector_debugging_status(self) -> str:
+        return super().get_inspector_debugging_status() + \
+               f"Player Self Implemented Debugging Stats\n" \
+               f"speed: {self.move_speed}\n" \
+               f"normalized direction: {self.normalized_direction}\n" \
+               f"normalized direction magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
+               f"non-normalized direction: {self.non_normalized_direction}\n" \
+               f"non-normalized direction magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
 
-        in_memory_animation_clips_names = ""
-        for clip in self.animation_controller.animation_clips_list:
-            in_memory_animation_clips_names += clip.name + ", "
-        in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
-        in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
-
-        components_names = ""
-        for component in self.components_list:
-            components_names += type(component).__name__ + ", "
-        components_names = components_names[:-1]
-        components_names = components_names[:-1]
-
-        return f"Index in Scene list = {self.get_index_in_scene_all_game_objects_list()}\n" \
-               f"Speed: {self.move_speed}\n" \
-               f"Normalized Direction: {self.normalized_direction}\n" \
-               f"Normalized Direction Magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
-               f"Non-Normalized Direction: {self.non_normalized_direction}\n" \
-               f"Non-Normalized Direction Magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
-               f"\nPlayer's Components: [{components_names}]\n" \
-               f"\nPlayer's Transform\n" \
-               f"Position: {self.transform.position}\n" \
-               f"\nPlayer's AnimationController\n" \
-               f"Current AnimationClip: {self.animation_controller.current_animation_clip.name}\n" \
-               f"Current AnimationClip's Frame: {int(self.animation_controller.current_frame_index)}\n" \
-               f"AnimationClips in Memory: [{in_memory_animation_clips_names}]"

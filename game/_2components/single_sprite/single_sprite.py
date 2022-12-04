@@ -8,7 +8,8 @@ class SingleSprite(Component):
 
     def __init__(self, img_path, game_object_owner):
         super().__init__(game_object_owner)
-        self.sprite_as_surface = pygame.image.load(img_path).convert_alpha()
+        self.img_path = img_path
+        self.sprite_as_surface = pygame.image.load(self.img_path).convert_alpha()
         self.game_object_owner.rect = self.game_object_owner.image.get_rect(center=self.game_object_owner.transform.position)
         self.game_object_owner.image = self.sprite_as_surface
 
@@ -17,8 +18,11 @@ class SingleSprite(Component):
         self.game_object_owner.image = scaled_sprite_as_surface
         self.game_object_owner.rect = self.game_object_owner.image.get_rect(center=self.game_object_owner.transform.position)
 
-
     # scaled like 0.8 = 80%
     @staticmethod
     def return_scaled_image_surface(surface_img, scale):
         return pygame.transform.scale(surface_img, (surface_img.get_width() * scale, surface_img.get_height() * scale))
+
+    def get_inspector_debugging_status(self) -> str:
+        return f"SingleSprite\n" \
+               f"path: {self.img_path}\n"

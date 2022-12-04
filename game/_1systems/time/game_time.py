@@ -1,2 +1,2 @@
-class Time:
+class GameTime:
     DeltaTime = 0

@@ -1,4 +1,4 @@
-from _1systems.time.time import Time
+from _1systems.time.game_time import GameTime
 from _2components.animation.animation_clip import AnimationClip
 from _2components.component_base_class.component import Component
 from _3gameobjs.game_obj import GameObject
@@ -33,13 +33,13 @@ class AnimationController(Component):
                 self.current_animation_clip = animation_clip
                 self.current_animation_clip_name = animation_clip_name
 
-    def stop_animation(self, true_false):
+    def stop_animation(self, true_false) -> None:
         self.stop_animation_clip = true_false
 
     def animate(self) -> None:
         if not self.stop_animation_clip and self.animation_clips_list != []:
             # jump from frame to frame
-            self.current_frame_index += self.animation_speed * Time.DeltaTime
+            self.current_frame_index += self.animation_speed * GameTime.DeltaTime
             # sets back to the first frame if it's bigger than the size of the animation
             if self.current_frame_index >= len(self.current_animation_clip.images):
                 self.current_frame_index = 0
@@ -47,6 +47,20 @@ class AnimationController(Component):
             # the rectangle that carries the image: the center pos of the rect is the same of the player pos and the size is remade every time the sprite is animated
             self.game_object_owner.rect = self.game_object_owner.image.get_rect(center=self.game_object_owner.transform.position)
 
-    def scale_all_animations_of_this_controller(self, scale):
+    def scale_all_animations_of_this_controller(self, scale) -> None:
         for animation in self.animation_clips_list:
             animation.scale_all_frames_of_this_animation(scale)
+
+    def get_inspector_debugging_status(self) -> str:
+        in_memory_animation_clips_names = ""
+        for clip in self.animation_clips_list:
+            in_memory_animation_clips_names += clip.name + ", "
+        in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
+        in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
+        return f"AnimationController\n" \
+               f"current animation clip: {self.current_animation_clip.name}\n" \
+               f"current animation clip frame: {int(self.current_frame_index)}\n" \
+               f"animation clips in memory: [{in_memory_animation_clips_names}]\n"
+
+
+

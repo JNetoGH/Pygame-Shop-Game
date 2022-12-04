@@ -19,8 +19,8 @@ class Scene:
         self.start()  # called once
 
     def start(self):
-        self.player = Player(self)
-        self.testObj = TestObj(self)
+        Player(self)
+        TestObj(self)
 
     def tick(self):
         for gm in self.all_game_obj:

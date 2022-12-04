@@ -2,6 +2,7 @@ import pygame
 from _1systems.screen.scalable_game_screen import ScalableGameScreen
 from _2components.component_base_class.component import Component
 
+
 class Transform(Component):
     def __init__(self, game_object_owner):
         super().__init__(game_object_owner)
@@ -15,3 +16,7 @@ class Transform(Component):
         self.position = new_position
         # updates the game object image's rect position, moves the image's rect together with the transform
         self.game_object_owner.rect.center = self.position
+
+    def get_inspector_debugging_status(self) -> str:
+        return f"Transform\n" \
+               f"position: {self.position}\n"

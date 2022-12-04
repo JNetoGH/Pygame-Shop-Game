@@ -44,6 +44,7 @@ class InputManager:
             InputManager.Vertical_Axis = 0
 
     @staticmethod
-    def get_status() -> str:
-        return f"Horizontal: {InputManager.Horizontal_Axis}\n" \
-               f"Vertical:   {InputManager.Vertical_Axis}"
+    def get_inspector_debugging_status() -> str:
+        return f"INPUT MANAGER SYSTEM\n" \
+               f"horizontal: {InputManager.Horizontal_Axis}\n" \
+               f"vertical:   {InputManager.Vertical_Axis}\n"
