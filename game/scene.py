@@ -4,7 +4,7 @@ from _1systems.screen.scalable_game_screen import ScalableGameScreen
 from test_obj import TestObj
 
 
-class Level:
+class Scene:
     def __init__(self, game):
         self.game = game
         self.all_sprites = pygame.sprite.Group()  # sprite group, used to draw then all
@@ -12,7 +12,7 @@ class Level:
         LIST USED FOR TICKS:
             - I had to call it tick() because pygame is stupid and already has a method called update, used for sprites
             - It holds all game objects of the scene
-            - When a game Obj is instantiated, it's automatically stored here using the level passed as parameter in 
+            - When a game Obj is instantiated, it's automatically stored here using the scene passed as parameter in 
               its constructor
         """
         self.all_game_obj = []

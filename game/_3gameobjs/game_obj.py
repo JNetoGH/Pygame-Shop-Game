@@ -5,12 +5,12 @@ from _2components.transform.transform import Transform
 
 class GameObject(pygame.sprite.Sprite):
 
-    def __init__(self, level):
-        super().__init__(level.all_sprites)
+    def __init__(self, scene):
+        super().__init__(scene.all_sprites)
 
         # when a component is instantiated, it is automatically stored here
         self.components_list = []
-        self.level = level
+        self.scene = scene
 
         # sets the transform
         self.transform = Transform(self)
@@ -23,15 +23,15 @@ class GameObject(pygame.sprite.Sprite):
         #   object pos at every movement, it's automatically made by the transform bia the move_position method
         self.rect = self.image.get_rect(center=self.transform.position)
 
-        # adds itself to the level game object list
-        level.all_game_obj.append(self)
+        # adds itself to the scene game object list
+        scene.all_game_obj.append(self)
 
         # calls its start() method
         self.start()
 
-    def get_index_in_level_list(self) -> int:
-        for i in range(0, len(self.level.all_game_obj)):
-            if self.level.all_game_obj[i] == self:
+    def get_index_in_scene_all_game_objects_list(self) -> int:
+        for i in range(0, len(self.scene.all_game_obj)):
+            if self.scene.all_game_obj[i] == self:
                 return i
 
     def start(self) -> None:

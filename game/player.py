@@ -10,8 +10,8 @@ from _3gameobjs.game_obj import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, level):
-        super().__init__(level)
+    def __init__(self, scene):
+        super().__init__(scene)
         # movement related
         self.move_speed = 200
         self.normalized_direction: pygame.Vector2 = pygame.Vector2(0, 0)
@@ -95,7 +95,7 @@ class Player(GameObject):
         components_names = components_names[:-1]
         components_names = components_names[:-1]
 
-        return f"Index in Level list = {self.get_index_in_level_list()}\n" \
+        return f"Index in Scene list = {self.get_index_in_scene_all_game_objects_list()}\n" \
                f"Speed: {self.move_speed}\n" \
                f"Normalized Direction: {self.normalized_direction}\n" \
                f"Normalized Direction Magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
