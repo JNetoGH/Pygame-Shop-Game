@@ -3,10 +3,13 @@ from _1systems.scalable_game_screen_system import ScalableGameScreen
 from _2components.transform.transform import Transform
 from abc import abstractmethod
 
+
 class GameObject(pygame.sprite.Sprite):
 
-    def __init__(self, scene):
+    def __init__(self, name: str, scene):
         super().__init__(scene.all_sprites)
+
+        self.name = name
 
         # when a component is instantiated, it is automatically stored here
         self.components_list = []
@@ -63,6 +66,7 @@ class GameObject(pygame.sprite.Sprite):
             components_inspector_debugging_status += component.get_inspector_debugging_status() + "\n"
 
         return f"GAME OBJECT INSPECTOR \n" \
+               f"game object name: {self.name}\n" \
                f"class name: {type(self)} \n" \
                f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
                f"components: [{components_names}]\n\n" \

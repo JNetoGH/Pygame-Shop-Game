@@ -14,7 +14,7 @@ from _3gameobjs.game_obj import GameObject
 class Player(GameObject):
 
     def __init__(self, scene):
-        super().__init__(scene)
+        super().__init__("player", scene)
 
         # movement related
         self.move_speed = 200
@@ -72,8 +72,14 @@ class Player(GameObject):
         self.current_tool_index = 0
         self.selected_tool = self.available_tools[self.current_tool_index]
 
+        # seeds
+        self.available_seeds = ["corn", "tomato"]
+        self.current_seed_index = 0
+        self.selected_seed = self.available_seeds[self.current_seed_index]
+
     def update(self) -> None:
 
+        # UPDATES IS MOVING FIELD
         self.is_moving = not (InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0) and not self.is_using_tool
 
         # TOOLS

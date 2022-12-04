@@ -8,7 +8,7 @@ from _3gameobjs.game_obj import GameObject
 
 class TestObj(GameObject):
     def __init__(self, scene):
-        super().__init__(scene)
+        super().__init__("testobj", scene)
 
     # called just once
     def start(self) -> None:
