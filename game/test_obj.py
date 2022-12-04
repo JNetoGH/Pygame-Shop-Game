@@ -19,7 +19,7 @@ class TestObj(GameObject):
         self.transform.move_position(pygame.Vector2(1200, 200))
 
     # called every frame
-    def tick(self) -> None:
+    def update(self) -> None:
         #increment = pygame.Vector2(1, 1)
         #self.transform.translate(increment)
         # self.animationController.animate()

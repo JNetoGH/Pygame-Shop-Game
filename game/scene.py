@@ -9,8 +9,7 @@ class Scene:
         self.game = game
         self.all_sprites = pygame.sprite.Group()  # sprite group, used to draw then all
         """ 
-        LIST USED FOR TICKS:
-            - I had to call it tick() because pygame is stupid and already has a method called update, used for sprites
+        LIST USED FOR UPDATES:
             - It holds all game objects of the scene
             - When a game Obj is instantiated, it's automatically stored here using the scene passed as parameter in 
               its constructor
@@ -22,9 +21,9 @@ class Scene:
         Player(self)
         TestObj(self)
 
-    def tick(self):
+    def update(self):
         for gm in self.all_game_obj:
-            gm.tick()
+            gm.update()
 
     def render(self):
         ScalableGameScreen.GameScreenDummySurface.fill("darkgreen")  # clears the screen for rendering

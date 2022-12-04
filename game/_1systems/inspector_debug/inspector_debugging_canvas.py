@@ -17,7 +17,7 @@ class InspectorDebuggingCanvas:
         msgs = "JNETO PRODUCTIONS GAME ENGINE: INSPECTOR DEBUGGING SYSTEM\n" \
                "\nENGINE INNER DETAILS" + \
                f"\nfps: {self.current_scene.game.clock.get_fps():.1f}" + \
-               f"\nelapsed ticks: {self.current_scene.game.ticks}" + \
+               f"\nelapsed updates: {self.current_scene.game.elapsed_updates}" + \
                f"\ndelta-time: {str(GameTime.DeltaTime)}\n" \
                f"\n{ScalableGameScreen.get_inspector_debugging_status()}" + \
                f"\n{InputManager.get_inspector_debugging_status()}" + \

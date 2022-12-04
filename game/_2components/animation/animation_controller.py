@@ -62,5 +62,3 @@ class AnimationController(Component):
                f"animation speed: {self.animation_speed}\n" \
                f"animation clips in memory: [{in_memory_animation_clips_names}]\n"
 
-
-

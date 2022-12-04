@@ -39,7 +39,7 @@ class GameObject(pygame.sprite.Sprite):
         pass
 
     @abstractmethod
-    def tick(self) -> None:
+    def update(self) -> None:
         pass
 
     @abstractmethod

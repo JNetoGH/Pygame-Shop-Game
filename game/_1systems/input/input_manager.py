@@ -8,7 +8,7 @@ class InputManager:
     Vertical_Axis = 0
 
     @staticmethod
-    def tick() -> None:
+    def update() -> None:
         InputManager._treat_exit()
         InputManager._treat_axis()
 

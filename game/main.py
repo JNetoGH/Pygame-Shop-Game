@@ -24,9 +24,9 @@ class Game:
         self.scene_example = Scene(self)
         self.delta_time = 0
 
-        # it is not used for much, just holds the total amount of ticks elapsed
-        self.ticks = 0
-        self.max_amount_of_ticks = 1000000000
+        # it is not used for much, just holds the total amount of update elapsed
+        self.elapsed_updates = 0
+        self.max_amount_of_updates_to_be_counted = 1000000000
 
         # should be the one of the last things to be instantiated
         self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=14)
@@ -34,13 +34,13 @@ class Game:
     def run_game_loop(self):
         while True:
 
-            self.ticks += 1
-            if self.ticks == self.max_amount_of_ticks:
-                self.ticks = 0
+            self.elapsed_updates += 1
+            if self.elapsed_updates == self.max_amount_of_updates_to_be_counted:
+                self.elapsed_updates = 0
 
             GameTime.DeltaTime = self.clock.tick() / 1000
-            InputManager.tick()
-            self.scene_example.tick()
+            InputManager.update()
+            self.scene_example.update()
             self.scene_example.render()
             self.inspector_debugging_canvas.render_inspector_debugging_text()
             ScalableGameScreen.render_final_scaled_result()

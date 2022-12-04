@@ -10,6 +10,7 @@ from _3gameobjs.game_obj import GameObject
 
 
 class Player(GameObject):
+
     def __init__(self, scene):
         super().__init__(scene)
         # movement related
@@ -33,13 +34,20 @@ class Player(GameObject):
         # the image itself
         self.image = self.animation_idle_down.images[0]
 
+        # tooling player system
+        self.selected_tool = "axe"
 
     def start(self) -> None:
         pass
 
-
-    def tick(self) -> None:
+    def update(self) -> None:
         self.move()
+
+        #tool
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            pass
+            # run a timer for the tool usage
 
     def render(self) -> None:
         super().render()
