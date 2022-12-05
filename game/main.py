@@ -35,7 +35,7 @@ class Game:
         self.elapsed_updates = 0
 
         # should be the one of the last things to be instantiated
-        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=10)
+        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=9)
 
     def run_game_loop(self):
         while True:

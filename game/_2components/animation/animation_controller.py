@@ -46,7 +46,7 @@ class AnimationController(Component):
                 self.current_frame_index = 0
             self._game_object_owner.image = self.current_animation_clip.images[int(self.current_frame_index)]
             # the rectangle that carries the image: the center pos of the rect is the same of the player pos and the size is remade every time_system the sprite is animated
-            self._game_object_owner.rect = self._game_object_owner.image.get_rect(center=self._game_object_owner.transform.position_read_only)
+            self._game_object_owner.rect = self._game_object_owner.image.get_rect(center=self._game_object_owner.transform.position)
 
     def scale_all_animations_of_this_controller(self, scale) -> None:
         for animation in self.animation_clips_list:

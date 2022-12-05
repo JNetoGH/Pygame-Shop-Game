@@ -33,7 +33,6 @@ class KeyTracker(Component):
         return f"COMPONENT(KeyTracker)\n" \
                f"tracked key: {self.pygame_key_code}\n" \
                f"total times fired: {self.total_times_fired}\n" \
-               f"fired this frame: {self.has_key_been_fired_at_this_frame} | " \
-               f"released this frame: {self.has_key_been_released_at_this_frame} | " \
+               f"this frame: (fired={self.has_key_been_fired_at_this_frame} | released={self.has_key_been_released_at_this_frame})\n" \
                f"is held down: {self.is_key_being_held_down}\n" \
 

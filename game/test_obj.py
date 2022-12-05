@@ -1,14 +1,11 @@
 import pygame
-
-from _2components.animation.animation_clip import AnimationClip
-from _2components.animation.animation_controller import AnimationController
 from _2components.single_sprite.single_sprite import SingleSprite
 from _3gameobjs.game_obj import GameObject
 
 
 class TestObj(GameObject):
-    def __init__(self, name: str, scene):
-        super().__init__(name, scene)
+    def __init__(self, name: str, scene, rendering_layer):
+        super().__init__(name, scene, rendering_layer)
 
     # called just once
     def game_object_start(self) -> None:
@@ -24,6 +21,10 @@ class TestObj(GameObject):
         #self.transform.translate(increment)
         # self.animationController.animate()
         pass
+
+    def get_inspector_debugging_status(self) -> str:
+        super(TestObj, self).get_inspector_debugging_status()
+        return ""
 
 
 

@@ -13,8 +13,8 @@ from _3gameobjs.game_obj import GameObject
 
 class Player(GameObject):
 
-    def __init__(self, name: str, scene):
-        super().__init__(name, scene)
+    def __init__(self, name: str, scene, rendering_layer):
+        super().__init__(name, scene, rendering_layer)
 
         # movement related
         self.move_speed = 200
@@ -160,9 +160,10 @@ class Player(GameObject):
         # allows moving only if there is no tool being used
         if not self.is_using_tool and self.is_moving:
             self.move_player()
+        else:
+            self.kill_player_directions()
 
-    def game_object_render(self) -> None:
-        super().game_object_render()
+        # ANIMATES THE PLAYER
         self.animate_player()
 
     def animate_player(self):
@@ -212,10 +213,14 @@ class Player(GameObject):
         else:
             self.normalized_direction = pygame.Vector2(0, 0)
         # creates a new position with the new direction
-        new_position: pygame.Vector2 = self.transform.position_read_only
+        new_position: pygame.Vector2 = self.transform.position
         new_position.x += self.normalized_direction.x * self.move_speed * GameTime.DeltaTime
         new_position.y += self.normalized_direction.y * self.move_speed * GameTime.DeltaTime
         self.transform.move_position(new_position)
+
+    def kill_player_directions(self):
+        self.normalized_direction = pygame.Vector2(0, 0)
+        self.non_normalized_direction = pygame.Vector2(0, 0)
 
     def get_inspector_debugging_status(self) -> str:
         return super().get_inspector_debugging_status() + \
