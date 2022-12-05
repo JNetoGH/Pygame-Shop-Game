@@ -5,6 +5,34 @@ from _3gameobjs.test_obj import TestObj
 from _1systems.scalable_game_screen_system import ScalableGameScreen
 
 
+class Camara:
+
+    def __init__(self, rendering_layers_to_render: list[RenderingLayer]):
+        self._rendering_layers_to_render = rendering_layers_to_render
+        self.followed_game_object = None
+
+    def render_layers(self):
+        for r_layer in self._rendering_layers_to_render:
+            for game_obj in r_layer.game_objects_to_render_read_only:
+                if game_obj.should__be_rendered:
+                    # re-centers the image sprite rect to the new possible position
+                    game_obj.rect = game_obj.image.get_rect(center=game_obj.transform.position)
+
+                    # - draws the game object image on the dummy screen
+                    # - the subtractions are need in order to displaye the image correctly because, by default it's shown at
+                    #   the corner like:
+                    """
+                        |-------|
+                        |       | => rect
+                        |-------|
+                                 IMAGE
+                    """
+                    image_x = game_obj.transform.position.x - game_obj.rect.width // 2
+                    image_y = game_obj.transform.position.y - game_obj.rect.height // 2
+                    ScalableGameScreen.GameScreenDummySurface.blit(game_obj.image, (image_x, image_y))
+
+    def follow_game_object(self, game_object):
+        self.followed_game_object = game_object
 
 class Scene:
     def __init__(self, game):
@@ -25,12 +53,17 @@ class Scene:
         self.rendering_layer_tools = RenderingLayer()
         self.rendering_layers = [self.rendering_layer_map, self.rendering_layer_0, self.rendering_layer_1, self.rendering_layer_tools]
 
+        self.map = Map("map", self, self.rendering_layer_map)
+        self.player = Player("game_player", self, self.rendering_layers[0])
+        self.test_obj = TestObj("test_obj_1", self, self.rendering_layers[1])
+
         self.scene_start()  # called once
 
+        # main camera will render the rendering layers
+        self.main_camera = Camara(self.rendering_layers)
+
     def scene_start(self):
-        Map("map", self, self.rendering_layer_map)
-        Player("game_player", self, self.rendering_layers[0])
-        TestObj("test_obj_1", self, self.rendering_layers[1])
+        pass
 
     def scene_update(self):
         # first is called the components update of the object, and then the game object itself
@@ -45,8 +78,7 @@ class Scene:
         ScalableGameScreen.GameScreenDummySurface.fill("darkgreen")
 
         # renders all rendering layers
-        for r_layer in self.rendering_layers:
-            r_layer.render_all_game_objects()
+        self.main_camera.render_layers()
 
 
         """      

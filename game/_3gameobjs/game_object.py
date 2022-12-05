@@ -66,25 +66,6 @@ class GameObject(pygame.sprite.Sprite):
                f"components: [{components_names}]\n\n" \
                f"{components_inspector_debugging_status}"
 
-    # DO NOT TOUCH AND DO NOT OVERRIDE! IT'S USED BY THE RENDERING_LAYER IN ORDER TO RENDER THE GAME OBJECT
-    def game_object_render(self) -> None:
-
-        # re-centers the image sprite rect to the new possible position
-        self.rect = self.image.get_rect(center=self.transform.position)
-
-        # - draws the game object image on the dummy screen
-        # - the subtractions are need in order to displaye the image correctly because, by default it's shown at
-        #   the corner like:
-        """
-            |-------|
-            |       | => rect
-            |-------|
-                     IMAGE
-        """
-        image_x = self.transform.position.x - self.rect.width // 2
-        image_y = self.transform.position.y - self.rect.height // 2
-        ScalableGameScreen.GameScreenDummySurface.blit(self.image, (image_x, image_y))
-
     # DO NOT TOUCH AND DO NOT OVERRIDE! IT'S USED BY THE InspectorDebuggingCanvas IN ORDER TO RENDER THE GAME OBJECT'S GIZMOS
     def game_object_debug_late_render_gizmos(self) -> None:
 

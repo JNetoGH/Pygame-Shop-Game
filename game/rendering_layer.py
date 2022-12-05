@@ -4,16 +4,16 @@ from _3gameobjs.game_object import GameObject
 
 class RenderingLayer:
 
-    def __init__(self):
+    def __init__(self, is_fixed_on_screen=False):
+        self.is_fixed_on_screen = is_fixed_on_screen
         self._game_objects_to_render: list[GameObject] = []
+
+    @property
+    def game_objects_to_render_read_only(self):
+        return self._game_objects_to_render
 
     def add_game_object(self, game_object: GameObject):
         self._game_objects_to_render.append(game_object)
 
     def remove_game_object(self, game_object: GameObject):
         self._game_objects_to_render.remove(game_object)
-
-    def render_all_game_objects(self):
-        for gm in self._game_objects_to_render:
-            if gm.should__be_rendered:
-                gm.game_object_render()

@@ -32,8 +32,7 @@ class ScalableGameScreen:
     |            | =>  |   X    o   |    =>   |                   |      =>  |-------------------| 
     |------------|     |------------|         |                   |          |    DummySurface   |  =>  pygame shows
                                               |-------------------|          |                   |      the RealSurface
-                                                                             |-------------------| 
-                                              
+                                                                             |-------------------|                 
     """
 
     DummyScreenWidth = 1280
