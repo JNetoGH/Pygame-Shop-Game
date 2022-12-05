@@ -46,4 +46,3 @@ class Timer(Component):
                f"duration: {self.duration_in_ms}ms\n" \
                f"timer start time: {self.start_time}ms\n" \
                f"timer elapsed time: {self.elapsed_time_read_only}ms\n"
-

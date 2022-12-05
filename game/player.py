@@ -82,6 +82,8 @@ class Player(GameObject):
         self.available_seeds = ["corn", "tomato"]
         self.current_seed_index: int = 0
         self.current_selected_seed = self.available_seeds[self.current_seed_index] if len(self.available_seeds) > 0 else "empty list"
+        # used just for debugging
+        self.last_used_seed = "Null"
 
     # called when the tool's timer is over, the computation of the tool effect
     def finish_current_selected_tool_usage(self):
@@ -92,9 +94,6 @@ class Player(GameObject):
         if self.is_using_tool:
             self.animation_controller.current_frame_index = 0
             self.is_using_tool = False
-
-    def use_current_selected_seed(self):
-        pass
 
     def game_object_update(self) -> None:
 
@@ -133,12 +132,20 @@ class Player(GameObject):
             # uses the current selected tool and passes the current one to be the next one or "empty list" string
             if self.use_seed_key_tracker_ctrl.has_key_been_fired_at_this_frame:
                 if len(self.available_seeds) > 0:
+
+                    # REQUIRED TO SWITCH THE CURRENT SEED
                     was_at_the_first_on_the_list = False
                     if self.current_seed_index == 0:
                         was_at_the_first_on_the_list = True
-                    # removes the seed fom list
+
+                    # USED JUST FOR DEBUGGING
                     print(f"{self.current_selected_seed} used")
+                    self.last_used_seed = self.current_selected_seed
+
+                    # REMOVES THE CURRENT SEED FROM THE LIST
                     self.available_seeds.remove(self.current_selected_seed)
+
+                    # SWITCHES THE CURRENT SEED
                     # pass the current selected one to the one before or to the 0 index
                     self.current_seed_index = self.current_seed_index - 1 if not was_at_the_first_on_the_list else 0
                     # sets the current seed or empty list is there is no more seeds
@@ -226,4 +233,5 @@ class Player(GameObject):
                f"is tool use exit timer active: {self.tool_usage_timer.is_timer_active_read_only}\n" \
                f"\n" \
                f"available seeds: {self.available_seeds}\n" \
-               f"current seed: {self.current_selected_seed} index({self.current_seed_index})" \
+               f"current seed: {self.current_selected_seed} index({self.current_seed_index})\n" \
+               f"last used seed: {self.last_used_seed}" \
