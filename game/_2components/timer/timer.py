@@ -4,12 +4,14 @@ from _2components.component_base_class.component import Component
 
 class Timer(Component):
 
-    def __init__(self, duration_in_ms, game_object_owner):
+    # can execute a function oce the timer is over
+    def __init__(self, duration_in_ms, game_object_owner, func = None):
         super().__init__(game_object_owner)
         self.duration_in_ms = duration_in_ms
         self.start_time = 0
         self.tot_time_elapsed_since_game_started = 0
         self._is_active = False
+        self.func = func
 
     @property
     def is_timer_active_read_only(self):
@@ -31,11 +33,15 @@ class Timer(Component):
 
     def component_update(self):
         self.tot_time_elapsed_since_game_started = pygame.time.get_ticks()
-        if self.tot_time_elapsed_since_game_started - self.start_time > self.duration_in_ms:
+        if self.tot_time_elapsed_since_game_started - self.start_time > self.duration_in_ms and self._is_active:
             self.deactivate()
+            # if function is not none
+            if self.func:
+                self.func()
 
     def get_inspector_debugging_status(self) -> str:
         return f"COMPONENT(Timer)\n" \
+               f"function carried: {self.func.__name__}\n" \
                f"total elapsed time since game started: {self.tot_time_elapsed_since_game_started}ms\n" \
                f"duration: {self.duration_in_ms}ms\n" \
                f"timer start time: {self.start_time}ms\n" \

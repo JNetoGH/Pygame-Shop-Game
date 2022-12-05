@@ -30,7 +30,7 @@ class GameObject(pygame.sprite.Sprite):
         scene.all_game_obj.append(self)
 
         # calls its start() method
-        self.start()
+        self.game_object_start()
 
     def get_index_in_scene_all_game_objects_list(self) -> int:
         for i in range(0, len(self.scene.all_game_obj)):
@@ -38,23 +38,24 @@ class GameObject(pygame.sprite.Sprite):
                 return i
 
     @abstractmethod
-    def start(self) -> None:
+    def game_object_start(self) -> None:
+        pass
+
+    # pygame is stupid and has already an update method for sprites(a.k.a game obj super class)
+    # so I had to call it this way
+    @abstractmethod
+    def game_object_update(self) -> None:
         pass
 
     @abstractmethod
-    def update(self) -> None:
+    def game_object_render(self) -> None:
         pass
 
-    @abstractmethod
-    def render(self) -> None:
-        pass
-
-    def debug_late_render(self) -> None:
+    def game_object_debug_late_render(self) -> None:
         # img rect
         pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, "red", self.rect, 1)
 
     def get_inspector_debugging_status(self) -> str:
-
         components_names = ""
         for component in self.components_list:
             components_names += type(component).__name__ + ", "

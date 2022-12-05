@@ -15,25 +15,25 @@ class Scene:
               its constructor
         """
         self.all_game_obj = []
-        self.start()  # called once
+        self.scene_start()  # called once
 
-    def start(self):
+    def scene_start(self):
         Player("game_player", self)
         TestObj("test_obj_1", self)
 
-    def update(self):
+    def scene_update(self):
         # first is called the components update of the object, and then the game object itself
         for gm in self.all_game_obj:
             for component in gm.components_list:
                 component.component_update()
-            gm.update()
+            gm.game_object_update()
 
-    def render(self):
+    def scene_render(self):
         ScalableGameScreen.GameScreenDummySurface.fill("darkgreen")  # clears the screen for rendering
         self.all_sprites.draw(ScalableGameScreen.GameScreenDummySurface)
         self.all_sprites.update()
         for gm in self.all_game_obj:
-            gm.render()
+            gm.game_object_render()
         # used to see lines and squares mainly
         for gm in self.all_game_obj:
-            gm.debug_late_render()
+            gm.game_object_debug_late_render()

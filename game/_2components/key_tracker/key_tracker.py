@@ -11,6 +11,7 @@ class KeyTracker(Component):
         self.has_key_been_released_at_this_frame = False
         self.is_key_being_held_down = False
         self._has_key_been_already_fired_but_not_released = False
+        self.total_times_fired: int = 0
 
     def component_update(self):
 
@@ -21,6 +22,7 @@ class KeyTracker(Component):
 
         if self.is_key_being_held_down and not self._has_key_been_already_fired_but_not_released and not self.has_key_been_fired_at_this_frame:
             self.has_key_been_fired_at_this_frame = True
+            self.total_times_fired += 1
             self._has_key_been_already_fired_but_not_released = True
 
         if self._has_key_been_already_fired_but_not_released and not self.is_key_being_held_down:
@@ -30,6 +32,8 @@ class KeyTracker(Component):
     def get_inspector_debugging_status(self) -> str:
         return f"COMPONENT(KeyTracker)\n" \
                f"tracked key: {self.pygame_key_code}\n" \
-               f"has been fired this frame: {self.has_key_been_fired_at_this_frame}\n" \
-               f"has been released this frame: {self.has_key_been_released_at_this_frame}\n" \
-               f"is key being held down: {self.is_key_being_held_down}\n"
+               f"total times fired: {self.total_times_fired}\n" \
+               f"fired this frame: {self.has_key_been_fired_at_this_frame} | " \
+               f"released this frame: {self.has_key_been_released_at_this_frame} | " \
+               f"is held down: {self.is_key_being_held_down}\n" \
+

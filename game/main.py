@@ -12,13 +12,19 @@ class Game:
 
         pygame.init()
 
+        # 21:9
+        RES_WFHD= [2560, 1080]
+
+        # 16:9
         RES_NHD = [640, 360]
         RES_FWVGA = [854, 480]
         RES_HD = [1280, 720]
         RES_HD_PLUS = [1600, 900]
         RES_FULL_HD = [1920, 1080]
         RES_2K_QHD = [2560, 1440]
-        ScalableGameScreen.init_screens(RES_FULL_HD, [2000, 1300], RES_FULL_HD)
+        RES_4K = [3840, 2160]
+
+        ScalableGameScreen.init_screens(RES_FULL_HD, [2000,1300], RES_FULL_HD)
 
         # important stuff
         self.clock = pygame.time.Clock()
@@ -36,8 +42,8 @@ class Game:
             self.elapsed_updates += 1
             GameTime.DeltaTime = self.clock.tick() / 1000
             InputManager.update()
-            self.scene_example.update()
-            self.scene_example.render()
+            self.scene_example.scene_update()
+            self.scene_example.scene_render()
             self.inspector_debugging_canvas.render_inspector_debugging_text()
             ScalableGameScreen.render_final_scaled_result()
 

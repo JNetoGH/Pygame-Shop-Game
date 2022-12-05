@@ -28,7 +28,7 @@ class Player(GameObject):
         self.single_sprite = SingleSprite("_0resources/graphics/character/down_idle/0.png", self)
 
         # used in animations holds the last direction the player faced while walking e.g. left, up...
-        self.last_direction_before_stop = ""
+        self.last_direction_before_stop = "down"
 
         # animations and controller
         self.animation_walk_down = AnimationClip("walk_down", 4, "_0resources/graphics/character/down_walk")
@@ -63,57 +63,115 @@ class Player(GameObject):
         # animation controller
         self.animation_controller = AnimationController(animation_clips, self)
 
+        # TOOLS
         # tooling player timer system
         self.is_using_tool = False
-        self.tool_use_exit_timer = Timer(600, self)
+        # each tool takes a certain amount of time to its usage be computed
+        self.tool_usage_timer = Timer(duration_in_ms=600, game_object_owner=self, func=self.finish_current_selected_tool_usage)
+        # used just for debugging, every time a tool_usage_timer ends adds 1
+        self.total_current_tool_usages = 0
         # gonna use p key to switch tools when fired
-        self.key_tracker_p = KeyTracker(pygame.K_p, self)
+        self.tool_changer_key_tracker_p = KeyTracker(pygame.K_p, self)
         self.available_tools = ["axe", "water", "hoe"]
-        self.current_tool_index = 0
-        self.selected_tool = self.available_tools[self.current_tool_index]
+        self.current_tool_index: int = 0
+        self.current_selected_tool = self.available_tools[self.current_tool_index] if len(self.available_tools) > 0 else "empty list"
 
-        # seeds
+        # SEEDS
+        self.change_seed_key_tracker_o = KeyTracker(pygame.K_o, self)
+        self.use_seed_key_tracker_ctrl = KeyTracker(pygame.K_LCTRL, self)
         self.available_seeds = ["corn", "tomato"]
-        self.current_seed_index = 0
-        self.selected_seed = self.available_seeds[self.current_seed_index]
+        self.current_seed_index: int = 0
+        self.current_selected_seed = self.available_seeds[self.current_seed_index] if len(self.available_seeds) > 0 else "empty list"
 
-    def update(self) -> None:
+    # called when the tool's timer is over, the computation of the tool effect
+    def finish_current_selected_tool_usage(self):
+        # what happens when the tool_exit_time
+        print(f"{self.current_selected_tool} used")
+        self.total_current_tool_usages += 1
+        # deactivates the tool
+        if self.is_using_tool:
+            self.animation_controller.current_frame_index = 0
+            self.is_using_tool = False
 
-        # UPDATES IS MOVING FIELD
-        self.is_moving = not (InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0) and not self.is_using_tool
+    def use_current_selected_seed(self):
+        pass
+
+    def game_object_update(self) -> None:
+
+        # KEYS
+        # SPACE = USE TOOL (usage compute when the timer is over) | P = CHANGE TOOL
+        #  L_CONTROL = PLANT SEED (when used is removed from the seeds list) | O = CHANGE SEED
 
         # TOOLS
-        # tool timer activation Press Space to use a tool
-        if InputManager.is_key_pressed(pygame.K_SPACE):
-            if not self.is_using_tool:
+        # tool timer activation Press Space to use a tool, can only use or switch between tools if the tools list is not empty
+        if len(self.available_tools) > 0:
+            # starts using the current selected tool if the player is not using it and activates the tool_usage_timer
+            if InputManager.is_key_pressed(pygame.K_SPACE) and not self.is_using_tool:
                 self.animation_controller.current_frame_index = 0
                 self.is_using_tool = True
-                # run a timer for the tool usage exit time_system
-                self.tool_use_exit_timer.activate()
-        # deactivates the tool
-        if not self.tool_use_exit_timer.is_timer_active_read_only:
-            if self.is_using_tool:
-                self.animation_controller.current_frame_index = 0
-                self.is_using_tool = False
-        # switches tool: can only switch a tool if is not using a tool at the moment
-        if not self.is_using_tool:
-            if self.key_tracker_p.has_key_been_fired_at_this_frame:
+                # runs the tool_usage_timer when it ends it will execute the finish_using_current_selected_tool_round()
+                # which will deactivate the timer and sel is_using_tool to False, making the timer able to run again
+                self.tool_usage_timer.activate()
+            # switches tool: can only switch a tool if is not using a tool at the moment
+            if not self.is_using_tool and self.tool_changer_key_tracker_p.has_key_been_fired_at_this_frame:
                 self.current_tool_index += 1
                 if self.current_tool_index == len(self.available_tools):
                     self.current_tool_index = 0
+                self.current_selected_tool = self.available_tools[self.current_tool_index]
+                # resets the total_current_tool_usages of the tool when switched
+                self.total_current_tool_usages = 0
+
+        # SEEDS
+        # can only use or switch between seed if the seed list is not empty, switches between seed
+        if len(self.available_seeds) > 0:
+            # switches the current selected seed
+            if self.change_seed_key_tracker_o.has_key_been_fired_at_this_frame:
+                self.current_seed_index += 1
+                if self.current_seed_index == len(self.available_seeds):
+                    self.current_seed_index = 0
+                self.current_selected_seed = self.available_seeds[self.current_seed_index]
+            # uses the current selected tool and passes the current one to be the next one or "empty list" string
+            if self.use_seed_key_tracker_ctrl.has_key_been_fired_at_this_frame:
+                if len(self.available_seeds) > 0:
+                    was_at_the_first_on_the_list = False
+                    if self.current_seed_index == 0:
+                        was_at_the_first_on_the_list = True
+                    # removes the seed fom list
+                    print(f"{self.current_selected_seed} used")
+                    self.available_seeds.remove(self.current_selected_seed)
+                    # pass the current selected one to the one before or to the 0 index
+                    self.current_seed_index = self.current_seed_index - 1 if not was_at_the_first_on_the_list else 0
+                    # sets the current seed or empty list is there is no more seeds
+                    self.current_selected_seed = self.available_seeds[self.current_seed_index] if len(self.available_seeds) > 0 else "empty list"
+
+                else:
+                    self.current_selected_seed = "empty list"
 
         # MOVE
+        # updates the is_moving field for the animations and its other dependencies
+        self.is_moving = not (InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0) and not self.is_using_tool
         # allows moving only if there is no tool being used
         if not self.is_using_tool and self.is_moving:
             self.move_player()
 
-    def render(self) -> None:
-        super().render()
+    def game_object_render(self) -> None:
+        super().game_object_render()
         self.animate_player()
 
     def animate_player(self):
-        # can oly make the movement stuff then ther e is no tool being used
-        if not self.is_using_tool:
+        # can oly make the movement stuff then there is no tool being used
+        if self.is_using_tool:
+            # using tool: simply concatenates the tool name, it will be the same as the clip folders names
+            if self.last_direction_before_stop == "down":
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_down")
+            elif self.last_direction_before_stop == "up":
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_up")
+            elif self.last_direction_before_stop == "left":
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_left")
+            elif self.last_direction_before_stop == "right":
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_right")
+        else:
+            # moving animation
             if self.is_moving:
                 if InputManager.Horizontal_Axis == -1:
                     self.animation_controller.set_current_animation("walk_left")
@@ -127,6 +185,7 @@ class Player(GameObject):
                 elif InputManager.Vertical_Axis == 1:
                     self.animation_controller.set_current_animation("walk_down")
                     self.last_direction_before_stop = "down"
+            # idle animation
             else:
                 if self.last_direction_before_stop == "down":
                     self.animation_controller.set_current_animation("idle_down")
@@ -136,16 +195,6 @@ class Player(GameObject):
                     self.animation_controller.set_current_animation("idle_left")
                 elif self.last_direction_before_stop == "right":
                     self.animation_controller.set_current_animation("idle_right")
-        # using tool: simply concatenates the tool name, it will be the same as the clip folders names
-        else:
-            if self.last_direction_before_stop == "down":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_down")
-            elif self.last_direction_before_stop == "up":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_up")
-            elif self.last_direction_before_stop == "left":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_left")
-            elif self.last_direction_before_stop == "right":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_right")
 
     def move_player(self) -> None:
         # generates a direction based on players input
@@ -169,7 +218,12 @@ class Player(GameObject):
                f"normalized direction magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
                f"non-normalized direction: {self.non_normalized_direction}\n" \
                f"non-normalized direction magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
-               f"current set tool: {self.available_tools[self.current_tool_index]}\n" \
+               f"\n" \
+               f"available tools: {self.available_tools}\n" \
+               f"current set tool: {self.current_selected_tool} index({self.current_tool_index})\n" \
+               f"total usages computed: {self.total_current_tool_usages}\n" \
                f"is using tool: {self.is_using_tool}\n" \
-               f"is tool use exit timer active: {self.tool_use_exit_timer.is_timer_active_read_only}\n" \
-
+               f"is tool use exit timer active: {self.tool_usage_timer.is_timer_active_read_only}\n" \
+               f"\n" \
+               f"available seeds: {self.available_seeds}\n" \
+               f"current seed: {self.current_selected_seed} index({self.current_seed_index})" \
