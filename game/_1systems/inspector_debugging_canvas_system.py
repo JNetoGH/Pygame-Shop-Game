@@ -13,7 +13,6 @@ class InspectorDebuggingCanvas:
         self.current_scene = scene
         self.font_size = font_size
 
-
     def render_inspector_debugging_text(self):
         font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf',
                                 self.font_size)  # create a text surface object,

@@ -6,9 +6,6 @@ from _3gameobjs.game_obj import GameObject
 class TestObj(GameObject):
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
-
-    # called just once
-    def game_object_start(self) -> None:
         # animation_clip = AnimationClip("clip_test", "_0resources/graphics/character/down_axe")
         # self.animationController = AnimationController([animation_clip], self)
         self.single_sprite = SingleSprite("_0resources/graphics/character/down_axe/0.png", self)

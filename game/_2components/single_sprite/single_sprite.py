@@ -21,6 +21,9 @@ class SingleSprite(Component):
         self._game_object_owner.image = _scaled_sprite_as_surface
         self._game_object_owner.rect = self._game_object_owner.image.get_rect(center=self._game_object_owner.transform.position)
 
+    def component_update(self):
+        self._game_object_owner.rect = self._game_object_owner.image.get_rect(center=self._game_object_owner.transform.position)
+
     # scaled like 0.8 = 80%
     @staticmethod
     def _return_scaled_image_surface(surface_img, scale):

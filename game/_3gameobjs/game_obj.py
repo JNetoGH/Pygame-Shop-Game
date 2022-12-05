@@ -10,6 +10,7 @@ class GameObject(pygame.sprite.Sprite):
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__()
         self.name = name
+        self.should__be_rendered: bool = True
         # when a component is instantiated, it is automatically stored here
         self.components_list = []
         self.scene = scene
@@ -27,8 +28,6 @@ class GameObject(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.transform.position)
         # adds itself to the scene game object list
         scene.all_game_obj.append(self)
-        # calls its start() method
-        self.game_object_start()
 
     def get_index_in_scene_all_game_objects_list(self) -> int:
         for i in range(0, len(self.scene.all_game_obj)):
@@ -41,10 +40,6 @@ class GameObject(pygame.sprite.Sprite):
             if self.scene.rendering_layers[i] == self.rendering_layer:
                 return i
         return -1
-
-    @abstractmethod
-    def game_object_start(self) -> None:
-        pass
 
     # pygame is stupid and has already an update method for sprites(a.k.a game obj super class)
     # so I had to call it this way
@@ -65,6 +60,7 @@ class GameObject(pygame.sprite.Sprite):
         return f"GAME OBJECT INSPECTOR \n" \
                f"game object name: {self.name}\n" \
                f"class name: {type(self)} \n" \
+               f"should be rendered: {self.should__be_rendered}\n" \
                f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
                f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene()}\n" \
                f"components: [{components_names}]\n\n" \
@@ -129,6 +125,7 @@ class GameObject(pygame.sprite.Sprite):
                f"GAME OBJECT INSPECTOR \n" \
                f"\ngame object name: {self.name}\n" \
                f"class name: {type(self)} \n" \
+               f"should be rendered: {self.should__be_rendered}\n" \
                f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
                f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene()}\n" \
                f"\ncomponents:\n[{components_names}]\n\n"

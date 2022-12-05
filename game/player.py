@@ -1,14 +1,25 @@
 import pygame
 import numpy
-
 from _1systems.game_time_system import GameTime
 from _1systems.input_manager_system import InputManager
+from _1systems.scalable_game_screen_system import ScalableGameScreen
 from _2components.key_tracker.key_tracker import KeyTracker
 from _2components.timer.timer import Timer
 from _2components.animation.animation_clip import AnimationClip
 from _2components.animation.animation_controller import AnimationController
 from _2components.single_sprite.single_sprite import SingleSprite
 from _3gameobjs.game_obj import GameObject
+
+
+class Tool(GameObject):
+
+    def __init__(self, name: str, img_path, scene, rendering_layer):
+        super().__init__(name, scene, rendering_layer)
+        self.img_path = img_path
+        self.single_sprite = SingleSprite(f"{self.img_path}", self)
+        position_x = ScalableGameScreen.DummyScreenWidth // 2
+        position_y = ScalableGameScreen.DummyScreenHeight - self.rect.height
+        self.transform.move_position(pygame.Vector2(position_x, position_y))
 
 
 class Player(GameObject):
@@ -64,6 +75,12 @@ class Player(GameObject):
         self.animation_controller = AnimationController(animation_clips, self)
 
         # TOOLS
+        self.axe = Tool("axe", "_0resources/graphics/tools/axe.png", self.scene, self.scene.rendering_layer_tools)
+        self.water = Tool("water", "_0resources/graphics/tools/water.png", self.scene, self.scene.rendering_layer_tools)
+        self.hoe = Tool("hoe", "_0resources/graphics/tools/hoe.png", self.scene, self.scene.rendering_layer_tools)
+
+
+        # TOOLS USAGE CONTROLLING SYSTEM
         # tooling player timer system
         self.is_using_tool = False
         # each tool takes a certain amount of time to its usage be computed
@@ -72,7 +89,7 @@ class Player(GameObject):
         self.total_current_tool_usages = 0
         # gonna use p key to switch tools when fired
         self.tool_changer_key_tracker_p = KeyTracker(pygame.K_p, self)
-        self.available_tools = ["axe", "water", "hoe"]
+        self.available_tools = [self.axe, self.water, self.hoe]
         self.current_tool_index: int = 0
         self.current_selected_tool = self.available_tools[self.current_tool_index] if len(self.available_tools) > 0 else "empty list"
 
@@ -84,6 +101,13 @@ class Player(GameObject):
         self.current_selected_seed = self.available_seeds[self.current_seed_index] if len(self.available_seeds) > 0 else "empty list"
         # used just for debugging
         self.last_used_seed = "Null"
+
+    def update_tool_menu_rendered_at_screen(self, required_tool):
+        for t in self.available_tools:
+            if t != required_tool:
+                t.should__be_rendered = False
+            else:
+                t.should__be_rendered = True
 
     # called when the tool's timer is over, the computation of the tool effect
     def finish_current_selected_tool_usage(self):
@@ -119,6 +143,7 @@ class Player(GameObject):
                 self.current_selected_tool = self.available_tools[self.current_tool_index]
                 # resets the total_current_tool_usages of the tool when switched
                 self.total_current_tool_usages = 0
+            self.update_tool_menu_rendered_at_screen(self.current_selected_tool)
 
         # SEEDS
         # can only use or switch between seed if the seed list is not empty, switches between seed
@@ -132,25 +157,20 @@ class Player(GameObject):
             # uses the current selected tool and passes the current one to be the next one or "empty list" string
             if self.use_seed_key_tracker_ctrl.has_key_been_fired_at_this_frame:
                 if len(self.available_seeds) > 0:
-
                     # REQUIRED TO SWITCH THE CURRENT SEED
                     was_at_the_first_on_the_list = False
                     if self.current_seed_index == 0:
                         was_at_the_first_on_the_list = True
-
                     # USED JUST FOR DEBUGGING
                     print(f"{self.current_selected_seed} used")
                     self.last_used_seed = self.current_selected_seed
-
                     # REMOVES THE CURRENT SEED FROM THE LIST
                     self.available_seeds.remove(self.current_selected_seed)
-
                     # SWITCHES THE CURRENT SEED
                     # pass the current selected one to the one before or to the 0 index
                     self.current_seed_index = self.current_seed_index - 1 if not was_at_the_first_on_the_list else 0
                     # sets the current seed or empty list is there is no more seeds
                     self.current_selected_seed = self.available_seeds[self.current_seed_index] if len(self.available_seeds) > 0 else "empty list"
-
                 else:
                     self.current_selected_seed = "empty list"
 
@@ -171,13 +191,13 @@ class Player(GameObject):
         if self.is_using_tool:
             # using tool: simply concatenates the tool name, it will be the same as the clip folders names
             if self.last_direction_before_stop == "down":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_down")
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index].name + "_down")
             elif self.last_direction_before_stop == "up":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_up")
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index].name + "_up")
             elif self.last_direction_before_stop == "left":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_left")
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index].name + "_left")
             elif self.last_direction_before_stop == "right":
-                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index] + "_right")
+                self.animation_controller.set_current_animation(self.available_tools[self.current_tool_index].name + "_right")
         else:
             # moving animation
             if self.is_moving:

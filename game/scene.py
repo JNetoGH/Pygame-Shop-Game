@@ -19,9 +19,10 @@ class Scene:
         self.all_game_obj = []
 
         # - When a game Obj is instantiated, it's automatically stored here using the layer passed as parameter in its constructor
-        rendering_layer_0 = RenderingLayer()
-        rendering_layer_1 = RenderingLayer()
-        self.rendering_layers = [rendering_layer_0, rendering_layer_1]
+        self.rendering_layer_0 = RenderingLayer()
+        self.rendering_layer_1 = RenderingLayer()
+        self.rendering_layer_tools = RenderingLayer()
+        self.rendering_layers = [self.rendering_layer_0, self.rendering_layer_1, self.rendering_layer_tools]
 
         self.scene_start()  # called once
 

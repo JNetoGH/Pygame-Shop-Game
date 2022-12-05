@@ -15,4 +15,5 @@ class RenderingLayer:
 
     def render_all_game_objects(self):
         for gm in self._game_objects_to_render:
-            gm.game_object_render()
+            if gm.should__be_rendered:
+                gm.game_object_render()

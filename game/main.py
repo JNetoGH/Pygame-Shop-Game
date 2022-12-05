@@ -50,6 +50,7 @@ class Game:
         # should be the one of the last things to be instantiated
         self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=9)
 
+        # show both the inspector lateral info and the gizmos
         self.show_inspector_debugging_canvas = True
 
     def run_game_loop(self):
