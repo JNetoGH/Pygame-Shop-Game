@@ -14,22 +14,37 @@ class ScalableGameScreen:
     # not used til now
     TILE_SIZE = 64
 
-    # DUMMY SCREEN
-    DummyScreenWidth = 1920
-    DummyScreenHeight = 1080
+    # CANVAS SURFACES
+    TargetResolutionForUpScaling = [1920, 1080]
+    # DUMMY SCREEN: the screen where thing are drew into
+    GameScreenDummySurface: pygame.Surface = None
+    # REAL CANVAS: the actual displayed canvas, receives a up/down-scaled dummy canvas to display
+    # thing should not be drawn directly at the GameScreenRealSurface
+    GameScreenRealSurface: pygame.Surface = None
+
+    """
+    HOW THE SCREEN SCALING SYSTEM WORKS
+    
+                                              DummySurface is                 RealSurface blits
+                       things are drawn       up/down-scaled to the           the Dummy surface into itself
+    DummySurface       to the DummySurface    TargetResolutionForUpScaling   
+    |------------|     |------------|         |-------------------|            RealSurface:
+    |            | =>  |   X    o   |    =>   |                   |      =>  |-------------------| 
+    |------------|     |------------|         |                   |          |    DummySurface   |  =>  pygame shows
+                                              |-------------------|          |                   |      the RealSurface
+                                                                             |-------------------| 
+                                              
+    """
+
+    DummyScreenWidth = 1280
+    DummyScreenHeight = 720
     HalfDummyScreenWidth = DummyScreenWidth // 2
     HalfDummyScreenHeight = DummyScreenHeight // 2
 
-    # REAL CANVAS
     RealScreenWidth = 1920
-    RealScreenHeight = 1920
+    RealScreenHeight = 1080
     HalfRealScreenWidth = RealScreenWidth // 2
     HalfRealScreenHeight = RealScreenHeight // 2
-
-    # CANVAS SURFACES
-    TargetResolutionForUpScaling = [1920, 1080]
-    GameScreenDummySurface: pygame.Surface = None
-    GameScreenRealSurface: pygame.Surface = None
 
     _CurrentOperation = OPERATION.NULL
 
