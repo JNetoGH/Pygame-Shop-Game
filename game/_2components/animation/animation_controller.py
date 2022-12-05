@@ -1,7 +1,7 @@
 from _1systems.game_time_system import GameTime
 from _2components.animation.animation_clip import AnimationClip
 from _2components.component_base_class.component import Component
-from _3gameobjs.game_obj import GameObject
+from _3gameobjs.game_object import GameObject
 
 
 # sets the current animation in a animation list and the current frame of the animation according to a speed

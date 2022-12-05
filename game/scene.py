@@ -1,7 +1,7 @@
-import pygame
-from player import Player
+from _3gameobjs.map import Map
+from _3gameobjs.player import Player
 from rendering_layer import RenderingLayer
-from test_obj import TestObj
+from _3gameobjs.test_obj import TestObj
 from _1systems.scalable_game_screen_system import ScalableGameScreen
 
 
@@ -19,14 +19,16 @@ class Scene:
         self.all_game_obj = []
 
         # - When a game Obj is instantiated, it's automatically stored here using the layer passed as parameter in its constructor
+        self.rendering_layer_map = RenderingLayer()
         self.rendering_layer_0 = RenderingLayer()
         self.rendering_layer_1 = RenderingLayer()
         self.rendering_layer_tools = RenderingLayer()
-        self.rendering_layers = [self.rendering_layer_0, self.rendering_layer_1, self.rendering_layer_tools]
+        self.rendering_layers = [self.rendering_layer_map, self.rendering_layer_0, self.rendering_layer_1, self.rendering_layer_tools]
 
         self.scene_start()  # called once
 
     def scene_start(self):
+        Map("map", self, self.rendering_layer_map)
         Player("game_player", self, self.rendering_layers[0])
         TestObj("test_obj_1", self, self.rendering_layers[1])
 

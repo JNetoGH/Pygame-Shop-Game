@@ -1,6 +1,6 @@
 import pygame
 from _2components.single_sprite.single_sprite import SingleSprite
-from _3gameobjs.game_obj import GameObject
+from _3gameobjs.game_object import GameObject
 
 
 class TestObj(GameObject):

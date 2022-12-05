@@ -8,10 +8,10 @@ from _2components.timer.timer import Timer
 from _2components.animation.animation_clip import AnimationClip
 from _2components.animation.animation_controller import AnimationController
 from _2components.single_sprite.single_sprite import SingleSprite
-from _3gameobjs.game_obj import GameObject
+from _3gameobjs.game_object import GameObject
 
 
-class Tool(GameObject):
+class PlayerItem(GameObject):
 
     def __init__(self, name: str, img_path, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
@@ -75,10 +75,9 @@ class Player(GameObject):
         self.animation_controller = AnimationController(animation_clips, self)
 
         # TOOLS
-        self.axe = Tool("axe", "_0resources/graphics/tools/axe.png", self.scene, self.scene.rendering_layer_tools)
-        self.water = Tool("water", "_0resources/graphics/tools/water.png", self.scene, self.scene.rendering_layer_tools)
-        self.hoe = Tool("hoe", "_0resources/graphics/tools/hoe.png", self.scene, self.scene.rendering_layer_tools)
-
+        self.axe = PlayerItem("axe", "_0resources/graphics/tools/axe.png", self.scene, self.scene.rendering_layer_tools)
+        self.water = PlayerItem("water", "_0resources/graphics/tools/water.png", self.scene, self.scene.rendering_layer_tools)
+        self.hoe = PlayerItem("hoe", "_0resources/graphics/tools/hoe.png", self.scene, self.scene.rendering_layer_tools)
 
         # TOOLS USAGE CONTROLLING SYSTEM
         # tooling player timer system
@@ -94,9 +93,13 @@ class Player(GameObject):
         self.current_selected_tool = self.available_tools[self.current_tool_index] if len(self.available_tools) > 0 else "empty list"
 
         # SEEDS
+        self.corn_seed = PlayerItem("corn_seed", "_0resources/graphics/seeds/corn.png", self.scene, self.scene.rendering_layer_tools)
+        self.tomato_seed = PlayerItem("tomato_seed", "_0resources/graphics/seeds/tomato.png", self.scene, self.scene.rendering_layer_tools)
+
+        # TOOLS USAGE CONTROLLING SYSTEM
         self.change_seed_key_tracker_o = KeyTracker(pygame.K_o, self)
         self.use_seed_key_tracker_ctrl = KeyTracker(pygame.K_LCTRL, self)
-        self.available_seeds = ["corn", "tomato"]
+        self.available_seeds = [self.corn_seed, self.tomato_seed]
         self.current_seed_index: int = 0
         self.current_selected_seed = self.available_seeds[self.current_seed_index] if len(self.available_seeds) > 0 else "empty list"
         # used just for debugging
@@ -109,6 +112,13 @@ class Player(GameObject):
             else:
                 t.should__be_rendered = True
 
+    def update_seed_menu_rendered_at_screen(self, required_seed):
+        for s in self.available_seeds:
+            if s != required_seed:
+                s.should__be_rendered = False
+            else:
+                s.should__be_rendered = True
+
     # called when the tool's timer is over, the computation of the tool effect
     def finish_current_selected_tool_usage(self):
         # what happens when the tool_exit_time
@@ -120,6 +130,17 @@ class Player(GameObject):
             self.is_using_tool = False
 
     def game_object_update(self) -> None:
+
+        # UPDATES PLAYER'S ITEMS POSITION
+        seeds_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth//2-70, ScalableGameScreen.DummyScreenHeight-100)
+        tools_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth//2+70, ScalableGameScreen.DummyScreenHeight-100)
+        for seed in self.available_seeds:
+            seed.transform.move_position(seeds_pos)
+        for tool in self.available_tools:
+            tool.transform.move_position(tools_pos)
+        # UPDATES THE CURRENT RENDERED ITEM (E.G tool or seed)
+        self.update_tool_menu_rendered_at_screen(self.current_selected_tool)
+        self.update_seed_menu_rendered_at_screen(self.current_selected_seed)
 
         # KEYS
         # SPACE = USE TOOL (usage compute when the timer is over) | P = CHANGE TOOL
@@ -143,7 +164,6 @@ class Player(GameObject):
                 self.current_selected_tool = self.available_tools[self.current_tool_index]
                 # resets the total_current_tool_usages of the tool when switched
                 self.total_current_tool_usages = 0
-            self.update_tool_menu_rendered_at_screen(self.current_selected_tool)
 
         # SEEDS
         # can only use or switch between seed if the seed list is not empty, switches between seed
@@ -162,10 +182,11 @@ class Player(GameObject):
                     if self.current_seed_index == 0:
                         was_at_the_first_on_the_list = True
                     # USED JUST FOR DEBUGGING
-                    print(f"{self.current_selected_seed} used")
+                    print(f"{self.current_selected_seed.name} used")
                     self.last_used_seed = self.current_selected_seed
                     # REMOVES THE CURRENT SEED FROM THE LIST
                     self.available_seeds.remove(self.current_selected_seed)
+                    self.current_selected_seed.should__be_rendered = False
                     # SWITCHES THE CURRENT SEED
                     # pass the current selected one to the one before or to the 0 index
                     self.current_seed_index = self.current_seed_index - 1 if not was_at_the_first_on_the_list else 0
@@ -252,7 +273,7 @@ class Player(GameObject):
                f"non-normalized direction magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
                f"\n" \
                f"available tools: {self.available_tools}\n" \
-               f"current set tool: {self.current_selected_tool} index({self.current_tool_index})\n" \
+               f"current set tool: {self.current_selected_tool.name} index({self.current_tool_index})\n" \
                f"total usages computed: {self.total_current_tool_usages}\n" \
                f"is using tool: {self.is_using_tool}\n" \
                f"is tool use exit timer active: {self.tool_usage_timer.is_timer_active_read_only}\n" \

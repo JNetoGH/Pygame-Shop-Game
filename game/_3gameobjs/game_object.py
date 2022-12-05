@@ -77,7 +77,7 @@ class GameObject(pygame.sprite.Sprite):
         #   the corner like:
         """
             |-------|
-            |       | = rect
+            |       | => rect
             |-------|
                      IMAGE
         """
@@ -104,7 +104,7 @@ class GameObject(pygame.sprite.Sprite):
         # TRANSFORM GIZMOS
         pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, "cyan", self.transform.position, 5)
         # description
-        text_transform = f"Transform.position (x:{self.transform.position.x} | y:{self.transform.position.y})"
+        text_transform = f"({self.name})Transform.position (x:{self.transform.position.x} | y:{self.transform.position.y})"
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_transform,
                              (self.transform.position.x + description_spacing_x, self.transform.position.y - font_size//2),
                              font, color=pygame.Color("cyan"))
