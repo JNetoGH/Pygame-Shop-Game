@@ -10,6 +10,19 @@ class Game:
 
     def __init__(self):
 
+        """
+            KEYS USED SO FAR:
+
+                 - player:
+                         SPACE = USE TOOL (usage compute when the timer is over)
+                         P = CHANGE TOOL
+                         L_CONTROL = PLANT SEED (when used is removed from the seeds list)
+                         O = CHANGE SEED
+                 - Game for (show_inspector_debugging_canvas)
+                         Z show the debugging canvas
+                         X hides the debugging canvas
+        """
+
         pygame.init()
 
         # 21:9
@@ -37,14 +50,26 @@ class Game:
         # should be the one of the last things to be instantiated
         self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=9)
 
+        self.show_inspector_debugging_canvas = True
+
     def run_game_loop(self):
         while True:
+
+            pygame.display.set_caption(f"JNETO PRODUCTION GAME ENGINE |  FPS {self.clock.get_fps():.1f}")
             self.elapsed_updates += 1
             GameTime.DeltaTime = self.clock.tick() / 1000
             InputManager.update()
             self.scene_example.scene_update()
             self.scene_example.scene_render()
-            self.inspector_debugging_canvas.render_inspector_debugging_text()
+
+            if InputManager.is_key_pressed(pygame.K_z):
+                self.show_inspector_debugging_canvas = True
+            elif InputManager.is_key_pressed(pygame.K_x):
+                self.show_inspector_debugging_canvas = False
+            if self.show_inspector_debugging_canvas:
+                self.inspector_debugging_canvas.render_inspector_debugging_text()
+                self.inspector_debugging_canvas.render_game_objects_gizmos()
+
             ScalableGameScreen.render_final_scaled_result()
 
 

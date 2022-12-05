@@ -16,7 +16,3 @@ class RenderingLayer:
     def render_all_game_objects(self):
         for gm in self._game_objects_to_render:
             gm.game_object_render()
-
-    def debug_late_render_all_game_objects(self):
-        for gm in self._game_objects_to_render:
-            gm.game_object_debug_late_render_gizmos()

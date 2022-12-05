@@ -5,10 +5,11 @@ class TextRender:
 
     @staticmethod
     # print text on screen with \n
-    def blit_text(surface, max_width, max_height, text, pos, font, color=pygame.Color('blue')):
+    def blit_text(surface, max_width, text, pos, font, color=pygame.Color('blue')):
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
         space = font.size(' ')[0]  # The width of a space.
         x, y = pos
+        word_height = 0
         for line in words:
             for word in line:
                 word_surface = font.render(word, 0, color)

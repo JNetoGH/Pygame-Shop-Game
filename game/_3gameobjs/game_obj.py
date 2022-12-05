@@ -5,9 +5,6 @@ from _2components.transform.transform import Transform
 from abc import abstractmethod
 
 
-
-
-
 class GameObject(pygame.sprite.Sprite):
 
     def __init__(self, name: str, scene, rendering_layer):
@@ -37,6 +34,13 @@ class GameObject(pygame.sprite.Sprite):
         for i in range(0, len(self.scene.all_game_obj)):
             if self.scene.all_game_obj[i] == self:
                 return i
+        return -1
+
+    def get_this_game_object_rendering_layer_index_in_scene(self) -> int:
+        for i in range(0, len(self.scene.rendering_layers)):
+            if self.scene.rendering_layers[i] == self.rendering_layer:
+                return i
+        return -1
 
     @abstractmethod
     def game_object_start(self) -> None:
@@ -48,6 +52,7 @@ class GameObject(pygame.sprite.Sprite):
     def game_object_update(self) -> None:
         pass
 
+    # it's meant to be overridden with a super().get_inspector_debugging_status() call in it
     def get_inspector_debugging_status(self) -> str:
         components_names = ""
         for component in self.components_list:
@@ -57,11 +62,11 @@ class GameObject(pygame.sprite.Sprite):
         components_inspector_debugging_status = ""
         for component in self.components_list:
             components_inspector_debugging_status += component.get_inspector_debugging_status() + "\n"
-
         return f"GAME OBJECT INSPECTOR \n" \
                f"game object name: {self.name}\n" \
                f"class name: {type(self)} \n" \
                f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
+               f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene()}\n" \
                f"components: [{components_names}]\n\n" \
                f"{components_inspector_debugging_status}"
 
@@ -84,7 +89,7 @@ class GameObject(pygame.sprite.Sprite):
         image_y = self.transform.position.y - self.rect.height // 2
         ScalableGameScreen.GameScreenDummySurface.blit(self.image, (image_x, image_y))
 
-    # DO NOT TOUCH AND DO NOT OVERRIDE! IT'S USED BY THE RENDERING_LAYER IN ORDER TO RENDER THE GAME OBJECT'S GIZMOS
+    # DO NOT TOUCH AND DO NOT OVERRIDE! IT'S USED BY THE InspectorDebuggingCanvas IN ORDER TO RENDER THE GAME OBJECT'S GIZMOS
     def game_object_debug_late_render_gizmos(self) -> None:
 
         font_size = 15
@@ -94,18 +99,39 @@ class GameObject(pygame.sprite.Sprite):
 
         # IMAGE RECT GIZMOS
         pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, "red", self.rect, 1)
-        # descriprion
+        # description
         text_img_rect = "self.image.rect"
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface,
-                             ScalableGameScreen.GameScreenDummySurface.get_width(),  ScalableGameScreen.GameScreenDummySurface.get_height(),
-                             text_img_rect , (self.transform.position.x + self.rect.width//2 + description_spacing_x, self.transform.position.y+self.rect.height//2-font_size),
+        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_img_rect,
+                             (self.transform.position.x + self.rect.width//2 + description_spacing_x, self.transform.position.y+self.rect.height//2-font_size),
                              font, color=pygame.Color("red"))
 
         # TRANSFORM GIZMOS
-        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, "black", self.transform.position, 5)
+        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, "cyan", self.transform.position, 5)
         # description
         text_transform = f"Transform.position (x:{self.transform.position.x} | y:{self.transform.position.y})"
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface,
-                             ScalableGameScreen.GameScreenDummySurface.get_width(),  ScalableGameScreen.GameScreenDummySurface.get_height(),
-                             text_transform, (self.transform.position.x + description_spacing_x, self.transform.position.y - font_size//2),
+        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_transform,
+                             (self.transform.position.x + description_spacing_x, self.transform.position.y - font_size//2),
+                             font, color=pygame.Color("cyan"))
+
+        # THE DEBUGGING STATS IS ALSO GOING TO APPEAR AS GIZMOS
+        components_names = ""
+        counter = 0
+        max_comp_name_per_line = 3
+        for component in self.components_list:
+            counter += 1
+            components_names += type(component).__name__ + ", "
+            if counter == max_comp_name_per_line:
+                components_names += "\n"
+                counter = 0
+        components_names = components_names[:-1]
+        components_names = components_names[:-1]
+        game_object_stats_text =\
+               f"GAME OBJECT INSPECTOR \n" \
+               f"\ngame object name: {self.name}\n" \
+               f"class name: {type(self)} \n" \
+               f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
+               f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene()}\n" \
+               f"\ncomponents:\n[{components_names}]\n\n"
+        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, game_object_stats_text,
+                             (self.transform.position.x-self.rect.width//2, self.transform.position.y + self.rect.height//2 + description_spacing_y),
                              font, color=pygame.Color("black"))

@@ -44,7 +44,7 @@ class Scene:
         # renders all rendering layers
         for r_layer in self.rendering_layers:
             r_layer.render_all_game_objects()
-            r_layer.debug_late_render_all_game_objects()
+
 
         """      
         OLD WAY WHEN SCENE WOULD RENDER EVERYTHING 

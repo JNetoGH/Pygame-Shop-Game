@@ -13,6 +13,7 @@ class InspectorDebuggingCanvas:
         self.current_scene = scene
         self.font_size = font_size
 
+
     def render_inspector_debugging_text(self):
         font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf',
                                 self.font_size)  # create a text surface object,
@@ -28,6 +29,9 @@ class InspectorDebuggingCanvas:
                f"{self.current_scene.all_game_obj[0].get_inspector_debugging_status()}\n"  # player is 0 in the list of objects as well
 
         # calls the method that displays text on the dummy screen
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface,
-                             ScalableGameScreen.DummyScreenWidth // 3, ScalableGameScreen.DummyScreenHeight,
+        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth // 3,
                              msgs, (20, 20), font, color=pygame.Color("white"))
+
+    def render_game_objects_gizmos(self):
+        for gm_obj in self.current_scene.all_game_obj:
+            gm_obj.game_object_debug_late_render_gizmos()
