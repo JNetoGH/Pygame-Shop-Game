@@ -4,7 +4,7 @@ from _3gameobjs.game_object import GameObject
 
 class RenderingLayer:
 
-    def __init__(self, is_fixed_on_screen=False):
+    def __init__(self, is_fixed_on_screen: bool):
         self.is_fixed_on_screen = is_fixed_on_screen
         self._game_objects_to_render: list[GameObject] = []
 

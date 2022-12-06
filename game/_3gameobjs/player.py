@@ -18,7 +18,7 @@ class PlayerItem(GameObject):
         self.img_path = img_path
         self.single_sprite = SingleSprite(f"{self.img_path}", self)
         position_x = ScalableGameScreen.DummyScreenWidth // 2
-        position_y = ScalableGameScreen.DummyScreenHeight - self.rect.height
+        position_y = ScalableGameScreen.DummyScreenHeight - self.image_rect.height
         self.transform.move_position(pygame.Vector2(position_x, position_y))
 
 
@@ -250,6 +250,8 @@ class Player(GameObject):
         self.non_normalized_direction = pygame.Vector2(InputManager.Horizontal_Axis, InputManager.Vertical_Axis)
         # normalizes the direction, but checks before if the Magnitude is not 0, otherwise it will launch an exception
         if numpy.linalg.norm(self.non_normalized_direction) != 0:
+            # .norm = magnitude n quer dizer normalizado, python é estranho
+            # vetor normalizado = vetor/magnitude
             self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
         else:
             self.normalized_direction = pygame.Vector2(0, 0)

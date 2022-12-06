@@ -20,8 +20,7 @@ class TestObj(GameObject):
         pass
 
     def get_inspector_debugging_status(self) -> str:
-        super(TestObj, self).get_inspector_debugging_status()
-        return ""
+        return super(TestObj, self).get_inspector_debugging_status()
 
 
 

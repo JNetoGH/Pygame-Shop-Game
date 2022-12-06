@@ -15,6 +15,9 @@ class Transform(Component):
     def move_position(self, new_position):
         self.position = new_position
 
+    def component_update(self):
+        pass
+
     def get_inspector_debugging_status(self) -> str:
         return f"COMPONENT(Transform)\n" \
                f"position: {self.position}\n"

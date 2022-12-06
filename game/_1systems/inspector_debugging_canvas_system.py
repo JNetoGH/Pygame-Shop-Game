@@ -25,7 +25,7 @@ class InspectorDebuggingCanvas:
                f"{ScalableGameScreen.get_inspector_debugging_status()}\n" + \
                f"{InputManager.get_inspector_debugging_status()}\n" \
                f"{self.current_scene.get_inspector_debugging_status()}\n" \
-               f"{self.current_scene.all_game_obj[0].get_inspector_debugging_status()}\n"  # player is 0 in the list of objects as well
+               f"{self.current_scene.all_game_obj[1].get_inspector_debugging_status()}\n"  # player is 0 in the list of objects as well
 
         # calls the method that displays text on the dummy screen
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth // 3,

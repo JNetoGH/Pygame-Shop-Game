@@ -37,7 +37,7 @@ class Game:
         RES_2K_QHD = [2560, 1440]
         RES_4K = [3840, 2160]
 
-        ScalableGameScreen.init_screens(RES_FULL_HD, [2000,1300], RES_FULL_HD)
+        ScalableGameScreen.init_screens(RES_FULL_HD, RES_FULL_HD, RES_FULL_HD)
 
         # important stuff
         self.clock = pygame.time.Clock()
@@ -48,7 +48,7 @@ class Game:
         self.elapsed_updates = 0
 
         # should be the one of the last things to be instantiated
-        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=9)
+        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=15)
 
         # show both the inspector lateral info and the gizmos
         self.show_inspector_debugging_canvas = True
