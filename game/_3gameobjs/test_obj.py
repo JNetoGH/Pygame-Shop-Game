@@ -10,7 +10,7 @@ class TestObj(GameObject):
         # self.animationController = AnimationController([animation_clip], self)
         self.single_sprite = SingleSprite("_0resources/graphics/character/down_axe/0.png", self)
         self.single_sprite.scale_itself(2)
-        self.transform.move_world_position(pygame.Vector2(1200, 200))
+        self.transform.move_world_position(pygame.Vector2(200, 200))
 
     # called every frame
     def game_object_update(self) -> None:

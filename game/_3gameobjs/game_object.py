@@ -7,7 +7,7 @@ from abc import abstractmethod
 
 class GameObject(pygame.sprite.Sprite):
 
-    def __init__(self, name: str, scene, rendering_layer):
+    def __init__(self, name: str, scene, rendering_layer, should_be_rendered: bool = True):
         super().__init__()
         self.name = name
         self.should__be_rendered: bool = True
@@ -81,16 +81,17 @@ class GameObject(pygame.sprite.Sprite):
         # description
         text_img_rect = "self.image.image_rect"
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_img_rect,
-                             (object_screen_position[0] + self.image_rect.width // 2 + description_spacing_x, object_screen_position[1] + self.image_rect.height // 2 - font_size),
+                             (object_screen_position[0] - self.image_rect.width // 2, object_screen_position[1] - self.image_rect.height // 2 - font_size - 5),
                              font, color=pygame.Color("red"))
 
         # TRANSFORM GIZMOS
-        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, "cyan", object_screen_position, 5)
+        transform_color = "black"
+        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, transform_color, object_screen_position, 5)
         # description
-        text_transform = f"({self.name})Transform.position (x:{object_screen_position[0]} | y:{object_screen_position[1]})"
+        text_transform = f"{self.name}'s Transform.world_position\n(x:{self.transform.world_position.x} | y:{self.transform.world_position.y})"
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_transform,
                              (object_screen_position[0] + description_spacing_x, object_screen_position[1] - font_size // 2),
-                             font, color=pygame.Color("cyan"))
+                             font, color=pygame.Color(transform_color))
 
         # THE DEBUGGING STATS IS ALSO GOING TO APPEAR AS GIZMOS
         components_names = ""

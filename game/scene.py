@@ -21,35 +21,20 @@ class Camara:
 
     def render_layers(self):
 
-        self.followed_object_offset.x = self._followed_game_object.transform.world_position.x - ScalableGameScreen.DummyScreenWidth / 2
-        self.followed_object_offset.y = self._followed_game_object.transform.world_position.y - ScalableGameScreen.DummyScreenHeight / 2
+        self.followed_object_offset.x = self._followed_game_object.transform.world_position.x - ScalableGameScreen.HalfDummyScreenWidth
+        self.followed_object_offset.y = self._followed_game_object.transform.world_position.y - ScalableGameScreen.HalfDummyScreenHeight
 
         print(f"self.followed_object_offset.x: {self.followed_object_offset.x}")
         print(f"self.followed_object_offset.y: {self.followed_object_offset.y}\n")
 
-
         for r_layer in self._rendering_layers_to_render:
             for game_obj in r_layer.game_objects_to_render_read_only:
 
+                # the final result of the render takes in consideration the game object world position
+                # that's why I pre-update the image_rect
                 game_obj.image_rect = game_obj.image.get_rect(center=game_obj.transform.world_position)
-                """
-                    # todo chamar também no sprite
-                    # re-centers the image sprite image_rect to the new possible world_position
-                    game_obj.image_rect = game_obj.image.get_rect(center=game_obj.transform.world_position)
-                    # - draws the game object image on the dummy screen
-                    # - the subtractions are need in order to displays the image correctly because, by default it's shown at
-                    #   the corner like:
-                    
-                        |-------|
-                        |       | => image_rect
-                        |-------|
-                                 IMAGE
-                    
-                    image_x = game_obj.transform.world_position.x - game_obj.image_rect.width // 2
-                    image_y = game_obj.transform.world_position.y - game_obj.image_rect.height // 2
-                    game_obj.image_rect.x = image_x
-                    game_obj.image_rect.y = image_y
-                """
+
+                # the followed game object must be treated in a different way
                 if game_obj != self._followed_game_object:
 
                     # updates the sprite image_rect
@@ -57,27 +42,19 @@ class Camara:
                     offset_rect.center -= self.followed_object_offset
                     game_obj.image_rect = offset_rect
 
-
+                    # render
                     if game_obj.should__be_rendered:
-                        # render
                         ScalableGameScreen.GameScreenDummySurface.blit(game_obj.image, game_obj.image_rect)
                 else:
 
-                    # updates the sprite image_rect
-                    screen_center = (ScalableGameScreen.DummyScreenWidth / 2, ScalableGameScreen.DummyScreenHeight / 2)
+                    # updates the sprite image_rect position the followed game object image rect ,
+                    # it's different from the orders because it's always n the center
+                    screen_center = (ScalableGameScreen.HalfDummyScreenWidth, ScalableGameScreen.HalfDummyScreenHeight)
+                    self._followed_game_object.image_rect = game_obj.image.get_rect(center=screen_center)
 
-                    #render
-                    ScalableGameScreen.GameScreenDummySurface.blit(game_obj.image, screen_center)
-
-
-
-                    """
-                    
-                    game_obj.transform.world_position = pygame.Vector2(scrren_center[0], scrren_center[1])
-                    """
-
-
-
+                    # render
+                    if self._followed_game_object.should__be_rendered:
+                        ScalableGameScreen.GameScreenDummySurface.blit(game_obj.image, game_obj.image_rect)
 
 
 class Scene:
@@ -105,10 +82,10 @@ class Scene:
         # game objects
         self.map = Map("map", self, self.rendering_layer_map)
         self.player = Player("game_player", self, self.rendering_layer_player)
+        self.player.transform.move_world_position(pygame.Vector2(500, 500))
         self.test_obj = TestObj("test_obj_1", self, self.rendering_layer_test)
         # main camera will render the rendering layers
         self.main_camera = Camara(self.rendering_layers, self.player)
-
 
     def scene_start(self):
         pass
@@ -125,18 +102,8 @@ class Scene:
         ScalableGameScreen.GameScreenDummySurface.fill("darkgreen")
         # renders all rendering layers
         self.main_camera.render_layers()
-        """      
-        OLD WAY WHEN SCENE WOULD RENDER EVERYTHING 
-        WITH THIS FIELD AT THE CONSTRUCTOR: self.all_sprites = pygame.sprite.Group()  # sprite group, used to draw then all
-        
-        self.all_sprites.draw(ScalableGameScreen.GameScreenDummySurface)
-        self.all_sprites.update()
-        # used to see lines and squares mainly
-        for gm in self.all_game_obj:
-            gm.game_object_debug_late_render()
-        """
 
-    # CALLED BY THE InspectorDebuggingCanvas to show this text at the inpector
+    # CALLED BY THE InspectorDebuggingCanvas to show this text at the inspector
     def get_inspector_debugging_status(self) -> str:
         return f"SCENE DEBUGGING STATUS\n" \
                f"total rendering layers: {len(self.rendering_layers)}\n" \
