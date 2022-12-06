@@ -79,6 +79,10 @@ class Player(GameObject):
         self.water = PlayerItem("water", "_0resources/graphics/tools/water.png", self.scene, self.scene.rendering_layer_tools)
         self.hoe = PlayerItem("hoe", "_0resources/graphics/tools/hoe.png", self.scene, self.scene.rendering_layer_tools)
 
+        self.axe.fix_game_object_on_screen(pygame.Vector2(500, 500))
+        self.water.fix_game_object_on_screen(pygame.Vector2(500, 500))
+        self.hoe.fix_game_object_on_screen(pygame.Vector2(500, 500))
+
         # TOOLS USAGE CONTROLLING SYSTEM
         # tooling player timer system
         self.is_using_tool = False
