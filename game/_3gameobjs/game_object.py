@@ -1,6 +1,7 @@
 import pygame
 from _1systems.scalable_game_screen_system import ScalableGameScreen
 from _1systems.text_rendering_system import TextRender
+from _2components.collider.collider import Collider
 from _2components.transform.transform import Transform
 from abc import abstractmethod
 
@@ -47,6 +48,10 @@ class GameObject(pygame.sprite.Sprite):
         # - This rect is mostly used to hold the game object screen position (not world position)
         #   so it's quite essential
         self.image_rect = self.image.get_rect(center=self.transform.world_position)
+
+        # when a collider is added to the game object it changes this field to True
+        self.has_collider = False
+
 
     # pygame is stupid and has already an update method for sprites(a.k.a game obj super class)
     # so I had to call it this way, this is the most important method of the entire engine
@@ -115,31 +120,35 @@ class GameObject(pygame.sprite.Sprite):
     # DO NOT TOUCH AND DO NOT OVERRIDE! IT'S USED BY THE InspectorDebuggingCanvas IN ORDER TO RENDER THE GAME OBJECT'S GIZMOS
     def game_object_debug_late_render_gizmos(self) -> None:
 
-
         object_screen_pos = self.transform.screen_position_read_only
 
         if self.transform.is_center_point_appearing_on_screen_read_only:
+
+            transform_color = "black"
+            colliders_color = "yellow"
+
             font_size = 15
             font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf', font_size)  # create a text surface object,
             description_spacing_x = 30
             description_spacing_y = 30
 
             # IMAGE RECT GIZMOS
+            # render the rect
             pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, "red", self.image_rect, 1)
             # description
             text_img_rect = "self.image.image_rect"
-            # render
+            # render render description
             TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_img_rect,
                                  (object_screen_pos[0] - self.image_rect.width // 2, object_screen_pos[1] - self.image_rect.height // 2 - font_size - 5),
                                  font, color=pygame.Color("red"))
 
             # TRANSFORM GIZMOS
-            transform_color = "black"
+            # render the point
             pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, transform_color, object_screen_pos, 5)
             # description
             text_transform = f"{self.name}'s Transform.world_position\n(x:{self.transform.world_position.x} | y:{self.transform.world_position.y})\n" \
                              f"{self.name}'s Transform.screen_position\n(x:{self.transform.screen_position_read_only.x} | y:{self.transform.screen_position_read_only.y})"
-            # render
+            # render description
             TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_transform,
                                  (object_screen_pos[0] + description_spacing_x, object_screen_pos[1] - font_size // 2 - description_spacing_y),
                                  font, color=pygame.Color(transform_color))
@@ -155,8 +164,31 @@ class GameObject(pygame.sprite.Sprite):
                    f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
                    f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene_rendering_layers_list()}\n" \
                    f"\ncomponents:\n[{components_names}]\n\n"
-            # render
+            # render description
             TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, game_object_stats_text,
                                  (object_screen_pos[0] - self.image_rect.width // 2,
                                   object_screen_pos[1] + self.image_rect.height // 2 + description_spacing_y),
                                  font, color=pygame.Color("black"))
+
+            # COLLIDERS GIZMOS
+            for component in self.components_list:
+                if isinstance(component, Collider):
+                    # render
+                    # the position of the collider is at world position,
+                    # so I have to treat its position for correct representation on screen
+                    representative_collider_rect = component.collider_rect.copy()
+                    representative_collider_rect.centerx = object_screen_pos.x + component.offset_from_game_object_x
+                    representative_collider_rect.centery = object_screen_pos.y + component.offset_from_game_object_y
+                    pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, colliders_color, representative_collider_rect, 1)
+                    # description
+                    collider_text = f"{component.game_object_owner_read_only.name}'s collider\n" \
+                                    f"offside.x: {component.offset_from_game_object_x} | offside.y: {component.offset_from_game_object_y}\n" \
+                                    f"width: {component.width}  |  height: {component.height}\n" \
+                                    f"world center position {component.collider_rect.center}"
+                    # render description
+                    TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
+                                         collider_text,
+                                         (representative_collider_rect.centerx - representative_collider_rect.width // 2,
+                                          representative_collider_rect.centery - representative_collider_rect.height // 2 - font_size*4 - 20),
+                                         font, color=pygame.Color(colliders_color))
+                    pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, colliders_color, representative_collider_rect.center, 5)

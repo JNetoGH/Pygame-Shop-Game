@@ -44,7 +44,7 @@ class Game:
         RES_2K_QHD = [2560, 1440]
         RES_4K = [3840, 2160]
 
-        ScalableGameScreen.init_screens(RES_FULL_HD, RES_FULL_HD, RES_FULL_HD)
+        ScalableGameScreen.init_screens(RES_HD_PLUS ,RES_HD_PLUS ,RES_HD_PLUS )
 
         # important stuff
         self.clock = pygame.time.Clock()

@@ -1,4 +1,6 @@
 import pygame
+
+from _2components.collider.collider import Collider
 from _2components.single_sprite.single_sprite import SingleSprite
 from _3gameobjs.game_object import GameObject
 
@@ -11,6 +13,8 @@ class TestObj(GameObject):
         self.single_sprite = SingleSprite("_0resources/graphics/character/down_axe/0.png", self)
         self.single_sprite.scale_itself(2)
         self.transform.move_world_position(pygame.Vector2(200, 200))
+
+        self.collider = Collider(0,0,400,400,self)
 
     # called every frame
     def game_object_update(self) -> None:

@@ -32,7 +32,7 @@ class Scene:
         # game objects
         self.map = Map("map", self, self.rendering_layer_map)
         self.player = Player("game_player", self, self.rendering_layer_player)
-        self.player.transform.move_world_position(pygame.Vector2(500, 500))
+        self.player.transform.position = pygame.Vector2(500, 500)
         self.test_obj = TestObj("test_obj_1", self, self.rendering_layer_test)
 
         # main camera will render the rendering layers

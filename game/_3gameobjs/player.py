@@ -2,6 +2,7 @@ import pygame
 from _1systems.game_time_system import GameTime
 from _1systems.input_manager_system import InputManager
 from _1systems.scalable_game_screen_system import ScalableGameScreen
+from _2components.collider.collider import Collider
 from _2components.key_tracker.key_tracker import KeyTracker
 from _2components.timer.timer import Timer
 from _2components.animation.animation_clip import AnimationClip
@@ -36,6 +37,11 @@ class Player(GameObject):
 
         # game object default sprite
         self.single_sprite = SingleSprite("_0resources/graphics/character/down_idle/0.png", self)
+
+        # collider
+        self.collider = Collider(-10, 20, 100, 200, self)
+
+        self.collider = Collider(-100, 50, 50, 50, self)
 
         # used in animations holds the last direction the player faced while walking e.g. left, up...
         self.last_direction_before_stop = "down"
@@ -78,9 +84,18 @@ class Player(GameObject):
         self.water = PlayerItem("water", "_0resources/graphics/tools/water.png", self.scene, self.scene.rendering_layer_tools)
         self.hoe = PlayerItem("hoe", "_0resources/graphics/tools/hoe.png", self.scene, self.scene.rendering_layer_tools)
 
+        # SEEDS
+        self.corn_seed = PlayerItem("corn_seed", "_0resources/graphics/seeds/corn.png", self.scene, self.scene.rendering_layer_tools)
+        self.tomato_seed = PlayerItem("tomato_seed", "_0resources/graphics/seeds/tomato.png", self.scene, self.scene.rendering_layer_tools)
+
+        seeds_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth // 2 - 70, ScalableGameScreen.DummyScreenHeight - 100)
+        tools_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth // 2 + 70,ScalableGameScreen.DummyScreenHeight - 100)
+
         self.axe.fix_game_object_on_screen(pygame.Vector2(900, ScalableGameScreen.DummyScreenHeight -50))
         self.water.fix_game_object_on_screen(pygame.Vector2(900, ScalableGameScreen.DummyScreenHeight -50))
         self.hoe.fix_game_object_on_screen(pygame.Vector2(900, ScalableGameScreen.DummyScreenHeight -50))
+        self.corn_seed.fix_game_object_on_screen(pygame.Vector2(1000, ScalableGameScreen.DummyScreenHeight -50))
+        self.tomato_seed.fix_game_object_on_screen(pygame.Vector2(1000, ScalableGameScreen.DummyScreenHeight -50))
 
         # TOOLS USAGE CONTROLLING SYSTEM
         # tooling player timer system
@@ -94,13 +109,6 @@ class Player(GameObject):
         self.available_tools = [self.axe, self.water, self.hoe]
         self.current_tool_index: int = 0
         self.current_selected_tool = self.available_tools[self.current_tool_index] if len(self.available_tools) > 0 else "empty list"
-
-        # SEEDS
-        self.corn_seed = PlayerItem("corn_seed", "_0resources/graphics/seeds/corn.png", self.scene, self.scene.rendering_layer_tools)
-        self.tomato_seed = PlayerItem("tomato_seed", "_0resources/graphics/seeds/tomato.png", self.scene, self.scene.rendering_layer_tools)
-
-        self.corn_seed.fix_game_object_on_screen(pygame.Vector2(1000, ScalableGameScreen.DummyScreenHeight -50))
-        self.tomato_seed.fix_game_object_on_screen(pygame.Vector2(1000, ScalableGameScreen.DummyScreenHeight -50))
 
         # TOOLS USAGE CONTROLLING SYSTEM
         self.change_seed_key_tracker_o = KeyTracker(pygame.K_o, self)
@@ -137,13 +145,6 @@ class Player(GameObject):
 
     def game_object_update(self) -> None:
 
-        # UPDATES PLAYER'S ITEMS POSITION
-        seeds_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth//2-70, ScalableGameScreen.DummyScreenHeight-100)
-        tools_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth//2+70, ScalableGameScreen.DummyScreenHeight-100)
-        for seed in self.available_seeds:
-            seed.transform.move_world_position(seeds_pos)
-        for tool in self.available_tools:
-            tool.transform.move_world_position(tools_pos)
         # UPDATES THE CURRENT RENDERED ITEM (E.G tool or seed)
         self.update_tool_menu_rendered_at_screen(self.current_selected_tool)
         self.update_seed_menu_rendered_at_screen(self.current_selected_seed)
@@ -262,10 +263,10 @@ class Player(GameObject):
         else:
             self.normalized_direction = pygame.Vector2(0, 0)
         # creates a new world_position with the new direction
-        new_position: pygame.Vector2 = self.transform.world_position
+        new_position: pygame.Vector2 = self.transform.world_position.copy()
         new_position.x += self.normalized_direction.x * self.move_speed * GameTime.DeltaTime
         new_position.y += self.normalized_direction.y * self.move_speed * GameTime.DeltaTime
-        self.transform.move_world_position(new_position)
+        self.transform.move_world_position_with_collisions_calculations(new_position)
 
     def kill_player_directions(self):
         self.normalized_direction = pygame.Vector2(0, 0)
