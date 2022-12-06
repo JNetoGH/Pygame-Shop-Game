@@ -25,7 +25,7 @@ class GameObject(pygame.sprite.Sprite):
         # - The rectangle that holds the game object's image
         # - The center pos of the image_rect is the same of the gm obj pos by default, but needs to be set back to the
         #   object pos at every movement, it's automatically made by the transform bia the move_position method
-        self.image_rect = self.image.get_rect(center=self.transform.position)
+        self.image_rect = self.image.get_rect(center=self.transform.world_position)
         # adds itself to the scene game object list
         scene.all_game_obj.append(self)
 
@@ -74,20 +74,22 @@ class GameObject(pygame.sprite.Sprite):
         description_spacing_x = 20
         description_spacing_y = 10
 
+        object_screen_position = (self.image_rect.centerx, self.image_rect.centery)
+
         # IMAGE RECT GIZMOS
         pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, "red", self.image_rect, 1)
         # description
         text_img_rect = "self.image.image_rect"
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_img_rect,
-                             (self.transform.position.x + self.image_rect.width // 2 + description_spacing_x, self.transform.position.y + self.image_rect.height // 2 - font_size),
+                             (object_screen_position[0] + self.image_rect.width // 2 + description_spacing_x, object_screen_position[1] + self.image_rect.height // 2 - font_size),
                              font, color=pygame.Color("red"))
 
         # TRANSFORM GIZMOS
-        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, "cyan", self.transform.position, 5)
+        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, "cyan", object_screen_position, 5)
         # description
-        text_transform = f"({self.name})Transform.position (x:{self.transform.position.x} | y:{self.transform.position.y})"
+        text_transform = f"({self.name})Transform.position (x:{object_screen_position[0]} | y:{object_screen_position[1]})"
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_transform,
-                             (self.transform.position.x + description_spacing_x, self.transform.position.y - font_size//2),
+                             (object_screen_position[0] + description_spacing_x, object_screen_position[1] - font_size // 2),
                              font, color=pygame.Color("cyan"))
 
         # THE DEBUGGING STATS IS ALSO GOING TO APPEAR AS GIZMOS
@@ -111,5 +113,6 @@ class GameObject(pygame.sprite.Sprite):
                f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene()}\n" \
                f"\ncomponents:\n[{components_names}]\n\n"
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, game_object_stats_text,
-                             (self.transform.position.x - self.image_rect.width // 2, self.transform.position.y + self.image_rect.height // 2 + description_spacing_y),
+                             (object_screen_position[0] - self.image_rect.width // 2,
+                              object_screen_position[1] + self.image_rect.height // 2 + description_spacing_y),
                              font, color=pygame.Color("black"))

@@ -21,21 +21,21 @@ class Camara:
 
     def render_layers(self):
 
-        self.followed_object_offset.x = self._followed_game_object.image_rect.centerx - ScalableGameScreen.DummyScreenWidth / 2
-        self.followed_object_offset.y = self._followed_game_object.image_rect.centery - ScalableGameScreen.DummyScreenHeight / 2
+        self.followed_object_offset.x = self._followed_game_object.transform.world_position.x - ScalableGameScreen.DummyScreenWidth / 2
+        self.followed_object_offset.y = self._followed_game_object.transform.world_position.y - ScalableGameScreen.DummyScreenHeight / 2
 
         print(f"self.followed_object_offset.x: {self.followed_object_offset.x}")
-        print(f"self.followed_object_offset.x: {self.followed_object_offset.y}")
+        print(f"self.followed_object_offset.y: {self.followed_object_offset.y}\n")
 
 
         for r_layer in self._rendering_layers_to_render:
             for game_obj in r_layer.game_objects_to_render_read_only:
 
-                game_obj.image_rect = game_obj.image.get_rect(center=game_obj.transform.position)
+                game_obj.image_rect = game_obj.image.get_rect(center=game_obj.transform.world_position)
                 """
                     # todo chamar também no sprite
-                    # re-centers the image sprite image_rect to the new possible position
-                    game_obj.image_rect = game_obj.image.get_rect(center=game_obj.transform.position)
+                    # re-centers the image sprite image_rect to the new possible world_position
+                    game_obj.image_rect = game_obj.image.get_rect(center=game_obj.transform.world_position)
                     # - draws the game object image on the dummy screen
                     # - the subtractions are need in order to displays the image correctly because, by default it's shown at
                     #   the corner like:
@@ -45,8 +45,8 @@ class Camara:
                         |-------|
                                  IMAGE
                     
-                    image_x = game_obj.transform.position.x - game_obj.image_rect.width // 2
-                    image_y = game_obj.transform.position.y - game_obj.image_rect.height // 2
+                    image_x = game_obj.transform.world_position.x - game_obj.image_rect.width // 2
+                    image_y = game_obj.transform.world_position.y - game_obj.image_rect.height // 2
                     game_obj.image_rect.x = image_x
                     game_obj.image_rect.y = image_y
                 """
@@ -73,8 +73,12 @@ class Camara:
 
                     """
                     
-                    game_obj.transform.position = pygame.Vector2(scrren_center[0], scrren_center[1])
+                    game_obj.transform.world_position = pygame.Vector2(scrren_center[0], scrren_center[1])
                     """
+
+
+
+
 
 class Scene:
 

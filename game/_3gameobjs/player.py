@@ -19,7 +19,7 @@ class PlayerItem(GameObject):
         self.single_sprite = SingleSprite(f"{self.img_path}", self)
         position_x = ScalableGameScreen.DummyScreenWidth // 2
         position_y = ScalableGameScreen.DummyScreenHeight - self.image_rect.height
-        self.transform.move_position(pygame.Vector2(position_x, position_y))
+        self.transform.move_world_position(pygame.Vector2(position_x, position_y))
 
 
 class Player(GameObject):
@@ -135,9 +135,9 @@ class Player(GameObject):
         seeds_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth//2-70, ScalableGameScreen.DummyScreenHeight-100)
         tools_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth//2+70, ScalableGameScreen.DummyScreenHeight-100)
         for seed in self.available_seeds:
-            seed.transform.move_position(seeds_pos)
+            seed.transform.move_world_position(seeds_pos)
         for tool in self.available_tools:
-            tool.transform.move_position(tools_pos)
+            tool.transform.move_world_position(tools_pos)
         # UPDATES THE CURRENT RENDERED ITEM (E.G tool or seed)
         self.update_tool_menu_rendered_at_screen(self.current_selected_tool)
         self.update_seed_menu_rendered_at_screen(self.current_selected_seed)
@@ -255,11 +255,11 @@ class Player(GameObject):
             self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
         else:
             self.normalized_direction = pygame.Vector2(0, 0)
-        # creates a new position with the new direction
-        new_position: pygame.Vector2 = self.transform.position
+        # creates a new world_position with the new direction
+        new_position: pygame.Vector2 = self.transform.world_position
         new_position.x += self.normalized_direction.x * self.move_speed * GameTime.DeltaTime
         new_position.y += self.normalized_direction.y * self.move_speed * GameTime.DeltaTime
-        self.transform.move_position(new_position)
+        self.transform.move_world_position(new_position)
 
     def kill_player_directions(self):
         self.normalized_direction = pygame.Vector2(0, 0)
