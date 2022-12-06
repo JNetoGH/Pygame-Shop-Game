@@ -37,7 +37,8 @@ class GameObject(pygame.sprite.Sprite):
         self.image.fill((255, 255, 255))
 
         # - The rectangle that holds the game object's image
-        # - The center pos of the image_rect is the same of the gm obj pos by default
+        # - The center pos of the image_rect (a.k.a. screen position) is the same of the gm obj pos by default
+        #   therefore, the at the start of the GameObject it's screen position is the same of its world position
         # - This rect is mostly used to hold the game object screen position (not world position)
         #   so it's quite essential
         self.image_rect = self.image.get_rect(center=self.transform.world_position)
@@ -97,30 +98,34 @@ class GameObject(pygame.sprite.Sprite):
 
         font_size = 15
         font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf', font_size)  # create a text surface object,
-        description_spacing_x = 20
-        description_spacing_y = 10
+        description_spacing_x = 30
+        description_spacing_y = 30
 
-        object_screen_position = (self.image_rect.centerx, self.image_rect.centery)
+        object_screen_pos = self.transform.screen_position_read_only
 
         # IMAGE RECT GIZMOS
         pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, "red", self.image_rect, 1)
         # description
         text_img_rect = "self.image.image_rect"
+        # render
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_img_rect,
-                             (object_screen_position[0] - self.image_rect.width // 2, object_screen_position[1] - self.image_rect.height // 2 - font_size - 5),
+                             (object_screen_pos[0] - self.image_rect.width // 2, object_screen_pos[1] - self.image_rect.height // 2 - font_size - 5),
                              font, color=pygame.Color("red"))
 
         # TRANSFORM GIZMOS
         transform_color = "black"
-        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, transform_color, object_screen_position, 5)
+        pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, transform_color, object_screen_pos, 5)
         # description
-        text_transform = f"{self.name}'s Transform.world_position\n(x:{self.transform.world_position.x} | y:{self.transform.world_position.y})"
+        text_transform = f"{self.name}'s Transform.world_position\n(x:{self.transform.world_position.x} | y:{self.transform.world_position.y})\n" \
+                         f"{self.name}'s Transform.screen_position\n(x:{self.transform.screen_position_read_only.x} | y:{self.transform.screen_position_read_only.y})"
+        # render
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, text_transform,
-                             (object_screen_position[0] + description_spacing_x, object_screen_position[1] - font_size // 2),
+                             (object_screen_pos[0] + description_spacing_x, object_screen_pos[1] - font_size // 2 - description_spacing_y),
                              font, color=pygame.Color(transform_color))
 
         # THE DEBUGGING STATS IS ALSO GOING TO APPEAR AS GIZMOS
         components_names = self.get_this_game_object_components_list_as_string()
+        # description
         game_object_stats_text =\
                f"GAME OBJECT INSPECTOR \n" \
                f"\ngame object name: {self.name}\n" \
@@ -129,7 +134,8 @@ class GameObject(pygame.sprite.Sprite):
                f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
                f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene_rendering_layers_list()}\n" \
                f"\ncomponents:\n[{components_names}]\n\n"
+        # render
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, game_object_stats_text,
-                             (object_screen_position[0] - self.image_rect.width // 2,
-                              object_screen_position[1] + self.image_rect.height // 2 + description_spacing_y),
+                             (object_screen_pos[0] - self.image_rect.width // 2,
+                              object_screen_pos[1] + self.image_rect.height // 2 + description_spacing_y),
                              font, color=pygame.Color("black"))
