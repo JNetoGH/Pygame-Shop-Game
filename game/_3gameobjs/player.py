@@ -1,5 +1,4 @@
 import pygame
-import numpy
 from _1systems.game_time_system import GameTime
 from _1systems.input_manager_system import InputManager
 from _1systems.scalable_game_screen_system import ScalableGameScreen
@@ -256,10 +255,10 @@ class Player(GameObject):
         # generates a direction based on players input
         self.non_normalized_direction = pygame.Vector2(InputManager.Horizontal_Axis, InputManager.Vertical_Axis)
         # normalizes the direction, but checks before if the Magnitude is not 0, otherwise it will launch an exception
-        if numpy.linalg.norm(self.non_normalized_direction) != 0:
+        if self.non_normalized_direction.magnitude() != 0:
             # .norm = magnitude n quer dizer normalizado, python é estranho
             # vetor normalizado = vetor/magnitude
-            self.normalized_direction = self.non_normalized_direction / numpy.linalg.norm(self.non_normalized_direction)
+            self.normalized_direction = self.non_normalized_direction / self.non_normalized_direction.magnitude()
         else:
             self.normalized_direction = pygame.Vector2(0, 0)
         # creates a new world_position with the new direction
@@ -277,9 +276,9 @@ class Player(GameObject):
                f"PLAYER SELF IMPLEMENTED DEBUGGING STATS\n" \
                f"speed: {self.move_speed}\n" \
                f"normalized direction: {self.normalized_direction}\n" \
-               f"normalized direction magnitude: {numpy.linalg.norm(self.normalized_direction)}\n" \
+               f"normalized direction magnitude: {self.normalized_direction.magnitude()}\n" \
                f"non-normalized direction: {self.non_normalized_direction}\n" \
-               f"non-normalized direction magnitude: {numpy.linalg.norm(self.non_normalized_direction)}\n" \
+               f"non-normalized direction magnitude: {self.non_normalized_direction.magnitude()}\n" \
                f"\n" \
                f"available tools: {self.available_tools}\n" \
                f"current set tool: {self.current_selected_tool.name} index({self.current_tool_index})\n" \
