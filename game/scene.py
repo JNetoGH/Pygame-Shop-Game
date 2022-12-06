@@ -21,11 +21,10 @@ class Camara:
 
     def render_layers(self):
 
+        # essential for moving, its the difference of the followed game obj position in relation to the screen,
+        # in other words, how much should every other game object should move on screen (not on world)
         self.followed_object_offset.x = self._followed_game_object.transform.world_position.x - ScalableGameScreen.HalfDummyScreenWidth
         self.followed_object_offset.y = self._followed_game_object.transform.world_position.y - ScalableGameScreen.HalfDummyScreenHeight
-
-        print(f"self.followed_object_offset.x: {self.followed_object_offset.x}")
-        print(f"self.followed_object_offset.y: {self.followed_object_offset.y}\n")
 
         for r_layer in self._rendering_layers_to_render:
             for game_obj in r_layer.game_objects_to_render_read_only:

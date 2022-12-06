@@ -9,25 +9,38 @@ class GameObject(pygame.sprite.Sprite):
 
     def __init__(self, name: str, scene, rendering_layer, should_be_rendered: bool = True):
         super().__init__()
+
+        # yes, because why not?
         self.name = name
+
+        # in case False the Camera won't render this GameObject
         self.should__be_rendered: bool = True
+
         # when a component is instantiated, it is automatically stored here
         self.components_list = []
+
+        # holds the scene that the game object is part of, and adds itself in it
         self.scene = scene
+        scene.all_game_obj.append(self)
+
         # sets the transform
+        # every game object in JNeto Production Game Engine must have a Transform
         self.transform = Transform(self)
-        # sets the rendering layer
+
+        # sets the rendering layer, and adds itself to it
         self.rendering_layer = rendering_layer
         self.rendering_layer.add_game_object(self)
-        # makes a default img to the object
+
+        # makes a default img to the object, it's just a rectangle filled with some color
+        # sprites or animation override it
         self.image = pygame.Surface((64, 32))
         self.image.fill((255, 255, 255))
+
         # - The rectangle that holds the game object's image
-        # - The center pos of the image_rect is the same of the gm obj pos by default, but needs to be set back to the
-        #   object pos at every movement, it's automatically made by the transform bia the move_position method
+        # - The center pos of the image_rect is the same of the gm obj pos by default
+        # - This rect is mostly used to hold the game object screen position (not world position)
+        #   so it's quite essential
         self.image_rect = self.image.get_rect(center=self.transform.world_position)
-        # adds itself to the scene game object list
-        scene.all_game_obj.append(self)
 
     def get_index_in_scene_all_game_objects_list(self) -> int:
         for i in range(0, len(self.scene.all_game_obj)):
@@ -35,7 +48,7 @@ class GameObject(pygame.sprite.Sprite):
                 return i
         return -1
 
-    def get_this_game_object_rendering_layer_index_in_scene(self) -> int:
+    def get_this_game_object_rendering_layer_index_in_scene_rendering_layers_list(self) -> int:
         for i in range(0, len(self.scene.rendering_layers)):
             if self.scene.rendering_layers[i] == self.rendering_layer:
                 return i
@@ -47,22 +60,35 @@ class GameObject(pygame.sprite.Sprite):
     def game_object_update(self) -> None:
         pass
 
+    def get_this_game_object_components_list_as_string(self):
+        components_names = ""
+        counter = 0
+        max_comp_name_per_line = 3
+        for component in self.components_list:
+            counter += 1
+            components_names += type(component).__name__ + ", "
+            if counter == max_comp_name_per_line:
+                components_names += "\n"
+                counter = 0
+        components_names = components_names[:-1]
+        components_names = components_names[:-1]
+        return components_names
+
     # it's meant to be overridden with a super().get_inspector_debugging_status() call in it
     def get_inspector_debugging_status(self) -> str:
-        components_names = ""
-        for component in self.components_list:
-            components_names += type(component).__name__ + ", "
-        components_names = components_names[:-1]
-        components_names = components_names[:-1]
+
+        components_names = self.get_this_game_object_components_list_as_string()
+
         components_inspector_debugging_status = ""
         for component in self.components_list:
             components_inspector_debugging_status += component.get_inspector_debugging_status() + "\n"
+
         return f"GAME OBJECT INSPECTOR \n" \
                f"game object name: {self.name}\n" \
                f"class name: {type(self)} \n" \
                f"should be rendered: {self.should__be_rendered}\n" \
                f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
-               f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene()}\n" \
+               f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene_rendering_layers_list()}\n" \
                f"components: [{components_names}]\n\n" \
                f"{components_inspector_debugging_status}"
 
@@ -94,24 +120,14 @@ class GameObject(pygame.sprite.Sprite):
                              font, color=pygame.Color(transform_color))
 
         # THE DEBUGGING STATS IS ALSO GOING TO APPEAR AS GIZMOS
-        components_names = ""
-        counter = 0
-        max_comp_name_per_line = 3
-        for component in self.components_list:
-            counter += 1
-            components_names += type(component).__name__ + ", "
-            if counter == max_comp_name_per_line:
-                components_names += "\n"
-                counter = 0
-        components_names = components_names[:-1]
-        components_names = components_names[:-1]
+        components_names = self.get_this_game_object_components_list_as_string()
         game_object_stats_text =\
                f"GAME OBJECT INSPECTOR \n" \
                f"\ngame object name: {self.name}\n" \
                f"class name: {type(self)} \n" \
                f"should be rendered: {self.should__be_rendered}\n" \
                f"index in scene game objects list: {self.get_index_in_scene_all_game_objects_list()}\n" \
-               f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene()}\n" \
+               f"rendering layer index: {self.get_this_game_object_rendering_layer_index_in_scene_rendering_layers_list()}\n" \
                f"\ncomponents:\n[{components_names}]\n\n"
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, game_object_stats_text,
                              (object_screen_position[0] - self.image_rect.width // 2,
