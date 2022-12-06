@@ -79,9 +79,9 @@ class Player(GameObject):
         self.water = PlayerItem("water", "_0resources/graphics/tools/water.png", self.scene, self.scene.rendering_layer_tools)
         self.hoe = PlayerItem("hoe", "_0resources/graphics/tools/hoe.png", self.scene, self.scene.rendering_layer_tools)
 
-        self.axe.fix_game_object_on_screen(pygame.Vector2(500, 500))
-        self.water.fix_game_object_on_screen(pygame.Vector2(500, 500))
-        self.hoe.fix_game_object_on_screen(pygame.Vector2(500, 500))
+        self.axe.fix_game_object_on_screen(pygame.Vector2(900, ScalableGameScreen.DummyScreenHeight -50))
+        self.water.fix_game_object_on_screen(pygame.Vector2(900, ScalableGameScreen.DummyScreenHeight -50))
+        self.hoe.fix_game_object_on_screen(pygame.Vector2(900, ScalableGameScreen.DummyScreenHeight -50))
 
         # TOOLS USAGE CONTROLLING SYSTEM
         # tooling player timer system
@@ -99,6 +99,9 @@ class Player(GameObject):
         # SEEDS
         self.corn_seed = PlayerItem("corn_seed", "_0resources/graphics/seeds/corn.png", self.scene, self.scene.rendering_layer_tools)
         self.tomato_seed = PlayerItem("tomato_seed", "_0resources/graphics/seeds/tomato.png", self.scene, self.scene.rendering_layer_tools)
+
+        self.corn_seed.fix_game_object_on_screen(pygame.Vector2(1000, ScalableGameScreen.DummyScreenHeight -50))
+        self.tomato_seed.fix_game_object_on_screen(pygame.Vector2(1000, ScalableGameScreen.DummyScreenHeight -50))
 
         # TOOLS USAGE CONTROLLING SYSTEM
         self.change_seed_key_tracker_o = KeyTracker(pygame.K_o, self)

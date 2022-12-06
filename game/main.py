@@ -23,6 +23,10 @@ class Game:
                          X hides the debugging canvas
                          C show gizmos
                          V hide gizmos
+                 - Camara Testing
+                        Q follows player
+                        E stops following player
+                        R focus camera at point 300 300
 
         """
 
@@ -75,11 +79,19 @@ class Game:
             if InputManager.is_key_pressed(pygame.K_c):
                 self.show_debugging_gizmos = True
             elif InputManager.is_key_pressed(pygame.K_v):
-                self.show_debugging_gizmos =  False
+                self.show_debugging_gizmos = False
             if self.show_inspector_debugging_canvas:
                 self.inspector_debugging_canvas.render_inspector_debugging_text()
             if self.show_debugging_gizmos:
                 self.inspector_debugging_canvas.render_game_objects_gizmos()
+
+            # for testing the camera
+            if InputManager.is_key_pressed(pygame.K_q):
+                self.scene_example.main_camera.follow_game_object(self.scene_example.player)
+            if InputManager.is_key_pressed(pygame.K_e):
+                self.scene_example.main_camera.stop_following_current_set_game_object()
+            if InputManager.is_key_pressed(pygame.K_r):
+                self.scene_example.main_camera.focus_camera_at_world_position(pygame.Vector2(300, 300))
 
             # render the final produced frame
             ScalableGameScreen.render_final_scaled_result()
