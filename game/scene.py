@@ -1,5 +1,4 @@
 import pygame
-
 from _3gameobjs.map import Map
 from _3gameobjs.player import Player
 from camera import Camara

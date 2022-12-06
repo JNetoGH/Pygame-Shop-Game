@@ -48,12 +48,25 @@ class GameObject(pygame.sprite.Sprite):
         #   so it's quite essential
         self.image_rect = self.image.get_rect(center=self.transform.world_position)
 
+    # pygame is stupid and has already an update method for sprites(a.k.a game obj super class)
+    # so I had to call it this way, this is the most important method of the entire engine
+    # should be overriden by all GameObjects
+    @abstractmethod
+    def game_object_update(self) -> None:
+        pass
+
     def fix_game_object_on_screen(self, fixed_position_on_screen: pygame.Vector2):
         self.is_fixed_on_screen = True
         self.fixed_position_on_screen = fixed_position_on_screen
 
     def unfix_game_object_on_screen(self):
         self.is_fixed_on_screen = False
+
+    def stop_rendering_this_game_object(self):
+        self.should__be_rendered = False
+
+    def start_rendering_this_game_object(self):
+        self.should__be_rendered = True
 
     def get_index_in_scene_all_game_objects_list(self) -> int:
         for i in range(0, len(self.scene.all_game_obj)):
@@ -66,12 +79,6 @@ class GameObject(pygame.sprite.Sprite):
             if self.scene.rendering_layers[i] == self.rendering_layer:
                 return i
         return -1
-
-    # pygame is stupid and has already an update method for sprites(a.k.a game obj super class)
-    # so I had to call it this way
-    @abstractmethod
-    def game_object_update(self) -> None:
-        pass
 
     def get_this_game_object_components_list_as_string(self):
         components_names = ""

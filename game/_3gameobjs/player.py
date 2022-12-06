@@ -115,16 +115,16 @@ class Player(GameObject):
     def update_tool_menu_rendered_at_screen(self, required_tool):
         for t in self.available_tools:
             if t != required_tool:
-                t.should__be_rendered = False
+                t.stop_rendering_this_game_object()
             else:
-                t.should__be_rendered = True
+                t.start_rendering_this_game_object()
 
     def update_seed_menu_rendered_at_screen(self, required_seed):
         for s in self.available_seeds:
             if s != required_seed:
-                s.should__be_rendered = False
+                s.stop_rendering_this_game_object()
             else:
-                s.should__be_rendered = True
+                s.start_rendering_this_game_object()
 
     # called when the tool's timer is over, the computation of the tool effect
     def finish_current_selected_tool_usage(self):
