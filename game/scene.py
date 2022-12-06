@@ -51,7 +51,8 @@ class Camara:
 
                 # - Just updates what is show at the transform for extra accuracy
                 # - Nice to mention, the transform is just a way the get the screen position easily, it doesn't change it
-                game_obj.transform._screen_position = pygame.Vector2(game_obj.image_rect.centerx, game_obj.image_rect.centery)
+                # - also updates if is appearing on screen
+                game_obj.transform.component_update()
 
 class Scene:
 

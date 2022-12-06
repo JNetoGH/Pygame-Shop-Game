@@ -8,10 +8,15 @@ class Transform(Component):
         super().__init__(game_object_owner)
         self.world_position: pygame.Vector2 = pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, ScalableGameScreen.HalfDummyScreenHeight)
         self._screen_position: pygame.Vector2 = pygame.Vector2()
+        self._is_center_point_appearing_on_screen = False
 
     @property
     def screen_position_read_only(self):
         return self._screen_position
+
+    @property
+    def is_center_point_appearing_on_screen_read_only(self):
+        return self._is_center_point_appearing_on_screen
 
     def translate_world_position(self, direction: pygame.Vector2):
         new_pos = pygame.Vector2(self.world_position.x + direction.x, self.world_position.y + direction.y)
@@ -26,5 +31,9 @@ class Transform(Component):
                f"screen position: {self._screen_position}\n"
 
     def component_update(self):
-        # updated the screen position  a.k.a. image_rect position
+        # updates the screen position  a.k.a. image_rect position
         self._screen_position = pygame.Vector2(self.game_object_owner.image_rect.centerx, self.game_object_owner.image_rect.centery)
+        # updates _is_center_point_appearing_on_screen
+        is_in_x = ScalableGameScreen.DummyScreenWidth > self._screen_position.x > 0
+        is_in_y = ScalableGameScreen.DummyScreenHeight > self._screen_position.y > 0
+        self._is_center_point_appearing_on_screen = is_in_x and is_in_y

@@ -21,6 +21,9 @@ class Game:
                  - Game for (show_inspector_debugging_canvas)
                          Z show the debugging canvas
                          X hides the debugging canvas
+                         C show gizmos
+                         V hide gizmos
+
         """
 
         pygame.init()
@@ -48,10 +51,11 @@ class Game:
         self.elapsed_updates = 0
 
         # should be the one of the last things to be instantiated
-        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=12)
+        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=8)
 
         # show both the inspector lateral info and the gizmos
         self.show_inspector_debugging_canvas = True
+        self.show_debugging_gizmos = True
 
     def run_game_loop(self):
         while True:
@@ -63,14 +67,21 @@ class Game:
             self.scene_example.scene_update()
             self.scene_example.scene_render()
 
+            # debugging inspector system and gizmos
             if InputManager.is_key_pressed(pygame.K_z):
                 self.show_inspector_debugging_canvas = True
             elif InputManager.is_key_pressed(pygame.K_x):
                 self.show_inspector_debugging_canvas = False
+            if InputManager.is_key_pressed(pygame.K_c):
+                self.show_debugging_gizmos = True
+            elif InputManager.is_key_pressed(pygame.K_v):
+                self.show_debugging_gizmos =  False
             if self.show_inspector_debugging_canvas:
                 self.inspector_debugging_canvas.render_inspector_debugging_text()
+            if self.show_debugging_gizmos:
                 self.inspector_debugging_canvas.render_game_objects_gizmos()
 
+            # render the final produced frame
             ScalableGameScreen.render_final_scaled_result()
 
 
