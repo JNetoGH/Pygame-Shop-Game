@@ -55,7 +55,7 @@ class Game:
         self.elapsed_updates = 0
 
         # should be the one of the last things to be instantiated
-        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=8)
+        self.inspector_debugging_canvas = InspectorDebuggingCanvas(self.scene_example, font_size=15)
 
         # show both the inspector lateral info and the gizmos
         self.show_inspector_debugging_canvas = True
@@ -80,10 +80,14 @@ class Game:
                 self.show_debugging_gizmos = True
             elif InputManager.is_key_pressed(pygame.K_v):
                 self.show_debugging_gizmos = False
+
+            if self.show_debugging_gizmos:
+                self.inspector_debugging_canvas.render_scene_game_objects_gizmos()
+
+            # needs to be on top of gizmos
             if self.show_inspector_debugging_canvas:
                 self.inspector_debugging_canvas.render_inspector_debugging_text()
-            if self.show_debugging_gizmos:
-                self.inspector_debugging_canvas.render_game_objects_gizmos()
+                #self.inspector_debugging_canvas.render_game_object_inspector_debugging_status(1, "white")
 
             # for testing the camera
             if InputManager.is_key_pressed(pygame.K_q):

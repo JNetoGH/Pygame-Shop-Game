@@ -57,7 +57,10 @@ class Scene:
 
     # CALLED BY THE InspectorDebuggingCanvas to show this text at the inspector
     def get_inspector_debugging_status(self) -> str:
+        game_obj_names = []
+        for gm_obj in self.all_game_obj:
+            game_obj_names.append(gm_obj.name)
         return f"SCENE DEBUGGING STATUS\n" \
                f"total rendering layers: {len(self.rendering_layers)}\n" \
-               f"total game objects: {len(self.all_game_obj)}\n"
-
+               f"total game objects: {len(self.all_game_obj)}\n" \
+               f"list: {game_obj_names}\n"

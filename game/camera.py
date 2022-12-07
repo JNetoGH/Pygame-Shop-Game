@@ -7,9 +7,16 @@ from rendering_layer import RenderingLayer
 class Camara:
 
     def __init__(self, rendering_layers_to_render: list[RenderingLayer], followed_game_object=None):
+
         self._rendering_layers_to_render = rendering_layers_to_render
         self._followed_game_object = followed_game_object
-        # the movement off-set base on the followed game object
+
+        # - The movement off-set base on the followed game object
+        # - Basically is how much the camera has to move every non-fixed on-screen GameObject
+        #   if the focused GameObject world_position_x is 3, the offset will be 3 in x and everything else will be
+        #   moved (-3) to compensate.
+        #  - The off_set.x = (world_pos.x - Half_screen__width), and off_set.y = (world_pos.y - Half_screen_height)
+        #    half because the camera focus in the middle of the screen
         self.followed_object_offset = pygame.Vector2()
 
     def follow_game_object(self, game_object):
@@ -18,15 +25,21 @@ class Camara:
     def stop_following_current_set_game_object(self):
         self._followed_game_object = None
 
+    @property
+    def world_position_read_only(self) -> pygame.Vector2:
+        world_position_in_x = self.followed_object_offset.x + ScalableGameScreen.HalfDummyScreenWidth
+        world_position_in_y = self.followed_object_offset.y + ScalableGameScreen.HalfDummyScreenHeight
+        return pygame.Vector2(world_position_in_x, world_position_in_y)
+
     # - Kinda fakes a game object position to artificially set the camera there
     # - I don't even have to say that it doesn't work if the camera is already following a game object
-    def focus_camera_at_world_position(self, position: pygame.Vector2):
-        self.followed_object_offset.x = position.x - ScalableGameScreen.HalfDummyScreenWidth
-        self.followed_object_offset.y = position.y - ScalableGameScreen.HalfDummyScreenHeight
+    def focus_camera_at_world_position(self, world_position: pygame.Vector2):
+        self.followed_object_offset.x = world_position.x - ScalableGameScreen.HalfDummyScreenWidth
+        self.followed_object_offset.y = world_position.y - ScalableGameScreen.HalfDummyScreenHeight
+        # to invert: position.x = offset.x + ScalableGameScreen.HalfDummyScreenWidth
 
     # the real deal, what really renders the whole game
     def render_layers(self):
-
         # - The camera stops following a GameObject its position on map will be the last position captured of the
         #   no more followed GameObject
         # - By default it's set to render at position 0,0, so if a camera has never followed a game object,
@@ -73,3 +86,17 @@ class Camara:
                 # - Nice to mention, the transform is just a way the get the screen position easily, it doesn't change it
                 # - Also updates if is appearing on screen
                 game_obj.transform.component_update()
+
+    def get_inspector_debugging_status(self) -> str:
+        text = "CAMERA SYSTEM\n"
+        if self._followed_game_object is not None:
+            text += f"following: {self._followed_game_object.name}\n"
+
+        else:
+            text += f"following GameObject: None\n"
+
+        text += f"following GameObject off-set: {self.followed_object_offset}\n"
+        # position.x = offset.x + ScalableGameScreen.HalfDummyScreenWidth
+        text += f"world position: {self.world_position_read_only}"
+
+        return text

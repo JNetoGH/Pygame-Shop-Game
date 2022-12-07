@@ -10,7 +10,7 @@ class Collider(Component):
 
         self.game_object_owner.has_collider = True
 
-        # initing field
+        # initiating fields
         self.width = width
         self.height = height
         self.offset_from_game_object_x = offset_from_game_object_x

@@ -18,6 +18,13 @@ class InspectorDebuggingCanvas:
         font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf',
                                 self.font_size)  # create a text surface object,
 
+        # black transparent rect
+        s = pygame.Surface((ScalableGameScreen.DummyScreenWidth // 3, ScalableGameScreen.DummyScreenHeight // 3 * 2 - 20))  # the size of your rect
+        s.set_alpha(128)  # alpha level
+        s.fill((0, 0, 0))  # this fills the entire surface
+        ScalableGameScreen.GameScreenDummySurface.blit(s, (10, 10))  # (0,0) are the top-left coordinates
+
+        # the msgs
         msgs = "JNETO PRODUCTIONS GAME ENGINE: INSPECTOR DEBUGGING SYSTEM\n\n" \
                f"ENGINE INNER DETAILS\n" \
                f"fps: {self.current_scene.game.clock.get_fps():.1f}\n" \
@@ -26,13 +33,20 @@ class InspectorDebuggingCanvas:
                f"{ScalableGameScreen.get_inspector_debugging_status()}\n" + \
                f"{InputManager.get_inspector_debugging_status()}\n" \
                f"{self.current_scene.get_inspector_debugging_status()}\n" \
-               f"{self.current_scene.all_game_obj[1].get_inspector_debugging_status()}\n"  # player is 0 in the list of objects as well
+               f"{self.current_scene.main_camera.get_inspector_debugging_status()}"
 
         # calls the method that displays text on the dummy screen
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth // 3,
-                             msgs, (20, 20), font, color=pygame.Color("white"))
+                             msgs, (30, 30), font, color=pygame.Color("white"))
 
-    def render_game_objects_gizmos(self):
+    def render_game_object_inspector_debugging_status(self, index_of_game_obj, color: str):
+        font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf', self.font_size)  # create a text surface object,
+        msgs = f"{self.current_scene.all_game_obj[index_of_game_obj].get_inspector_debugging_status()}\n"
+        # calls the method that displays text on the dummy screen
+        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth *2,
+                             msgs, (ScalableGameScreen.DummyScreenWidth//3*2, 20), font, color=pygame.Color(color))
+
+    def render_scene_game_objects_gizmos(self):
         for gm_obj in self.current_scene.all_game_obj:
             font_size = 15
             font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf', font_size)  # create a text surface object

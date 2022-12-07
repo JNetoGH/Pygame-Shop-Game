@@ -1,7 +1,4 @@
 import pygame
-from _1systems.scalable_game_screen_system import ScalableGameScreen
-from _1systems.text_rendering_system import TextRender
-from _2components.collider.collider import Collider
 from _2components.transform.transform import Transform
 from abc import abstractmethod
 
@@ -85,17 +82,19 @@ class GameObject(pygame.sprite.Sprite):
         return -1
 
     def get_this_game_object_components_list_as_string(self):
-        components_names = ""
-        counter = 0
-        max_comp_name_per_line = 3
-        for component in self.components_list:
-            counter += 1
-            components_names += type(component).__name__ + ", "
-            if counter == max_comp_name_per_line:
-                components_names += "\n"
-                counter = 0
-        components_names = components_names[:-1]
-        components_names = components_names[:-1]
+        components_names = "None"
+        if len(self.components_list) > 0:
+            components_names = ""
+            counter = 0
+            max_comp_name_per_line = 3
+            for component in self.components_list:
+                counter += 1
+                components_names += type(component).__name__ + ", "
+                if counter == max_comp_name_per_line:
+                    components_names += "\n"
+                    counter = 0
+            components_names = components_names[:-1]
+            components_names = components_names[:-1]
         return components_names
 
     # it's meant to be overridden with a super().get_inspector_debugging_status() call in it
