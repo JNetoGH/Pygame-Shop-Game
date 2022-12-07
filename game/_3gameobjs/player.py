@@ -8,7 +8,7 @@ from _2components.timer.timer import Timer
 from _2components.animation.animation_clip import AnimationClip
 from _2components.animation.animation_controller import AnimationController
 from _2components.single_sprite.single_sprite import SingleSprite
-from _3gameobjs.game_object import GameObject
+from _3gameobjs.game_object_base_class import GameObject
 
 
 class PlayerItem(GameObject):
@@ -36,7 +36,7 @@ class Player(GameObject):
         self.is_moving = False
 
         # game object default sprite
-        self.single_sprite = SingleSprite("_0resources/graphics/character/down_idle/0.png", self)
+        self.single_sprite = SingleSprite("game_res/graphics/character/down_idle/0.png", self)
 
         # collider
         self.collider = Collider(-10, 20, 100, 200, self)
@@ -47,27 +47,27 @@ class Player(GameObject):
         self.last_direction_before_stop = "down"
 
         # animations and controller
-        self.animation_walk_down = AnimationClip("walk_down", 4, "_0resources/graphics/character/down_walk")
-        self.animation_walk_right = AnimationClip("walk_right", 4, "_0resources/graphics/character/right_walk")
-        self.animation_walk_up = AnimationClip("walk_up", 4, "_0resources/graphics/character/up_walk")
-        self.animation_walk_left = AnimationClip("walk_left", 4, "_0resources/graphics/character/left_walk")
-        self.animation_idle_down = AnimationClip("idle_down", 4, "_0resources/graphics/character/down_idle")
-        self.animation_idle_right = AnimationClip("idle_right", 4, "_0resources/graphics/character/right_idle")
-        self.animation_idle_up = AnimationClip("idle_up", 4, "_0resources/graphics/character/up_idle")
-        self.animation_idle_left = AnimationClip("idle_left", 4, "_0resources/graphics/character/left_idle")
+        self.animation_walk_down = AnimationClip("walk_down", 4, "game_res/graphics/character/down_walk")
+        self.animation_walk_right = AnimationClip("walk_right", 4, "game_res/graphics/character/right_walk")
+        self.animation_walk_up = AnimationClip("walk_up", 4, "game_res/graphics/character/up_walk")
+        self.animation_walk_left = AnimationClip("walk_left", 4, "game_res/graphics/character/left_walk")
+        self.animation_idle_down = AnimationClip("idle_down", 4, "game_res/graphics/character/down_idle")
+        self.animation_idle_right = AnimationClip("idle_right", 4, "game_res/graphics/character/right_idle")
+        self.animation_idle_up = AnimationClip("idle_up", 4, "game_res/graphics/character/up_idle")
+        self.animation_idle_left = AnimationClip("idle_left", 4, "game_res/graphics/character/left_idle")
         # tools animations
-        self.animation_axe_down = AnimationClip("axe_down", 3, "_0resources/graphics/character/down_axe")
-        self.animation_axe_right = AnimationClip("axe_right", 3, "_0resources/graphics/character/right_axe")
-        self.animation_axe_up = AnimationClip("axe_up", 3, "_0resources/graphics/character/up_axe")
-        self.animation_axe_left = AnimationClip("axe_left", 3, "_0resources/graphics/character/left_axe")
-        self.animation_hoe_down = AnimationClip("hoe_down", 3, "_0resources/graphics/character/down_hoe")
-        self.animation_hoe_right = AnimationClip("hoe_right", 3, "_0resources/graphics/character/right_hoe")
-        self.animation_hoe_up = AnimationClip("hoe_up", 3, "_0resources/graphics/character/up_hoe")
-        self.animation_hoe_left = AnimationClip("hoe_left", 3, "_0resources/graphics/character/left_hoe")
-        self.animation_water_down = AnimationClip("water_down", 3, "_0resources/graphics/character/down_water")
-        self.animation_water_right = AnimationClip("water_right", 3, "_0resources/graphics/character/right_water")
-        self.animation_water_up = AnimationClip("water_up", 3, "_0resources/graphics/character/up_water")
-        self.animation_water_left = AnimationClip("water_left", 3, "_0resources/graphics/character/left_water")
+        self.animation_axe_down = AnimationClip("axe_down", 3, "game_res/graphics/character/down_axe")
+        self.animation_axe_right = AnimationClip("axe_right", 3, "game_res/graphics/character/right_axe")
+        self.animation_axe_up = AnimationClip("axe_up", 3, "game_res/graphics/character/up_axe")
+        self.animation_axe_left = AnimationClip("axe_left", 3, "game_res/graphics/character/left_axe")
+        self.animation_hoe_down = AnimationClip("hoe_down", 3, "game_res/graphics/character/down_hoe")
+        self.animation_hoe_right = AnimationClip("hoe_right", 3, "game_res/graphics/character/right_hoe")
+        self.animation_hoe_up = AnimationClip("hoe_up", 3, "game_res/graphics/character/up_hoe")
+        self.animation_hoe_left = AnimationClip("hoe_left", 3, "game_res/graphics/character/left_hoe")
+        self.animation_water_down = AnimationClip("water_down", 3, "game_res/graphics/character/down_water")
+        self.animation_water_right = AnimationClip("water_right", 3, "game_res/graphics/character/right_water")
+        self.animation_water_up = AnimationClip("water_up", 3, "game_res/graphics/character/up_water")
+        self.animation_water_left = AnimationClip("water_left", 3, "game_res/graphics/character/left_water")
         # putting clips in a list
         animation_clips = [self.animation_walk_right, self.animation_walk_up, self.animation_walk_left,
                            self.animation_walk_down, self.animation_idle_right, self.animation_idle_up,
@@ -80,13 +80,13 @@ class Player(GameObject):
         self.animation_controller = AnimationController(animation_clips, self)
 
         # TOOLS
-        self.axe = PlayerItem("axe", "_0resources/graphics/tools/axe.png", self.scene, self.scene.rendering_layer_tools)
-        self.water = PlayerItem("water", "_0resources/graphics/tools/water.png", self.scene, self.scene.rendering_layer_tools)
-        self.hoe = PlayerItem("hoe", "_0resources/graphics/tools/hoe.png", self.scene, self.scene.rendering_layer_tools)
+        self.axe = PlayerItem("axe", "game_res/graphics/tools/axe.png", self.scene, self.scene.game.rendering_layer_tools)
+        self.water = PlayerItem("water", "game_res/graphics/tools/water.png", self.scene, self.scene.game.rendering_layer_tools)
+        self.hoe = PlayerItem("hoe", "game_res/graphics/tools/hoe.png", self.scene, self.scene.game.rendering_layer_tools)
 
         # SEEDS
-        self.corn_seed = PlayerItem("corn_seed", "_0resources/graphics/seeds/corn.png", self.scene, self.scene.rendering_layer_tools)
-        self.tomato_seed = PlayerItem("tomato_seed", "_0resources/graphics/seeds/tomato.png", self.scene, self.scene.rendering_layer_tools)
+        self.corn_seed = PlayerItem("corn_seed", "game_res/graphics/seeds/corn.png", self.scene, self.scene.game.rendering_layer_tools)
+        self.tomato_seed = PlayerItem("tomato_seed", "game_res/graphics/seeds/tomato.png", self.scene, self.scene.game.rendering_layer_tools)
 
         seeds_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth // 2 - 70, ScalableGameScreen.DummyScreenHeight - 100)
         tools_pos = pygame.Vector2(ScalableGameScreen.DummyScreenWidth // 2 + 70,ScalableGameScreen.DummyScreenHeight - 100)

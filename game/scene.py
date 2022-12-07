@@ -1,9 +1,3 @@
-import pygame
-from _3gameobjs.map import Map
-from _3gameobjs.player import Player
-from camera import Camara
-from rendering_layer import RenderingLayer
-from _3gameobjs.test_obj import TestObj
 from _1systems.scalable_game_screen_system import ScalableGameScreen
 
 
@@ -11,33 +5,19 @@ class Scene:
 
     def __init__(self, game):
 
+        # I don't know if it is going to stay here, some things use it to accesses de Game class, but whatever
         self.game = game
 
-        """ 
-        LIST USED FOR UPDATES:
-            - It holds all game objects of the scene
-            - When a game Obj is instantiated, it's automatically stored here using the scene passed as parameter in 
-              its constructor """
+        # It holds all game objects of the scene When a game Obj is instantiated,
+        # it's automatically stored here using the scene passed as parameter in  its constructor
         self.all_game_obj = []
-
         # - When a game Obj is instantiated, it's automatically stored here using the layer passed as parameter in its constructor
-        self.rendering_layer_map = RenderingLayer()
-        self.rendering_layer_test = RenderingLayer()
-        self.rendering_layer_player = RenderingLayer()
-        self.rendering_layer_tools = RenderingLayer()
-        self.rendering_layers = [self.rendering_layer_map, self.rendering_layer_test, self.rendering_layer_player, self.rendering_layer_tools]
-
-        self.scene_start()  # called once
-
-        # game objects
-        self.map = Map("map", self, self.rendering_layer_map)
-        self.player = Player("game_player", self, self.rendering_layer_player)
-        self.player.transform.position = pygame.Vector2(500, 500)
-        self.test_obj = TestObj("test_obj_1", self, self.rendering_layer_test)
-
+        self.rendering_layers = []
         # main camera will render the rendering layers
-        self.main_camera = Camara(self.rendering_layers)
-        self.main_camera.follow_game_object(self.player)
+        self.main_camera = None
+
+        # called once if i want to start stuff in here
+        self.scene_start()
 
     def scene_start(self):
         pass

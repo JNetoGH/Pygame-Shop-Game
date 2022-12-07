@@ -15,7 +15,7 @@ class InspectorDebuggingCanvas:
         self.font_size = font_size
 
     def render_inspector_debugging_text(self):
-        font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf',
+        font = pygame.font.Font('_0engine_resources/fonts/JetBrainsMono-Medium.ttf',
                                 self.font_size)  # create a text surface object,
 
         # black transparent rect
@@ -40,7 +40,7 @@ class InspectorDebuggingCanvas:
                              msgs, (30, 30), font, color=pygame.Color("white"))
 
     def render_game_object_inspector_debugging_status(self, index_of_game_obj, color: str):
-        font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf', self.font_size)  # create a text surface object,
+        font = pygame.font.Font('_0engine_resources/fonts/JetBrainsMono-Medium.ttf', self.font_size)  # create a text surface object,
         msgs = f"{self.current_scene.all_game_obj[index_of_game_obj].get_inspector_debugging_status()}\n"
         # calls the method that displays text on the dummy screen
         TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth *2,
@@ -49,7 +49,7 @@ class InspectorDebuggingCanvas:
     def render_scene_game_objects_gizmos(self):
         for gm_obj in self.current_scene.all_game_obj:
             font_size = 15
-            font = pygame.font.Font('_0resources/fonts/JetBrainsMono-Medium.ttf', font_size)  # create a text surface object
+            font = pygame.font.Font('_0engine_resources/fonts/JetBrainsMono-Medium.ttf', font_size)  # create a text surface object
             if gm_obj.transform.is_center_point_appearing_on_screen_read_only:
                 InspectorDebuggingCanvas._render_gizmos_of_game_obj_transform(gm_obj, "black", font, font_size)
                 InspectorDebuggingCanvas._render_gizmos_of_game_obj_image_rect(gm_obj, "red", font, font_size)

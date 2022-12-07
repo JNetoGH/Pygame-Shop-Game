@@ -1,5 +1,5 @@
 from _1systems.scalable_game_screen_system import ScalableGameScreen
-from _3gameobjs.game_object import GameObject
+from _3gameobjs.game_object_base_class import GameObject
 
 
 class RenderingLayer:
