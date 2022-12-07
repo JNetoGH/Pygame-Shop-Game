@@ -39,9 +39,7 @@ class Player(GameObject):
         self.single_sprite = SingleSprite("game_res/graphics/character/down_idle/0.png", self)
 
         # collider
-        self.collider = Collider(-10, 20, 100, 200, self)
-
-        self.collider = Collider(-100, 50, 50, 50, self)
+        self.collider = Collider(0, 30, 50, 20, self)
 
         # used in animations holds the last direction the player faced while walking e.g. left, up...
         self.last_direction_before_stop = "down"

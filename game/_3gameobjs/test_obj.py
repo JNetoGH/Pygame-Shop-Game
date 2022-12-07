@@ -13,7 +13,7 @@ class TestObj(GameObject):
         self.single_sprite.scale_itself(2)
         self.transform.move_world_position(pygame.Vector2(200, 200))
 
-        self.collider = Collider(0,0,400,400,self)
+
 
     # called every frame
     def game_object_update(self) -> None:
