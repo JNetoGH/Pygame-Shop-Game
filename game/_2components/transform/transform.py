@@ -60,8 +60,8 @@ class Transform(Component):
 
                         print(f"checking collider index: {i}")
                         projection_of_current_collider_rect_to_new_position = this_game_object_collider.collider_rect.copy()
-                        projection_of_current_collider_rect_to_new_position.centerx = new_position.x + this_game_object_collider.offset_from_game_object_x
-                        projection_of_current_collider_rect_to_new_position.centery = new_position.y + this_game_object_collider.offset_from_game_object_y
+                        projection_of_current_collider_rect_to_new_position.centerx = round(new_position.x + this_game_object_collider.offset_from_game_object_x)
+                        projection_of_current_collider_rect_to_new_position.centery = round(new_position.y + this_game_object_collider.offset_from_game_object_y)
 
                         for other_game_obj_collider in other_game_object_colliders_list:
                             

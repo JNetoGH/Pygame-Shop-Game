@@ -19,9 +19,10 @@ class Collider(Component):
         # making the collider rect
         self.collider_rect: pygame.Rect = pygame.Rect(0, 0, 0, 0)
 
-        # sets the collider_rect default shape and position
-        # pygame is stupid, it only uses ints to represent rectanclge what truncates the float from 1.9 to 1 for example
-        # making pretty bad collision, so i am rounding what makes 1.9 => 2 and 1.2 => 1, what is a bit better
+        # - Sets the collider_rect default shape and position
+        # - Pygame is stupid, it only uses ints to represent rectangle what truncates the float from 1.9 to 1 for example
+        #   making pretty bad collision, so I am rounding what makes 1.9 => 2 and 1.2 => 1, what is a bit better,
+        #   but still not perfect, just because it's an approximation.
         self.collider_rect.width = self.width
         self.collider_rect.height = self.height
         self.collider_rect.centerx = round(self.game_object_owner.transform.world_position.x + self.offset_from_game_object_x)
