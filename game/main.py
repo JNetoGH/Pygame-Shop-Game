@@ -1,6 +1,6 @@
 import pygame
 
-from Test2 import Test2Obj
+from _3gameobjs.Test2 import Test2Obj
 from _1systems.inspector_debugging_canvas_system import InspectorDebuggingCanvas
 from _1systems.input_manager_system import InputManager
 from _1systems.scalable_game_screen_system import ScalableGameScreen

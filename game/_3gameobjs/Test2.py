@@ -11,11 +11,10 @@ class Test2Obj(GameObject):
         super().__init__(name, scene, rendering_layer)
         self.transform.move_world_position(pygame.Vector2(700,700))
         self.sprite = SingleSprite("game_res/graphics/seeds/corn.png", self)
-        self.collider = Collider(0,0,100,100,self)
+        self.collider = Collider(0, 0, 100, 100,self)
 
     def game_object_update(self) -> None:
-
-        direction = pygame.Vector2(0,5)
+        direction = pygame.Vector2(0, 5)
         new_posix = self.transform.world_position.x + direction.x
         new_posiy = self.transform.world_position.y + direction.y
         new_posi = pygame.Vector2(new_posix, new_posiy)
