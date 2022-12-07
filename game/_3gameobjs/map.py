@@ -16,7 +16,8 @@ class Map(GameObject):
         self.collider_right = Collider(590, 0, 20, 2000, self)
 
         # balcony
-        self.collider_balcony_horizontal = Collider(-600, 0, 0, 0, self)
+        self.collider_balcony_horizontal = Collider(-400, -5, 550, 40, self)
+        self.collider_balcony_left = Collider(-70, -80, 30, 220, self)
 
         # boxes
         self.collider_boxes_lef = Collider(-670, 190, 70, 200, self)
