@@ -149,7 +149,11 @@ class Player(GameObject):
 
         # buying phase
         if self.key_tracker_o.has_key_been_released_at_this_frame:
-            pass
+            print()
+            print("buying phase")
+            #for res in self.res_inventory:
+
+            print()
 
         # ANIMATES THE PLAYER
         self.animate_player()
