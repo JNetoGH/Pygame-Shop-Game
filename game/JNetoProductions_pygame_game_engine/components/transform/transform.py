@@ -39,7 +39,6 @@ class Transform(Component):
             return
 
         # moves it if the new position is diff from the current position
-        print(f"{self.game_object_owner.name} has collider: {self.game_object_owner.has_collider}")
         is_next_position_colliding = False
         other_game_object_colliders_list = []
         this_game_object_colliders_list = []
@@ -59,14 +58,10 @@ class Transform(Component):
                     if isinstance(component, Collider):
                         other_game_object_colliders_list.append(component)
 
-                print(f"total colliders: {len(this_game_object_colliders_list)}")
-
                 # checks for collision
                 for i in range(len(this_game_object_colliders_list)):
 
                     this_game_object_collider = this_game_object_colliders_list[i]
-
-                    print(f"checking collider index: {i}")
                     projection_of_current_collider_rect_to_new_position = this_game_object_collider.collider_rect.copy()
                     projection_of_current_collider_rect_to_new_position.centerx = round(new_position.x + this_game_object_collider.offset_from_game_object_x)
                     projection_of_current_collider_rect_to_new_position.centery = round(new_position.y + this_game_object_collider.offset_from_game_object_y)
@@ -75,9 +70,7 @@ class Transform(Component):
 
                         if projection_of_current_collider_rect_to_new_position.colliderect(other_game_obj_collider.collider_rect):
                             is_next_position_colliding = True
-                            print("next position collided\n")
 
-        print(f"is_next_position_colliding: {is_next_position_colliding}\n")
         if not is_next_position_colliding:
             self.world_position = new_position
 
