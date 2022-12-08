@@ -1,6 +1,6 @@
 import pygame
 
-from JNetoProductions_pygame_game_engine.systems.text_rendering_system import TextRender
+from JNetoProductions_pygame_game_engine.systems._text_rendering_system import TextRenderOverlaySystem
 from JNetoProductions_pygame_game_engine.systems.inspector_debugging_canvas_system import InspectorDebuggingCanvas
 from JNetoProductions_pygame_game_engine.systems.input_manager_system import InputManager
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
@@ -41,8 +41,8 @@ class GameLoop:
         self.inspector_debugging_canvas = None
 
         # show both the inspector lateral info and the gizmos
-        self.show_inspector_debugging_canvas = True
-        self.show_debugging_gizmos = True
+        self.show_inspector_debugging_canvas = False
+        self.show_debugging_gizmos = False
 
     def run_game_loop(self):
 
@@ -59,7 +59,7 @@ class GameLoop:
                 # clears the screen
                 ScalableGameScreen.GameScreenDummySurface.fill("darkgreen")
                 font = pygame.font.Font('JNetoProductions_pygame_game_engine/_engine_resources/fonts/JetBrainsMono-Medium.ttf', 50)  # create a text surface object,
-                TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, "no scene set", (600, 400), font, color="white")
+                TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth, "no scene set", (600, 400), font, color="white")
                 ScalableGameScreen.render_final_scaled_result()
                 continue
 
@@ -82,7 +82,7 @@ class GameLoop:
             # needs to be on top of gizmos
             if self.show_inspector_debugging_canvas:
                 self.inspector_debugging_canvas.render_inspector_debugging_text()
-                #self.inspector_debugging_canvas.render_game_object_inspector_debugging_status(1, "white")  # GmObj info
+                self.inspector_debugging_canvas.render_game_object_inspector_debugging_status(1, "white")  # GmObj info
 
             # render the final produced frame
             ScalableGameScreen.render_final_scaled_result()

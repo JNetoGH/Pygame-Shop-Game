@@ -2,7 +2,7 @@ import pygame
 from JNetoProductions_pygame_game_engine.systems.input_manager_system import InputManager
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
-from JNetoProductions_pygame_game_engine.systems.text_rendering_system import TextRender
+from JNetoProductions_pygame_game_engine.systems._text_rendering_system import TextRenderOverlaySystem
 from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
 from JNetoProductions_pygame_game_engine.scene import Scene
 
@@ -37,15 +37,15 @@ class InspectorDebuggingCanvas:
                f"{self.current_scene.main_camera.get_inspector_debugging_status()}"
 
         # calls the method that displays text on the dummy screen
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth // 3,
-                             msgs, (30, 30), font, color=pygame.Color("white"))
+        TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth // 3,
+                                          msgs, (30, 30), font, color=pygame.Color("white"))
 
     def render_game_object_inspector_debugging_status(self, index_of_game_obj, color: str):
-        font = pygame.font.Font('JNetoProductions_pygame_game_engine_engine_resources/fonts/JetBrainsMono-Medium.ttf', self.font_size)  # create a text surface object,
+        font = pygame.font.Font('JNetoProductions_pygame_game_engine/_engine_resources/fonts/JetBrainsMono-Medium.ttf', self.font_size)  # create a text surface object,
         msgs = f"{self.current_scene.all_game_obj[index_of_game_obj].get_inspector_debugging_status()}\n"
         # calls the method that displays text on the dummy screen
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth *2,
-                             msgs, (ScalableGameScreen.DummyScreenWidth//3*2, 20), font, color=pygame.Color(color))
+        TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth * 2,
+                                          msgs, (ScalableGameScreen.DummyScreenWidth//3*2, 20), font, color=pygame.Color(color))
 
     def render_scene_game_objects_gizmos(self):
         for gm_obj in self.current_scene.all_game_obj:
@@ -73,11 +73,11 @@ class InspectorDebuggingCanvas:
         text_transform = f"{game_obj.name}'s Transform.world_position\n(x:{game_obj.transform.world_position.x} | y:{game_obj.transform.world_position.y})\n" \
                          f"{game_obj.name}'s Transform.screen_position\n(x:{game_obj.transform.screen_position_read_only.x} | y:{game_obj.transform.screen_position_read_only.y})"
         # render description
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
-                             text_transform,
-                             (object_screen_pos[0] + description_spacing_x,
+        TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
+                                          text_transform,
+                                          (object_screen_pos[0] + description_spacing_x,
                               object_screen_pos[1] - font_size // 2 - description_spacing_y),
-                             font, color=pygame.Color(color))
+                                          font, color=pygame.Color(color))
 
     @staticmethod
     def _render_gizmos_of_game_obj_image_rect(game_obj, color: str, font: pygame.font.Font, font_size: int) -> None:
@@ -90,11 +90,11 @@ class InspectorDebuggingCanvas:
         # description
         text_img_rect = "self.image.image_rect"
         # render render description
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
-                             text_img_rect,
-                             (object_screen_pos[0] - game_obj.image_rect.width // 2,
+        TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
+                                          text_img_rect,
+                                          (object_screen_pos[0] - game_obj.image_rect.width // 2,
                               object_screen_pos[1] - game_obj.image_rect.height // 2 - font_size - 5),
-                             font, color=pygame.Color(color))
+                                          font, color=pygame.Color(color))
 
     @staticmethod
     def _render_gizmos_of_game_obj_debugging_stats(game_obj, color: str, font: pygame.font.Font) -> None:
@@ -116,11 +116,11 @@ class InspectorDebuggingCanvas:
             f"rendering layer index: {game_obj.get_this_game_object_rendering_layer_index_in_scene_rendering_layers_list()}\n" \
             f"\ncomponents:\n[{components_names}]\n\n"
         # render description
-        TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
-                             game_object_stats_text,
-                             (object_screen_pos[0] - game_obj.image_rect.width // 2,
+        TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
+                                          game_object_stats_text,
+                                          (object_screen_pos[0] - game_obj.image_rect.width // 2,
                               object_screen_pos[1] + game_obj.image_rect.height // 2 + description_spacing_y),
-                             font, color=pygame.Color(color))
+                                          font, color=pygame.Color(color))
 
     @staticmethod
     def _render_gizmos_of_game_obj_colliders(game_obj, color: str, font: pygame.font.Font, font_size: int) -> None:
@@ -144,10 +144,10 @@ class InspectorDebuggingCanvas:
                                 f"width: {component.width}  |  height: {component.height}\n" \
                                 f"world center position {component.collider_rect.center}"
                 # render description
-                TextRender.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
-                                     collider_text,
-                                     (representative_collider_rect.centerx - representative_collider_rect.width // 2,
+                TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
+                                                  collider_text,
+                                                  (representative_collider_rect.centerx - representative_collider_rect.width // 2,
                                       representative_collider_rect.centery - representative_collider_rect.height // 2 - font_size * 4 - 20),
-                                     font, color=pygame.Color(color))
+                                                  font, color=pygame.Color(color))
                 pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, color,
                                    representative_collider_rect.center, 5)

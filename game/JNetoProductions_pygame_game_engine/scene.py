@@ -25,7 +25,7 @@ class Scene:
 
     def scene_render(self):
         # clears the screen for rendering
-        ScalableGameScreen.GameScreenDummySurface.fill("black")
+        ScalableGameScreen.GameScreenDummySurface.fill("green")
         # renders all rendering layers
         self.main_camera.render_layers()
 

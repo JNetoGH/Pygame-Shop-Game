@@ -5,7 +5,6 @@ from JNetoProductions_pygame_game_engine.scene import Scene
 from our_game.game_objects.map import Map
 from our_game.game_objects.player import Player
 
-
 class Game:
 
     def __init__(self):

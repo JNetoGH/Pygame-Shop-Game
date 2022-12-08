@@ -1,5 +1,6 @@
 import pygame
 
+from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 
 
@@ -79,6 +80,11 @@ class Camara:
                 # render the game_loop object on screen according to its screen position (not world position) a.k.a. image_rect position
                 if game_obj.should__be_rendered:
                     ScalableGameScreen.GameScreenDummySurface.blit(game_obj.image, game_obj.image_rect)
+
+                    # blits all the text render components of the game object
+                    for component in game_obj.components_list:
+                        if isinstance(component, TextRenderComponent) and component.should_be_rendered:
+                            ScalableGameScreen.GameScreenDummySurface.blit(component.text_surface, component.position_on_screen)
 
                 # - Should be the last thing executing at the rendering system
                 # - Just updates what is show at the transform for extra accuracy

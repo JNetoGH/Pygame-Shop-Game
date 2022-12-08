@@ -44,6 +44,7 @@ class AnimationController(Component):
             self.current_frame_index += self.animation_speed * GameTime.DeltaTime
             self.animation_speed = self.current_animation_clip.animation_speed
             # sets back to the first frame if it's bigger than the size of the animation
+
             if self.current_frame_index >= len(self.current_animation_clip.images):
                 self.current_frame_index = 0
             self.game_object_owner.image = self.current_animation_clip.images[int(self.current_frame_index)]
@@ -60,7 +61,8 @@ class AnimationController(Component):
         in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
         return f"COMPONENT(AnimationController)\n" \
                f"current animation clip: {self.current_animation_clip.name}\n" \
-               f"current animation clip frame: {int(self.current_frame_index)}\n" \
+               f"current clip truncate index: {int(self.current_frame_index)}\n" \
                f"animation speed: {self.animation_speed}\n" \
-               f"animation clips in memory: [{in_memory_animation_clips_names}]\n"
+               f"animation clips in memory: [{in_memory_animation_clips_names}]\n" \
+               f"list len: {len(self.current_animation_clip.images)}\n"
 
