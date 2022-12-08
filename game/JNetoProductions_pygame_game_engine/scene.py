@@ -13,6 +13,11 @@ class Scene:
         # called once if i want to start stuff in here
         self.scene_start()
 
+    def get_game_object_by_name(self, name: str):
+        for game_obj in self.all_game_obj:
+            if game_obj.name == name:
+                return game_obj
+
     def scene_start(self):
         pass
 

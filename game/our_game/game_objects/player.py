@@ -32,7 +32,9 @@ class Resource(GameObject):
         self.amount += quantity
 
     def remove_amount(self, quantity):
-        if quantity >= 0:
+        if quantity <= 0:
+            return
+        if self.amount - quantity < 0:
             return
         self.amount -= quantity
 
@@ -65,6 +67,16 @@ class ResInventory(GameObject):
             Resource("diamante", 15, 1,  "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, self.rendering_layer),
                                         ]
 
+    def add_amount(self, quantity, res_name):
+        for res in self.resources:
+            if res.name == res_name:
+                res.add_amount(quantity)
+
+    def remove_amount(self, quantity, res_name):
+        for res in self.resources:
+            if res.name == res_name:
+                res.remove_amount(quantity)
+
     def game_object_update(self) -> None:
         # aligns the existing itens sprite with the inventory
         posi_res_y_in_screen = ScalableGameScreen.DummyScreenHeight - 30
@@ -76,7 +88,6 @@ class ResInventory(GameObject):
             res.fix_game_object_on_screen(pygame.Vector2(posi_res_x_is_screen, posi_res_y_in_screen))
             # last step
             posi_res_x_is_screen += espacamento
-
 
     def see_res_status(self):
         for res in self.resources:
@@ -128,13 +139,18 @@ class Player(GameObject):
         # res_inventory
         self.res_inventory = ResInventory("res_inventory", self.scene, self.rendering_layer)
 
-        self.text = TextRenderComponent("oi", 50, pygame.Color(255,255,255), 0, 0, self)
-
         self.key_tracker_p = KeyTracker(pygame.K_p, self)
         self.key_tracker_o = KeyTracker(pygame.K_o, self)
+        self.key_tracker_i = KeyTracker(pygame.K_i, self)
 
+        self.money = 100
+        self.money_text_render = TextRenderComponent(f"${self.money}", 20, pygame.Color(50, 205, 50), 0, -40, self)
 
     def game_object_update(self) -> None:
+
+        # update money text
+        self.money_text_render.change_text(f"${self.money}")
+
         # MOVE
         # updates the is_moving field for the animations and its other dependencies
         self.is_moving = not (InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0)
@@ -149,13 +165,15 @@ class Player(GameObject):
 
         # buying phase
         if self.key_tracker_o.has_key_been_released_at_this_frame:
-            print()
-            print("buying phase")
 
+            buying_phase = self.scene.get_game_object_by_name("buying_phase")
+            buying_phase.run_phase()
 
-            #for res in self.res_inventory:
+            #self.res_inventory.add_amount(1, "bronze")
+            #self.money += 1
+        #if self.key_tracker_i.has_key_been_fired_at_this_frame:
+            #self.res_inventory.remove_amount(1, "bronze")
 
-            print()
 
         # ANIMATES THE PLAYER
         self.animate_player()

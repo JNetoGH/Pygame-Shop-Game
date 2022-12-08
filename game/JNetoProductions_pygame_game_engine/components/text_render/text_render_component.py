@@ -36,14 +36,16 @@ class TextRenderComponent(Component):
         self._color = color
         self.text_surface = self._font.render(self._text, True, self._color)
 
+    def change_text(self, text: str):
+        self._text = text
+        self.text_surface = self._font.render(self._text, True, self._color)
+
     def stop_rendering_text(self):
         self.should_be_rendered = False
 
     def start_rendering_text(self):
         self.should_be_rendered = True
 
-    def change_text(self, text: str):
-        self._text = text
 
     def change_off_set_from_game_object(self, offset_from_game_object_x, offset_from_game_object_y):
         self.offset_from_game_object_x = offset_from_game_object_x

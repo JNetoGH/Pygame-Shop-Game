@@ -26,7 +26,7 @@ class GameLoop:
         RES_2K_QHD = [2560, 1440]
         RES_4K = [3840, 2160]
 
-        ScalableGameScreen.init_screens(RES_HD_PLUS, RES_HD_PLUS, RES_HD_PLUS)
+        ScalableGameScreen.init_screens(RES_HD, RES_HD, RES_HD)
 
         # important stuff
         self.clock = pygame.time.Clock()
@@ -41,8 +41,8 @@ class GameLoop:
         self.inspector_debugging_canvas = None
 
         # show both the inspector lateral info and the gizmos
-        self.show_inspector_debugging_canvas = False
-        self.show_debugging_gizmos = False
+        self.show_inspector_debugging_canvas = True
+        self.show_debugging_gizmos = True
 
     def run_game_loop(self):
 
@@ -82,7 +82,7 @@ class GameLoop:
             # needs to be on top of gizmos
             if self.show_inspector_debugging_canvas:
                 self.inspector_debugging_canvas.render_inspector_debugging_text()
-                self.inspector_debugging_canvas.render_game_object_inspector_debugging_status(1, "white")  # GmObj info
+                self.inspector_debugging_canvas.render_game_object_inspector_debugging_status(11, "white")  # GmObj info
 
             # render the final produced frame
             ScalableGameScreen.render_final_scaled_result()

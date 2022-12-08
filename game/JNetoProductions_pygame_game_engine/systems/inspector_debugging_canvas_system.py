@@ -20,7 +20,7 @@ class InspectorDebuggingCanvas:
                                 self.font_size)  # create a text surface object,
 
         # black transparent rect
-        s = pygame.Surface((ScalableGameScreen.DummyScreenWidth // 3, ScalableGameScreen.DummyScreenHeight // 3 * 2 - 20))  # the size of your rect
+        s = pygame.Surface((ScalableGameScreen.DummyScreenWidth // 3, ScalableGameScreen.DummyScreenHeight - 20))  # the size of your rect
         s.set_alpha(128)  # alpha level
         s.fill((0, 0, 0))  # this fills the entire surface
         ScalableGameScreen.GameScreenDummySurface.blit(s, (10, 10))  # (0,0) are the top-left coordinates
