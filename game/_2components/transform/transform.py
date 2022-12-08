@@ -28,8 +28,13 @@ class Transform(Component):
 
     def move_world_position_with_collisions_calculations(self, new_position):
 
-        print(f"{self.game_object_owner.name} has collider: {self.game_object_owner.has_collider}")
+        # doesn't make the calculation if the new position is the same of the current position,
+        # A.K.A GameObject didn't move
+        if new_position.x == self.world_position.x and new_position.y == self.world_position.y:
+            return
 
+        # moves it if the new position is diff from the current position
+        print(f"{self.game_object_owner.name} has collider: {self.game_object_owner.has_collider}")
         if self.game_object_owner.has_collider:
 
             is_next_position_colliding = False
