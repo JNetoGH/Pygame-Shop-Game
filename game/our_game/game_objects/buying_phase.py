@@ -139,20 +139,28 @@ class BuyingPhase(GameObject):
         self.is_running = True
         self.current_item_index = 0
         self.purchase_amount = 1
+
         self.start_rendering_this_game_object()
         self.middle_block.start_rendering_this_game_object()
         self.representation_of_the_current_item_at_buying_phase.start_rendering_this_game_object()
         self.buying_phase_text_holder.start_rendering_this_game_object()
         self.translucent_square.start_rendering_this_game_object()
+
         self.scene.main_camera.stop_following_current_set_game_object()
+        self.scene.main_camera.focus_camera_at_world_position(pygame.Vector2(
+            self.player.transform.world_position.x + 300,
+            self.player.transform.world_position.y + 200
+        ))
 
     def stop_phase(self):
         self.is_running = False
+
         self.stop_rendering_this_game_object()
         self.middle_block.stop_rendering_this_game_object()
         self.representation_of_the_current_item_at_buying_phase.stop_rendering_this_game_object()
         self.buying_phase_text_holder.stop_rendering_this_game_object()
         self.translucent_square.stop_rendering_this_game_object()
+
         self.scene.main_camera.follow_game_object(self.player)
 
     def game_object_update(self) -> None:
