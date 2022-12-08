@@ -41,8 +41,8 @@ class GameLoop:
         self.inspector_debugging_canvas = None
 
         # show both the inspector lateral info and the gizmos
-        self.show_inspector_debugging_canvas = True
-        self.show_debugging_gizmos = True
+        self.show_inspector_debugging_canvas = False
+        self.show_debugging_gizmos = False
 
     def run_game_loop(self):
 
