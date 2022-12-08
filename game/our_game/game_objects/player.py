@@ -151,6 +151,8 @@ class Player(GameObject):
         if self.key_tracker_o.has_key_been_released_at_this_frame:
             print()
             print("buying phase")
+
+            
             #for res in self.res_inventory:
 
             print()
