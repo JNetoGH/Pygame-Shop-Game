@@ -56,6 +56,18 @@ class GameObject(pygame.sprite.Sprite):
     def game_object_update(self) -> None:
         pass
 
+    def remove_component(self, component):
+        if isinstance(component, Transform):
+            return
+        for c in self.components_list:
+            if c == component:
+                self.components_list.remove(component)
+
+    def add_component(self, component):
+        if isinstance(component, Transform):
+            return
+        self.components_list.append(component)
+
     def fix_game_object_on_screen(self, fixed_position_on_screen: pygame.Vector2):
         self.is_fixed_on_screen = True
         self.fixed_position_on_screen = fixed_position_on_screen

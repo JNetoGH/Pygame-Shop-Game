@@ -1,11 +1,18 @@
+import pygame
+
 from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
+from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
 from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 
 
+
 class Map(GameObject):
-    def __init__(self, name: str, scene, rendering_layer):
+
+    def __init__(self, game, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
+        self.game = game
+
         self.single_sprite = SingleSprite("our_game/game_res/graphics/map/loja_nossa.png", self)
         self.single_sprite.scale_itself(4)
 
@@ -46,3 +53,5 @@ class Map(GameObject):
         # chests
         self.collider_chests = Collider(-440, 40, 100, 80, self)
 
+    def game_object_update(self) -> None:
+        pass
