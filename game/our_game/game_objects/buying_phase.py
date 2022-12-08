@@ -13,7 +13,7 @@ class MiddleBlock(GameObject):
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
 
-        #self.stop_rendering_this_game_object()
+        self.stop_rendering_this_game_object()
 
         self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/buying_phase.png", self)
         self.single_sprite.scale_itself(4)
@@ -25,27 +25,58 @@ class RepresentationOfTheCurrentItemAtBuyingPhase(GameObject):
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
 
-        #self.stop_rendering_this_game_object()
+        self.stop_rendering_this_game_object()
+
         self.single_sprite = SingleSprite("our_game/game_res/graphics/crafting_resources/bronze.png", self)
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280))
         self.single_sprite.scale_itself(8)
+
+
+class TrasnlucentSquare(GameObject):
+    def __init__(self, name: str, scene, rendering_layer):
+        super().__init__(name, scene, rendering_layer)
+        self.stop_rendering_this_game_object()
+
+        self.image = pygame.Surface((400, 170))
+        self.image.set_alpha(200)  # alpha level
+        self.image.fill((0, 0, 0))  # this fills the entire surface
+
+        self.fix_game_object_on_screen(pygame.Vector2(230,365))
 
 
 class BuyingPhaseTextHolder(GameObject):
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
 
-        #self.stop_rendering_this_game_object()
+        self.stop_rendering_this_game_object()
 
-        self.image = pygame.Surface((0,0))
+        self.image = pygame.Surface((0, 0))
         self.fix_game_object_on_screen(self.transform.world_position)
 
+        # explanatory texts
+        x_axis = -410
+        explain_size = 15
+
+        # tile
+        self.text_render = TextRenderComponent("BUYING PHASE", 50, pygame.Color(255, 255, 255), x_axis, -40, self)
+        # 🡸🡺 change current item
+        self.text_render_confirm = TextRenderComponent("Press ← or → to change current item", explain_size, pygame.Color(255, 255, 255), x_axis, 0, self)
+        # 🡹🡻 change amout for purchase
+        self.text_render_confirm = TextRenderComponent("Press ↑ or ↓ to change amount for purchase", explain_size, pygame.Color(255, 255, 255), x_axis, 20, self)
+        # enter confirm a purchase
+        self.text_render_confirm = TextRenderComponent("Press Enter to confirm a purchase", explain_size, pygame.Color(255, 255, 255), x_axis, 40, self)
+        # k ends the buying phase
+        self.text_render_confirm = TextRenderComponent("Press K to end the buying phase", explain_size, pygame.Color(255, 255, 255), x_axis, 60, self)
+
         # money and amount texts
-        self.text_render_of_purchase_price = TextRenderComponent("$0000000", 30, pygame.Color(0, 0, 0), -5, 165, self)
+        self.text_render_of_purchase_price = TextRenderComponent("$0000000", 30, pygame.Color(128, 0, 0), -5, 165, self)
         self.text_render_of_purchase_amount = TextRenderComponent("00000000", 30, pygame.Color(0, 0, 0), -5, 40, self)
 
         # labels
-        self.text_render_purchase_status = TextRenderComponent("Default", 30, pygame.Color(0, 0, 0), -5, -100, self)
+        self.text_render_available_money = TextRenderComponent("money: $0000000", 30,  pygame.Color(0, 128, 0), -5, -195, self)
+
+        # total label
+        self.text_render_total_label = TextRenderComponent("total", 30, pygame.Color(0,0,0), -5, 100, self)
 
         # + an - buttons
         self.pressing_time_in_ms = 500
@@ -76,10 +107,9 @@ class BuyingPhase(GameObject):
     def __init__(self, name: str, player, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
 
-        #self.stop_rendering_this_game_object()
+        self.stop_rendering_this_game_object()
 
         self.image = pygame.Surface((0, 0))
-        self.text_render = TextRenderComponent("BUYING PHASE", 60, pygame.Color(255, 255, 255), 0, 0, self)
 
         self.fixed_position_on_screen = pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, 50)
         self.fix_game_object_on_screen(self.fixed_position_on_screen)
@@ -102,6 +132,7 @@ class BuyingPhase(GameObject):
         self.middle_block = MiddleBlock("buying_phase_middle_block", self.scene, self.rendering_layer)
         self.representation_of_the_current_item_at_buying_phase = RepresentationOfTheCurrentItemAtBuyingPhase(
             "representation_of_the_current_item_at_buying_phase", self.scene, self.rendering_layer)
+        self.translucent_square = TrasnlucentSquare("translucent_square", self.scene, self.rendering_layer)
         self.buying_phase_text_holder = BuyingPhaseTextHolder("buying_phase_text_holder", self.scene, self.rendering_layer)
 
     def run_phase(self):
@@ -112,6 +143,8 @@ class BuyingPhase(GameObject):
         self.middle_block.start_rendering_this_game_object()
         self.representation_of_the_current_item_at_buying_phase.start_rendering_this_game_object()
         self.buying_phase_text_holder.start_rendering_this_game_object()
+        self.translucent_square.start_rendering_this_game_object()
+        self.scene.main_camera.stop_following_current_set_game_object()
 
     def stop_phase(self):
         self.is_running = False
@@ -119,6 +152,8 @@ class BuyingPhase(GameObject):
         self.middle_block.stop_rendering_this_game_object()
         self.representation_of_the_current_item_at_buying_phase.stop_rendering_this_game_object()
         self.buying_phase_text_holder.stop_rendering_this_game_object()
+        self.translucent_square.stop_rendering_this_game_object()
+        self.scene.main_camera.follow_game_object(self.player)
 
     def game_object_update(self) -> None:
         if self.is_running:
@@ -135,6 +170,8 @@ class BuyingPhase(GameObject):
             self.buying_phase_text_holder.text_render_of_purchase_price.change_text(f"${purchase_value}")
             # purchase amount
             self.buying_phase_text_holder.text_render_of_purchase_amount.change_text(f"{self.purchase_amount}")
+            # available money
+            self.buying_phase_text_holder.text_render_available_money.change_text(f"money: ${self.player.money}")
 
             print(f"available money: {self.player.money}")
             print(f"has enough money: {has_enough_money}")
