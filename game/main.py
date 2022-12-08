@@ -65,7 +65,7 @@ class Game:
         self.map = Map("map", self.scene_example, self.rendering_layer_map)
         self.player = Player("game_player", self.scene_example, self.rendering_layer_player)
         self.player.transform.position = pygame.Vector2(500, 500)
-        self.test_obj = TestObj("test_obj_1", self.scene_example, self.rendering_layer_test)
+        #self.test_obj = TestObj("test_obj_1", self.scene_example, self.rendering_layer_test)
         self.test_obj2 = Test2Obj("test2", self.scene_example, self.rendering_layer_test)
 
         # the main Camera
