@@ -152,7 +152,7 @@ class Player(GameObject):
             print()
             print("buying phase")
 
-            
+
             #for res in self.res_inventory:
 
             print()
