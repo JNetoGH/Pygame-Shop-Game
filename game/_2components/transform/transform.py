@@ -33,54 +33,54 @@ class Transform(Component):
         if new_position.x == self.world_position.x and new_position.y == self.world_position.y:
             return
 
+        # if the object meant to be4 moved has no colliders, then it is simply moved with no calculations
+        if not self.game_object_owner.has_collider:
+            self.world_position = new_position
+            return
+
         # moves it if the new position is diff from the current position
         print(f"{self.game_object_owner.name} has collider: {self.game_object_owner.has_collider}")
-        if self.game_object_owner.has_collider:
+        is_next_position_colliding = False
+        other_game_object_colliders_list = []
+        this_game_object_colliders_list = []
 
-            is_next_position_colliding = False
-            other_game_object_colliders_list = []
-            this_game_object_colliders_list = []
+        # inits this game object colliders list
+        for component in self.game_object_owner.components_list:
+            if isinstance(component, Collider):
+                this_game_object_colliders_list.append(component)
 
-            # inits this game object colliders list
-            for component in self.game_object_owner.components_list:
-                if isinstance(component, Collider):
-                    this_game_object_colliders_list.append(component)
+        for other_gm_obj in self.game_object_owner.scene.all_game_obj:
 
-            for other_gm_obj in self.game_object_owner.scene.all_game_obj:
+            # if another game object have a collider it will remake the other game object colliders list
+            if other_gm_obj != self.game_object_owner and other_gm_obj.has_collider:
 
-                # if another game object have a collider it will remake the other game object colliders list
-                if other_gm_obj != self.game_object_owner and other_gm_obj.has_collider:
+                # fills the other game object colliders list
+                for component in other_gm_obj.components_list:
+                    if isinstance(component, Collider):
+                        other_game_object_colliders_list.append(component)
 
-                    # fills the other game object colliders list
-                    for component in other_gm_obj.components_list:
-                        if isinstance(component, Collider):
-                            other_game_object_colliders_list.append(component)
+                print(f"total colliders: {len(this_game_object_colliders_list)}")
 
-                    print(f"total colliders: {len(this_game_object_colliders_list)}")
+                # checks for collision
+                for i in range(len(this_game_object_colliders_list)):
 
-                    # checks for collision
-                    for i in range(len(this_game_object_colliders_list)):
+                    this_game_object_collider = this_game_object_colliders_list[i]
 
-                        this_game_object_collider = this_game_object_colliders_list[i]
+                    print(f"checking collider index: {i}")
+                    projection_of_current_collider_rect_to_new_position = this_game_object_collider.collider_rect.copy()
+                    projection_of_current_collider_rect_to_new_position.centerx = round(new_position.x + this_game_object_collider.offset_from_game_object_x)
+                    projection_of_current_collider_rect_to_new_position.centery = round(new_position.y + this_game_object_collider.offset_from_game_object_y)
 
-                        print(f"checking collider index: {i}")
-                        projection_of_current_collider_rect_to_new_position = this_game_object_collider.collider_rect.copy()
-                        projection_of_current_collider_rect_to_new_position.centerx = round(new_position.x + this_game_object_collider.offset_from_game_object_x)
-                        projection_of_current_collider_rect_to_new_position.centery = round(new_position.y + this_game_object_collider.offset_from_game_object_y)
+                    for other_game_obj_collider in other_game_object_colliders_list:
 
-                        for other_game_obj_collider in other_game_object_colliders_list:
-                            
-                            if projection_of_current_collider_rect_to_new_position.colliderect(other_game_obj_collider.collider_rect):
-                                is_next_position_colliding = True
-                                print("next position collided\n")
+                        if projection_of_current_collider_rect_to_new_position.colliderect(other_game_obj_collider.collider_rect):
+                            is_next_position_colliding = True
+                            print("next position collided\n")
 
-            print(f"is_next_position_colliding: {is_next_position_colliding}")
-            print()
-            if not is_next_position_colliding:
-                self.world_position = new_position
-
-        else:
+        print(f"is_next_position_colliding: {is_next_position_colliding}\n")
+        if not is_next_position_colliding:
             self.world_position = new_position
+
 
 
 
