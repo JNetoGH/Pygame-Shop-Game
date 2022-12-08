@@ -44,3 +44,4 @@ class Map(GameObject):
 
         # chests
         self.collider_chests = Collider(-440, 40, 100, 80, self)
+

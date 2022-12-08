@@ -45,10 +45,10 @@ class Player(GameObject):
         self.last_direction_before_stop = "down"
 
         # animations and controller
-        self.animation_walk_down = AnimationClip("walk_down", 4, "game_res/graphics/character/down_walk")
-        self.animation_walk_right = AnimationClip("walk_right", 4, "game_res/graphics/character/right_walk")
-        self.animation_walk_up = AnimationClip("walk_up", 4, "game_res/graphics/character/up_walk")
-        self.animation_walk_left = AnimationClip("walk_left", 4, "game_res/graphics/character/left_walk")
+        self.animation_walk_down = AnimationClip("walk_down", 4, "game_res/graphics/player/down")
+        self.animation_walk_right = AnimationClip("walk_right", 4, "game_res/graphics/player/right")
+        self.animation_walk_up = AnimationClip("walk_up", 4, "game_res/graphics/player/up")
+        self.animation_walk_left = AnimationClip("walk_left", 4, "game_res/graphics/player/left")
         self.animation_idle_down = AnimationClip("idle_down", 4, "game_res/graphics/character/down_idle")
         self.animation_idle_right = AnimationClip("idle_right", 4, "game_res/graphics/character/right_idle")
         self.animation_idle_up = AnimationClip("idle_up", 4, "game_res/graphics/character/up_idle")
