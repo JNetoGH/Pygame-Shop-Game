@@ -172,11 +172,14 @@ class BuyingPhase(GameObject):
             # available money
             self.buying_phase_text_holder.text_render_available_money.change_text(f"money: ${self.player.money}")
 
+            """
+            # DEBUGGING INFO
             print(f"available money: {self.player.money}")
             print(f"has enough money: {has_enough_money}")
             print(f"{current_item.name}")
             print(f"amount: {self.purchase_amount}")
             print(f"price: {purchase_value}\n")
+            """
 
             # switch between resources
             if self.key_tracker_arrow_right.has_key_been_fired_at_this_frame:

@@ -119,7 +119,8 @@ class SellingPhase(GameObject):
         self.remove_default_rect_image()
 
         # npc generation: its static, a copy  of it is manipulated
-        #points = (400, 400)(600,800)(500, 600)(800, 300)(700, 700)(200, 500)(100, 850)(900, 300)(850, 650)(650, 550)(700, 200)(890, 100)(1000, 500)(1020, 700)(1050, 800)
+        #  points = (400, 400)(600,800)(500, 600)(800, 300)(700, 700)(200, 500)(100, 850)(900, 300)(850, 650)(650, 550)
+        # (700, 200)(890, 100)(1000, 500)(1020, 700)(1050, 800)
         self.available_points: list[pygame.Vector2] = [pygame.Vector2(400,400), pygame.Vector2(600,800), pygame.Vector2(500,600),
                                                        pygame.Vector2(800,300), pygame.Vector2(700,700), pygame.Vector2(200,500),
                                                        pygame.Vector2(100,850), pygame.Vector2(900,300), pygame.Vector2(850,650),
@@ -159,18 +160,16 @@ class SellingPhase(GameObject):
 
         # clear the generated npcs from the scene and their ballons
         for npc in self.list_of_npc:
-            npc.purchase_balloon.stop_rendering_this_game_object()
-            npc.purchase_balloon.item_image_holder.stop_rendering_this_game_object()
-            npc.stop_rendering_this_game_object()
             self.scene.remove_game_object(npc.purchase_balloon)
             self.scene.remove_game_object(npc.purchase_balloon.item_image_holder)
             self.scene.remove_game_object(npc)
 
-
     def game_object_update(self) -> None:
         if self.is_running:
 
-            #print("runnin selling phase")
+            # DEBUGGING INFO
+            # print("running selling phase")
+
             # exit crafting phase
             if self.key_tracker_k.has_key_been_fired_at_this_frame:
                 self.stop_phase()

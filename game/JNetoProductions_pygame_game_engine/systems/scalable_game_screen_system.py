@@ -105,9 +105,9 @@ class ScalableGameScreen:
     @staticmethod
     def get_inspector_debugging_status() -> str:
         return f"SCREEN SCALE SYSTEM\n" \
-               f"rendering screen res (dummy surface):     {ScalableGameScreen.DummyScreenWidth} x {ScalableGameScreen.DummyScreenHeight}\n" \
-               f"real screen res(real surface):            {ScalableGameScreen.RealScreenWidth} x {ScalableGameScreen.RealScreenHeight}\n" \
-               f"target up/downscale res (produced frame): {ScalableGameScreen.TargetResolutionForUpScaling[0]} x {ScalableGameScreen.TargetResolutionForUpScaling[1]}\n" \
+               f"res (dummy surface): {ScalableGameScreen.DummyScreenWidth} x {ScalableGameScreen.DummyScreenHeight}\n" \
+               f"res (real surface):  {ScalableGameScreen.RealScreenWidth} x {ScalableGameScreen.RealScreenHeight}\n" \
+               f"res (target):        {ScalableGameScreen.TargetResolutionForUpScaling[0]} x {ScalableGameScreen.TargetResolutionForUpScaling[1]}\n" \
                f"current operation: {ScalableGameScreen._CurrentOperation}\n"
 
 

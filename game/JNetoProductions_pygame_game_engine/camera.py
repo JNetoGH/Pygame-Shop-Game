@@ -8,7 +8,7 @@ class Camara:
 
     def __init__(self, *rendering_layers):
 
-        self.rendering_layers = rendering_layers
+        self.rendering_layers_list = rendering_layers
         self._followed_game_object = None
 
         # - The movement off-set base on the followed game_loop object
@@ -51,7 +51,7 @@ class Camara:
             self.followed_object_offset.x = self._followed_game_object.transform.world_position.x - ScalableGameScreen.HalfDummyScreenWidth
             self.followed_object_offset.y = self._followed_game_object.transform.world_position.y - ScalableGameScreen.HalfDummyScreenHeight
 
-        for r_layer in self.rendering_layers:
+        for r_layer in self.rendering_layers_list:
             for game_obj in r_layer.game_objects_to_render_read_only:
 
                 # the final result of the render takes in consideration the game_loop object world position

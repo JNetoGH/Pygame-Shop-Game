@@ -78,15 +78,18 @@ class CraftingPhase(GameObject):
 
     def stop_phase(self):
         self.is_running = False
+
         self.stop_rendering_this_game_object()
         self.translucent_square.stop_rendering_this_game_object()
-        self.scene.main_camera.follow_game_object(self.player)
         self.text_holder.stop_rendering_this_game_object()
+
+        self.scene.main_camera.follow_game_object(self.player)
 
     def game_object_update(self) -> None:
         if self.is_running:
 
-            print("running crafting phase")
+            # FOR DEBUGGING
+            # print("running crafting phase")
 
             current_recipe: CraftableRecipe = self.player.craft_inventory.recipes[self.current_item_index]
             current_recipe.show_recipe_recept_on_screen()

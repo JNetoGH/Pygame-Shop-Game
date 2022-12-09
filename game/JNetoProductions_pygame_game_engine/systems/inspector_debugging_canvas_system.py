@@ -52,6 +52,7 @@ class InspectorDebuggingCanvas:
             font_size = 15
             font = pygame.font.Font('JNetoProductions_pygame_game_engine/_engine_resources/fonts/JetBrainsMono-Medium.ttf', font_size)  # create a text surface object
             """
+            # os gismoz foram desabilidatos por agr
             if gm_obj.transform.is_center_point_appearing_on_screen_read_only:
                 InspectorDebuggingCanvas._render_gizmos_of_game_obj_transform(gm_obj, "black", font, font_size)
                 InspectorDebuggingCanvas._render_gizmos_of_game_obj_image_rect(gm_obj, "red", font, font_size)
