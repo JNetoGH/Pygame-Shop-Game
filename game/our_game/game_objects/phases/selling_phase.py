@@ -5,9 +5,23 @@ import pygame
 from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
 from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
 from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
-from JNetoProductions_pygame_game_engine.components.timer.timer import Timer
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
+
+
+class PurchaseBalloon(GameObject):
+    def __init__(self, name: str, npc_owner, scene, rendering_layer):
+        super().__init__(name, scene, rendering_layer)
+        self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/balao.png", self)
+        self.npc_owner = npc_owner
+
+    def game_object_update(self) -> None:
+        y_off_set = -60
+        x_off_set = -20
+        position = pygame.Vector2(self.npc_owner.transform.world_position.x, self.npc_owner.transform.world_position.y)
+        position.y = position.y + y_off_set
+        position.x = position.x + x_off_set
+        self.transform.move_world_position(position)
 
 
 class Npc(GameObject):
@@ -24,6 +38,9 @@ class Npc(GameObject):
         self.single_sprite = SingleSprite(Npc.AvailableNpcsPaths[self.sprite_set], self)
         self.collider = Collider(0, 0, 55, 70, self)
 
+        self.purchase_balloon = PurchaseBalloon(f"puchase balloon {self.name}", self, self.scene,
+                                                self.scene.get_rendering_layer_by_name("rendering_layer_ballon"))
+
         self.max_alpha_level = 255
         self.current_alpha_level = 1
         self.appearing_speed = 200
@@ -32,6 +49,7 @@ class Npc(GameObject):
 
     def appear_animation(self):
         self.image.set_alpha(1)
+        self.purchase_balloon.image.set_alpha(1)
         self.is_in_appearing_animation = True
 
     def game_object_update(self) -> None:
@@ -39,8 +57,10 @@ class Npc(GameObject):
             self.current_alpha_level = self.current_alpha_level + self.appearing_speed * GameTime.DeltaTime
             if self.current_alpha_level <= self.max_alpha_level:
                 self.image.set_alpha(self.current_alpha_level)
+                self.purchase_balloon.image.set_alpha(self.current_alpha_level)
             else:
                 self.image.set_alpha(self.max_alpha_level)
+                self.purchase_balloon.image.set_alpha(self.max_alpha_level)
                 self.is_in_appearing_animation = False
             print(f"alpha: {self.current_alpha_level}")
 
@@ -99,8 +119,10 @@ class SellingPhase(GameObject):
     def stop_phase(self):
         self.is_running = False
 
-        # clear the generated npcs from the scene
+        # clear the generated npcs from the scene and their ballons
         for npc in self.list_of_npc:
+            npc.purchase_balloon.stop_rendering_this_game_object()
+            self.scene.remove_game_object(npc.purchase_balloon)
             npc.stop_rendering_this_game_object()
             self.scene.remove_game_object(npc)
 

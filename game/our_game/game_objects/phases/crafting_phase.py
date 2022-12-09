@@ -55,11 +55,9 @@ class CraftingPhase(GameObject):
         self.key_tracker_enter = KeyTracker(pygame.K_RETURN, self)
         self.key_tracker_k = KeyTracker(pygame.K_k, self)
 
-
         # position on screen
         self.fixed_position_on_screen = pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280-mexida)
         self.fix_game_object_on_screen(self.fixed_position_on_screen)
-
 
     def run_phase(self):
         self.is_running = True
@@ -77,8 +75,6 @@ class CraftingPhase(GameObject):
 
         for recipe in self.player.craft_inventory.recipes:
             recipe.stop_showing_recipe_on_screen()
-
-
 
     def stop_phase(self):
         self.is_running = False

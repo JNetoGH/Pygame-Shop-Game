@@ -61,8 +61,8 @@ class Player(GameObject):
         self.exp_text_render = TextRenderComponent(f"xp{self.exp}", 20, pygame.Color(253, 253, 150), 0, -60, self)
 
         # inventories
-        self.res_inventory = ResInventory("res_inventory", self.scene, self.rendering_layer)
-        self.craft_inventory = CraftablesInventory("craftables_inventory", self.scene, self.rendering_layer)
+        self.res_inventory = ResInventory("res_inventory", self.scene, self.scene.get_rendering_layer_by_name("rendering_layer_inventories"))
+        self.craft_inventory = CraftablesInventory("craftables_inventory", self.scene, self.scene.get_rendering_layer_by_name("rendering_layer_inventories"))
 
         self.buying_phase = None
         self.crafting_phase = None

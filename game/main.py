@@ -21,10 +21,15 @@ class Game:
         self.rendering_layer_test = RenderingLayer("rendering_layer_test")
         self.rendering_layer_npcs = RenderingLayer("rendering_layer_npcs")
         self.rendering_layer_player = RenderingLayer("rendering_layer_player")
+        self.rendering_layer_ballons = RenderingLayer("rendering_layer_ballon")
+        self.rendering_layer_inventories = RenderingLayer("rendering_layer_inventories")
+
         self.rendering_layer_phases = RenderingLayer("rendering_layer_phases")
         self.rendering_layer_over_all = RenderingLayer("rendering_layer_over_all")
-        self.main_camera = Camara(self.rendering_layer_map, self.rendering_layer_test, self.rendering_layer_npcs,
-                                  self.rendering_layer_player,  self.rendering_layer_phases, self.rendering_layer_over_all)
+        self.main_camera = Camara(self.rendering_layer_map, self.rendering_layer_test,
+                                  self.rendering_layer_npcs, self.rendering_layer_player,
+                                  self.rendering_layer_ballons, self.rendering_layer_inventories,
+                                  self.rendering_layer_phases,  self.rendering_layer_over_all)
 
         # the scene
         self.shop_scene = Scene(self.main_camera)
