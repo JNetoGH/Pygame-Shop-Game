@@ -81,7 +81,7 @@ class Camara:
                 if game_obj.should__be_rendered:
                     ScalableGameScreen.GameScreenDummySurface.blit(game_obj.image, game_obj.image_rect)
 
-                    # blits all the text render components of the game object, but updates the position before for extra acurrancy
+                    # blits all the text render components of the game object, but updates the position before for extra accuracy
                     for component in game_obj.components_list:
                         if isinstance(component, TextRenderComponent) and component.should_be_rendered:
                             component.update_position()

@@ -28,9 +28,9 @@ class CraftingTextHolder(GameObject):
         # tile
         self.text_render = TextRenderComponent("CRAFTING PHASE", 45, pygame.Color(255, 255, 255), x_axis,105 + mexida_y_txt, self)
         # 🡸🡺 change current recipe
-        self.text_render_confirm = TextRenderComponent("Press ← or → to change current recipe", explain_size, pygame.Color(255, 255, 255), x_axis, 140 + mexida_y_txt, self)
+        self.text_render_confirm = TextRenderComponent("Press ← or → to switch the current recipe", explain_size, pygame.Color(255, 255, 255), x_axis, 140 + mexida_y_txt, self)
         # enter confirm a crafting
-        self.text_render_confirm = TextRenderComponent("Press E to confirm a crafting", explain_size, pygame.Color(255, 255, 255), x_axis, 160 + mexida_y_txt, self)
+        self.text_render_confirm = TextRenderComponent("Press E to attempt a crafting", explain_size, pygame.Color(255, 255, 255), x_axis, 160 + mexida_y_txt, self)
         # k ends the crafting phase
         self.text_render_confirm = TextRenderComponent("Press K to end the crafting phase", explain_size, pygame.Color(255, 255, 255), x_axis, 180 + mexida_y_txt, self)
 

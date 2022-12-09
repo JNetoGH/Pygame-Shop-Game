@@ -2,6 +2,7 @@ import pygame
 from JNetoProductions_pygame_game_engine.components.component_base_class.component_base_class import Component
 
 
+# its rendered straight by the camera, there is a spacial part inside the camera for thi component
 class TextRenderComponent(Component):
     def __init__(self, text: str, font_size, color: pygame.Color, offset_from_game_object_x, offset_from_game_object_y, game_object_owner):
         super().__init__(game_object_owner)
