@@ -5,14 +5,36 @@ import pygame
 from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
 from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
 from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
+from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
 
 
+class ItemImgHolder(GameObject):
+    def __init__(self, name: str, path_to_image, purchase_balloon, scene, rendering_layer):
+        super().__init__(name, scene, rendering_layer)
+        self.single_sprite = SingleSprite(path_to_image, self)
+        self.single_sprite.scale_itself(3)
+        self.purchase_balloon = purchase_balloon
+
+
+    def game_object_update(self) -> None:
+        position = pygame.Vector2()
+        position.x = self.purchase_balloon.transform.world_position.x
+        position.y =  self.purchase_balloon.transform.world_position.y
+        self.transform.move_world_position(position)
+
+
 class PurchaseBalloon(GameObject):
-    def __init__(self, name: str, npc_owner, scene, rendering_layer):
+
+    def __init__(self, name: str, path_to_image, npc_owner, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
         self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/balao.png", self)
+        self.price_willing_to_pay = 99999
+
+        self.text_render_of_price_willing_to_pay = TextRenderComponent(f"{self.price_willing_to_pay}", 15, pygame.Color(0, 128, 0), 12, -27, self)
+        self.item_image_holder = ItemImgHolder("image placer", path_to_image, self, self.scene, self.rendering_layer)
+
         self.npc_owner = npc_owner
 
     def game_object_update(self) -> None:
@@ -38,8 +60,8 @@ class Npc(GameObject):
         self.single_sprite = SingleSprite(Npc.AvailableNpcsPaths[self.sprite_set], self)
         self.collider = Collider(0, 0, 55, 70, self)
 
-        self.purchase_balloon = PurchaseBalloon(f"puchase balloon {self.name}", self, self.scene,
-                                                self.scene.get_rendering_layer_by_name("rendering_layer_ballon"))
+        img_path = "our_game/game_res/graphics/craftables/espada_rubi.png"
+        self.purchase_balloon = PurchaseBalloon(f"purchase balloon {self.name}", img_path, self, self.scene, self.scene.get_rendering_layer_by_name("rendering_layer_ballon"))
 
         self.max_alpha_level = 255
         self.current_alpha_level = 1
@@ -50,6 +72,7 @@ class Npc(GameObject):
     def appear_animation(self):
         self.image.set_alpha(1)
         self.purchase_balloon.image.set_alpha(1)
+        self.purchase_balloon.item_image_holder.image.set_alpha(1)
         self.is_in_appearing_animation = True
 
     def game_object_update(self) -> None:
@@ -58,9 +81,11 @@ class Npc(GameObject):
             if self.current_alpha_level <= self.max_alpha_level:
                 self.image.set_alpha(self.current_alpha_level)
                 self.purchase_balloon.image.set_alpha(self.current_alpha_level)
+                self.purchase_balloon.item_image_holder.image.set_alpha(self.current_alpha_level)
             else:
                 self.image.set_alpha(self.max_alpha_level)
                 self.purchase_balloon.image.set_alpha(self.max_alpha_level)
+                self.purchase_balloon.item_image_holder.image.set_alpha(self.max_alpha_level)
                 self.is_in_appearing_animation = False
             print(f"alpha: {self.current_alpha_level}")
 
@@ -122,8 +147,10 @@ class SellingPhase(GameObject):
         # clear the generated npcs from the scene and their ballons
         for npc in self.list_of_npc:
             npc.purchase_balloon.stop_rendering_this_game_object()
-            self.scene.remove_game_object(npc.purchase_balloon)
+            npc.purchase_balloon.item_image_holder.stop_rendering_this_game_object()
             npc.stop_rendering_this_game_object()
+            self.scene.remove_game_object(npc.purchase_balloon)
+            self.scene.remove_game_object(npc.purchase_balloon.item_image_holder)
             self.scene.remove_game_object(npc)
 
 
