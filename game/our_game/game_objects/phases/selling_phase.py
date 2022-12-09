@@ -6,7 +6,7 @@ from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite 
 from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
-from our_game.game_objects.inventories.craft_inventory import Recipe
+from our_game.game_objects.inventories.craftable_recipe import CraftableRecipe
 from our_game.game_objects.inventories.inventory_item import InventoryItem
 
 
@@ -63,8 +63,8 @@ class Npc(GameObject):
 
         # generates a recipe
         self.player = player
-        self.recipes: list[Recipe] = player.craft_inventory.recipes
-        self.chosen_recipe: Recipe = self.recipes[random.randint(0, len(self.recipes)-1)]
+        self.recipes: list[CraftableRecipe] = player.craft_inventory.recipes
+        self.chosen_recipe: CraftableRecipe = self.recipes[random.randint(0, len(self.recipes) - 1)]
         self.chosen_recipe_output: InventoryItem = self.chosen_recipe.craftable_output
         self.price_willing_to_pay = self.chosen_recipe_output.price
 

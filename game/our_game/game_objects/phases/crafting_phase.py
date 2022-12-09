@@ -4,7 +4,7 @@ from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker impo
 from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-from our_game.game_objects.inventories.craft_inventory import Recipe
+from our_game.game_objects.inventories.craftable_recipe import CraftableRecipe
 from our_game.game_objects.translucent_square import TrasnlucentSquare
 
 
@@ -88,7 +88,7 @@ class CraftingPhase(GameObject):
 
             print("running crafting phase")
 
-            current_recipe: Recipe = self.player.craft_inventory.recipes[self.current_item_index]
+            current_recipe: CraftableRecipe = self.player.craft_inventory.recipes[self.current_item_index]
             current_recipe.show_recipe_recept_on_screen()
 
             # switch between resources
