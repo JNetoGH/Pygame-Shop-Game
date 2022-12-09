@@ -6,7 +6,8 @@ from JNetoProductions_pygame_game_engine.components.text_render.text_render_comp
 from JNetoProductions_pygame_game_engine.components.timer.timer import Timer
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-from our_game.game_objects.inventory_item import InventoryItem
+from our_game.game_objects.inventories.inventory_item import InventoryItem
+from our_game.game_objects.translucent_square import TrasnlucentSquare
 
 mexida = 70
 
@@ -31,18 +32,6 @@ class RepresentationOfTheCurrentItemAtBuyingPhase(GameObject):
         self.single_sprite = SingleSprite("our_game/game_res/graphics/crafting_resources/bronze.png", self)
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280-mexida))
         self.single_sprite.scale_itself(8)
-
-
-class TrasnlucentSquare(GameObject):
-    def __init__(self, name: str, scene, rendering_layer):
-        super().__init__(name, scene, rendering_layer)
-        self.stop_rendering_this_game_object()
-
-        self.image = pygame.Surface((400, 170))
-        self.image.set_alpha(200)  # alpha level
-        self.image.fill((0, 0, 0))  # this fills the entire surface
-
-        self.fix_game_object_on_screen(pygame.Vector2(230,365))
 
 
 class BuyingPhaseTextHolder(GameObject):

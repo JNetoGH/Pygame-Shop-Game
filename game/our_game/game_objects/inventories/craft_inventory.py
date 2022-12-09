@@ -5,7 +5,7 @@ from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite 
 from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-from our_game.game_objects.inventory_item import InventoryItem
+from our_game.game_objects.inventories.inventory_item import InventoryItem
 
 
 class Recipe(GameObject):

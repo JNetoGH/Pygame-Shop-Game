@@ -29,9 +29,10 @@ class GameObject(pygame.sprite.Sprite):
         self.rendering_layer = rendering_layer
         self.rendering_layer.add_game_object(self)
 
-        # makes a default img to the object, it's invisible
+        # makes a default img to the object, it's a white rect
         # sprites or animation override it
-        self.image = pygame.Surface((0, 0))
+        self.image = pygame.Surface((100, 100))
+        self.image.fill("white")
 
         # used by the camera to ignore the world position when rendering the GameObject,
         # by using the fixed_position_on_screen
@@ -79,6 +80,9 @@ class GameObject(pygame.sprite.Sprite):
 
     def start_rendering_this_game_object(self):
         self.should__be_rendered = True
+
+    def remove_default_rect_image(self):
+        self.image = pygame.Surface((0, 0))
 
     def get_index_in_scene_all_game_objects_list(self) -> int:
         for i in range(0, len(self.scene.all_game_obj)):

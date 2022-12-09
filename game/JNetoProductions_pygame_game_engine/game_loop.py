@@ -82,7 +82,7 @@ class GameLoop:
             # needs to be on top of gizmos
             if self.show_inspector_debugging_canvas:
                 self.inspector_debugging_canvas.render_inspector_debugging_text()
-                self.inspector_debugging_canvas.render_game_object_inspector_debugging_status(11, "white")  # GmObj info
+                self.inspector_debugging_canvas.render_game_object_inspector_debugging_status(1, "white")  # GmObj info
 
             # render the final produced frame
             ScalableGameScreen.render_final_scaled_result()

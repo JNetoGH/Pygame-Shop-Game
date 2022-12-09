@@ -3,7 +3,7 @@ import pygame
 from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-from our_game.game_objects.inventory_item import InventoryItem
+from our_game.game_objects.inventories.inventory_item import InventoryItem
 
 
 class ResInventory(GameObject):

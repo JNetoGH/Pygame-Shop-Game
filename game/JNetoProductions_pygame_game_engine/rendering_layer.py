@@ -3,7 +3,8 @@ from JNetoProductions_pygame_game_engine.game_object_base_class import GameObjec
 
 class RenderingLayer:
 
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self._game_objects_to_render: list[GameObject] = []
 
     @property

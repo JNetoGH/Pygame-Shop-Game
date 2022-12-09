@@ -20,6 +20,16 @@ class Scene:
             if game_obj.name == name:
                 return game_obj
 
+    def get_rendering_layer_by_name(self, name: str):
+        for r_layer in self.all_rendering_layers:
+            if r_layer.name == name:
+                return r_layer
+
+    def remove_game_object(self, required_game_object):
+        for gm in self.all_game_obj:
+            if gm == required_game_object:
+                self.all_game_obj.remove(gm)
+
     def scene_start(self):
         pass
 

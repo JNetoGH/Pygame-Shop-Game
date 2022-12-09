@@ -11,9 +11,6 @@ class OPERATION(enum.Enum):
 
 class ScalableGameScreen:
 
-    # not used til now
-    TILE_SIZE = 64
-
     # CANVAS SURFACES
     TargetResolutionForUpScaling = [1920, 1080]
     # DUMMY SCREEN: the screen where thing are drew into

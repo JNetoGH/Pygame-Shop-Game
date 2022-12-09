@@ -8,8 +8,8 @@ from JNetoProductions_pygame_game_engine.components.animation.animation_clip imp
 from JNetoProductions_pygame_game_engine.components.animation.animation_controller import AnimationController
 from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
-from our_game.game_objects.craft_inventory import CraftablesInventory
-from our_game.game_objects.resource_inventory import ResInventory
+from our_game.game_objects.inventories.craft_inventory import CraftablesInventory
+from our_game.game_objects.inventories.resource_inventory import ResInventory
 
 
 class Player(GameObject):
@@ -64,6 +64,10 @@ class Player(GameObject):
         self.res_inventory = ResInventory("res_inventory", self.scene, self.rendering_layer)
         self.craft_inventory = CraftablesInventory("craftables_inventory", self.scene, self.rendering_layer)
 
+        self.buying_phase = None
+        self.crafting_phase = None
+        self.selling_phase = None
+
         self.key_tracker_p = KeyTracker(pygame.K_p, self)
         self.key_tracker_o = KeyTracker(pygame.K_o, self)
         self.key_tracker_i = KeyTracker(pygame.K_i, self)
@@ -76,6 +80,10 @@ class Player(GameObject):
         self.money_text_render.change_text(f"${self.money}")
         self.exp_text_render.change_text(f"xp{self.exp}")
 
+        self.buying_phase = self.scene.get_game_object_by_name("buying_phase")
+        self.crafting_phase = self.scene.get_game_object_by_name("crafting_phase")
+        self.selling_phase = self.scene.get_game_object_by_name("selling_phase")
+
         # MOVE
         # updates the is_moving field for the animations and its other dependencies
         self.is_moving = not (InputManager.Vertical_Axis == 0 and InputManager.Horizontal_Axis == 0)
@@ -85,21 +93,22 @@ class Player(GameObject):
         else:
             self.kill_player_directions()
 
-        if self.key_tracker_p.has_key_been_fired_at_this_frame:
-            self.res_inventory.see_status()
-            self.craft_inventory.see_status()
+        # used to block run another phase when a phase is already running
+        is_there_any_scene_running = self.crafting_phase.is_running or self.buying_phase.is_running or self.selling_phase.is_running
 
-        # buying phase
-        if self.key_tracker_o.has_key_been_released_at_this_frame:
+        # run buying phase
+        if self.key_tracker_i.has_key_been_released_at_this_frame and not is_there_any_scene_running:
+            self.buying_phase.run_phase()
 
-            buying_phase = self.scene.get_game_object_by_name("buying_phase")
-            buying_phase.run_phase()
+        # run crafting phase
+        elif self.key_tracker_o.has_key_been_fired_at_this_frame and not is_there_any_scene_running:
+            self.crafting_phase.run_phase()
 
-        # crafting phase
-        elif self.key_tracker_i.has_key_been_fired_at_this_frame:
+        # run selling phase
+        elif self.key_tracker_p.has_key_been_fired_at_this_frame and not is_there_any_scene_running:
+            self.selling_phase.run_phase()
 
-            crafting_phase = self.scene.get_game_object_by_name("crafting_phase")
-            crafting_phase.run_phase()
+
 
         # ANIMATES THE PLAYER
         self.animate_player()
