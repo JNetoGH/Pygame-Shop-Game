@@ -1,7 +1,7 @@
 import pygame
 
-from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
-from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
+from JNetoProductions_pygame_game_engine.components.key_tracker_component import KeyTrackerComponent
+from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from our_game.game_objects.inventories.craftable_recipe import CraftableRecipe
@@ -48,12 +48,12 @@ class CraftingPhase(GameObject):
         self.text_holder = CraftingTextHolder("text_holder", self.scene, self.rendering_layer)
 
         # key trackers
-        self.key_tracker_arrow_left = KeyTracker(pygame.K_LEFT, self)
-        self.key_tracker_arrow_right = KeyTracker(pygame.K_RIGHT, self)
-        self.key_tracker_arrow_up = KeyTracker(pygame.K_UP, self)
-        self.key_tracker_arrow_down = KeyTracker(pygame.K_DOWN, self)
-        self.key_tracker_enter = KeyTracker(pygame.K_RETURN, self)
-        self.key_tracker_k = KeyTracker(pygame.K_k, self)
+        self.key_tracker_arrow_left = KeyTrackerComponent(pygame.K_LEFT, self)
+        self.key_tracker_arrow_right = KeyTrackerComponent(pygame.K_RIGHT, self)
+        self.key_tracker_arrow_up = KeyTrackerComponent(pygame.K_UP, self)
+        self.key_tracker_arrow_down = KeyTrackerComponent(pygame.K_DOWN, self)
+        self.key_tracker_enter = KeyTrackerComponent(pygame.K_RETURN, self)
+        self.key_tracker_k = KeyTrackerComponent(pygame.K_k, self)
 
         # position on screen
         self.fixed_position_on_screen = pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280-mexida)

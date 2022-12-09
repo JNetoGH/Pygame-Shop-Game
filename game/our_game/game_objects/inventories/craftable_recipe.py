@@ -2,8 +2,8 @@ import random
 
 import pygame
 
-from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
-from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
+from JNetoProductions_pygame_game_engine.components.single_sprite_component import SingleSpriteComponent
+from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from our_game.game_objects.inventories.inventory_item import InventoryItem
@@ -25,7 +25,7 @@ class CraftableRecipe(GameObject):
             ScalableGameScreen.HalfDummyScreenWidth,
             ScalableGameScreen.HalfDummyScreenHeight-50)
         )
-        self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/receitas_layout.png", self)
+        self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/ui/receitas_layout.png", self)
         self.single_sprite.scale_itself(4)
 
         self.name_text_render = TextRenderComponent(self.name, 20, pygame.Color(0, 0, 0), 10, 65, self)

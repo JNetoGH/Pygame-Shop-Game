@@ -1,8 +1,8 @@
 import pygame.time
-from JNetoProductions_pygame_game_engine.components.component_base_class.component import Component
+from JNetoProductions_pygame_game_engine.components.component_base_class.component_base_class import Component
 
 
-class Timer(Component):
+class TimerComponent(Component):
 
     # can execute a function oce the timer is over
     def __init__(self, duration_in_ms, game_object_owner, func = None):
@@ -40,7 +40,7 @@ class Timer(Component):
                 self.func()
 
     def get_inspector_debugging_status(self) -> str:
-        return f"COMPONENT(Timer)\n" \
+        return f"COMPONENT(TimerComponent)\n" \
                f"function carried: {self.func.__name__}\n" \
                f"total elapsed time since game started: {self.tot_time_elapsed_since_game_started}ms\n" \
                f"duration: {self.duration_in_ms}ms\n" \

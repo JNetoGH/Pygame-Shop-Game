@@ -1,9 +1,9 @@
 import random
 import pygame
-from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
-from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
-from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
-from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
+from JNetoProductions_pygame_game_engine.components.collider_component import ColliderComponent
+from JNetoProductions_pygame_game_engine.components.key_tracker_component import KeyTrackerComponent
+from JNetoProductions_pygame_game_engine.components.single_sprite_component import SingleSpriteComponent
+from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
 from our_game.game_objects.inventories.craftable_recipe import CraftableRecipe
@@ -14,7 +14,7 @@ class ItemImgHolder(GameObject):
 
     def __init__(self, name: str, path_to_image, purchase_balloon, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
-        self.single_sprite = SingleSprite(path_to_image, self)
+        self.single_sprite = SingleSpriteComponent(path_to_image, self)
         self.single_sprite.scale_itself(3)
         self.purchase_balloon = purchase_balloon
 
@@ -29,7 +29,7 @@ class PurchaseBalloon(GameObject):
 
     def __init__(self, name: str, path_to_image, price_willing_to_pay,npc_owner, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
-        self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/balao.png", self)
+        self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/ui/balao.png", self)
         self.price_willing_to_pay = price_willing_to_pay
 
         self.text_render_of_price_willing_to_pay = TextRenderComponent(f"{self.price_willing_to_pay}", 15, pygame.Color(0, 128, 0), 12, -27, self)
@@ -58,8 +58,8 @@ class Npc(GameObject):
 
         # sets the object in world
         self.sprite_set = random.randint(0, Npc.TotalAvailableCompleteNpcsSpriteSet-1)
-        self.single_sprite = SingleSprite(Npc.AvailableNpcsPaths[self.sprite_set], self)
-        self.collider = Collider(0, 0, 55, 70, self)
+        self.single_sprite = SingleSpriteComponent(Npc.AvailableNpcsPaths[self.sprite_set], self)
+        self.collider = ColliderComponent(0, 0, 55, 70, self)
 
         # generates a recipe
         self.player = player
@@ -112,8 +112,8 @@ class SellingPhase(GameObject):
         self.is_running = False
 
         # key trackers
-        self.key_tracker_enter = KeyTracker(pygame.K_RETURN, self)
-        self.key_tracker_k = KeyTracker(pygame.K_k, self)
+        self.key_tracker_enter = KeyTrackerComponent(pygame.K_RETURN, self)
+        self.key_tracker_k = KeyTrackerComponent(pygame.K_k, self)
 
         # others
         self.remove_default_rect_image()

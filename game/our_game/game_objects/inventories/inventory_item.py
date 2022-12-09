@@ -1,7 +1,7 @@
 import pygame
 
-from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
-from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
+from JNetoProductions_pygame_game_engine.components.single_sprite_component import SingleSpriteComponent
+from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 
 
@@ -12,7 +12,7 @@ class InventoryItem(GameObject):
         self.name = name
         self.price = price
         self.amount = initial_amount
-        self.single_sprite = SingleSprite(img_path, self)
+        self.single_sprite = SingleSpriteComponent(img_path, self)
         self.single_sprite.scale_itself(2)
         self.amount_text_render = TextRenderComponent(f"{self.amount}", 15, pygame.Color(0,0,0), 15, 13, self)
 

@@ -1,9 +1,9 @@
 import pygame.rect
 
-from JNetoProductions_pygame_game_engine.components.component_base_class.component import Component
+from JNetoProductions_pygame_game_engine.components.component_base_class.component_base_class import Component
 
 
-class Collider(Component):
+class ColliderComponent(Component):
 
     def __init__(self, offset_from_game_object_x, offset_from_game_object_y, width, height, game_object_owner):
         super().__init__(game_object_owner)
@@ -41,4 +41,4 @@ class Collider(Component):
         self.collider_rect.centery = self.game_object_owner.transform.world_position.y + self.offset_from_game_object_y
 
     def get_inspector_debugging_status(self) -> str:
-        return "Component(Collider)\n"
+        return "Component(ColliderComponent)\n"

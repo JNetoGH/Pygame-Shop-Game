@@ -1,6 +1,6 @@
 import pygame
 
-from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
+from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 
 

@@ -1,5 +1,5 @@
 import pygame
-from JNetoProductions_pygame_game_engine.components.component_base_class.component import Component
+from JNetoProductions_pygame_game_engine.components.component_base_class.component_base_class import Component
 
 
 class TextRenderComponent(Component):

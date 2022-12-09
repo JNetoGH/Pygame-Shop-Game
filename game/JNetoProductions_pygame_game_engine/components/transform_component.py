@@ -1,10 +1,10 @@
 import pygame
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
-from JNetoProductions_pygame_game_engine.components.component_base_class.component import Component
+from JNetoProductions_pygame_game_engine.components.collider_component import ColliderComponent
+from JNetoProductions_pygame_game_engine.components.component_base_class.component_base_class import Component
 
 
-class Transform(Component):
+class TransformComponent(Component):
     def __init__(self, game_object_owner):
         super().__init__(game_object_owner)
         self.world_position: pygame.Vector2 = pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, ScalableGameScreen.HalfDummyScreenHeight)
@@ -45,7 +45,7 @@ class Transform(Component):
 
         # inits this game_loop object colliders list
         for component in self.game_object_owner.components_list:
-            if isinstance(component, Collider):
+            if isinstance(component, ColliderComponent):
                 this_game_object_colliders_list.append(component)
 
         for other_gm_obj in self.game_object_owner.scene.all_game_obj:
@@ -55,7 +55,7 @@ class Transform(Component):
 
                 # fills the other game_loop object colliders list
                 for component in other_gm_obj.components_list:
-                    if isinstance(component, Collider):
+                    if isinstance(component, ColliderComponent):
                         other_game_object_colliders_list.append(component)
 
                 # checks for collision
@@ -78,7 +78,7 @@ class Transform(Component):
 
 
     def get_inspector_debugging_status(self) -> str:
-        return f"COMPONENT(Transform)\n" \
+        return f"COMPONENT(TransformComponent)\n" \
                f"world position:  {self.world_position}\n" \
                f"screen position: {self._screen_position}\n"
 

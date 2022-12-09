@@ -1,9 +1,9 @@
 import pygame
 
-from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
-from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
-from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
-from JNetoProductions_pygame_game_engine.components.timer.timer import Timer
+from JNetoProductions_pygame_game_engine.components.key_tracker_component import KeyTrackerComponent
+from JNetoProductions_pygame_game_engine.components.single_sprite_component import SingleSpriteComponent
+from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
+from JNetoProductions_pygame_game_engine.components.timer_component import TimerComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from our_game.game_objects.inventories.inventory_item import InventoryItem
@@ -17,7 +17,7 @@ class MiddleBlock(GameObject):
 
         self.stop_rendering_this_game_object()
 
-        self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/buying_phase.png", self)
+        self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/ui/buying_phase.png", self)
         self.single_sprite.scale_itself(4)
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth,
                                                       ScalableGameScreen.HalfDummyScreenHeight-mexida))
@@ -29,7 +29,7 @@ class RepresentationOfTheCurrentItemAtBuyingPhase(GameObject):
 
         self.stop_rendering_this_game_object()
 
-        self.single_sprite = SingleSprite("our_game/game_res/graphics/crafting_resources/bronze.png", self)
+        self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/crafting_resources/bronze.png", self)
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280-mexida))
         self.single_sprite.scale_itself(8)
 
@@ -77,12 +77,12 @@ class BuyingPhaseTextHolder(GameObject):
 
     def press_plus_button(self):
         self.text_render_of_option_plus.change_color(self.pressed_button_color)
-        pressing_time = Timer(self.pressing_time_in_ms, self, self.change_plus_button_color)
+        pressing_time = TimerComponent(self.pressing_time_in_ms, self, self.change_plus_button_color)
         pressing_time.activate()
 
     def press_minus_button(self):
         self.text_render_of_option_minus.change_color(self.pressed_button_color)
-        pressing_time = Timer(self.pressing_time_in_ms, self, self.change_minus_button_color)
+        pressing_time = TimerComponent(self.pressing_time_in_ms, self, self.change_minus_button_color)
         pressing_time.activate()
 
     def change_plus_button_color(self):
@@ -107,12 +107,12 @@ class BuyingPhase(GameObject):
         self.fix_game_object_on_screen(self.fixed_position_on_screen)
 
         # key trackers
-        self.key_tracker_arrow_left = KeyTracker(pygame.K_LEFT, self)
-        self.key_tracker_arrow_right = KeyTracker(pygame.K_RIGHT, self)
-        self.key_tracker_arrow_up = KeyTracker(pygame.K_UP, self)
-        self.key_tracker_arrow_down = KeyTracker(pygame.K_DOWN, self)
-        self.key_tracker_enter = KeyTracker(pygame.K_RETURN, self)
-        self.key_tracker_k = KeyTracker(pygame.K_k, self)
+        self.key_tracker_arrow_left = KeyTrackerComponent(pygame.K_LEFT, self)
+        self.key_tracker_arrow_right = KeyTrackerComponent(pygame.K_RIGHT, self)
+        self.key_tracker_arrow_up = KeyTrackerComponent(pygame.K_UP, self)
+        self.key_tracker_arrow_down = KeyTrackerComponent(pygame.K_DOWN, self)
+        self.key_tracker_enter = KeyTrackerComponent(pygame.K_RETURN, self)
+        self.key_tracker_k = KeyTrackerComponent(pygame.K_k, self)
 
         # buy related stuff
         self.current_item_index = 0

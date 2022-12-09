@@ -3,7 +3,7 @@ from JNetoProductions_pygame_game_engine.systems.input_manager_system import Inp
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
 from JNetoProductions_pygame_game_engine.systems._text_rendering_system import TextRenderOverlaySystem
-from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
+from JNetoProductions_pygame_game_engine.components.collider_component import ColliderComponent
 from JNetoProductions_pygame_game_engine.scene import Scene
 
 
@@ -73,8 +73,8 @@ class InspectorDebuggingCanvas:
         # render the point
         pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, color, object_screen_pos, 5)
         # description
-        text_transform = f"{game_obj.name}'s Transform.world_position\n(x:{game_obj.transform.world_position.x} | y:{game_obj.transform.world_position.y})\n" \
-                         f"{game_obj.name}'s Transform.screen_position\n(x:{game_obj.transform.screen_position_read_only.x} | y:{game_obj.transform.screen_position_read_only.y})"
+        text_transform = f"{game_obj.name}'s TransformComponent.world_position\n(x:{game_obj.transform.world_position.x} | y:{game_obj.transform.world_position.y})\n" \
+                         f"{game_obj.name}'s TransformComponent.screen_position\n(x:{game_obj.transform.screen_position_read_only.x} | y:{game_obj.transform.screen_position_read_only.y})"
         # render description
         TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
                                           text_transform,
@@ -132,7 +132,7 @@ class InspectorDebuggingCanvas:
 
         # COLLIDERS GIZMOS
         for component in game_obj.components_list:
-            if isinstance(component, Collider):
+            if isinstance(component, ColliderComponent):
                 # render
                 # the position of the collider is at world position,
                 # so I have to treat its position for correct representation on screen

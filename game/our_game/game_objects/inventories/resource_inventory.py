@@ -1,6 +1,6 @@
 import pygame
 
-from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
+from JNetoProductions_pygame_game_engine.components.single_sprite_component import SingleSpriteComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from our_game.game_objects.inventories.inventory_item import InventoryItem
@@ -11,7 +11,7 @@ class ResInventory(GameObject):
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
 
-        self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/inventory.png", self)
+        self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/ui/inventory.png", self)
         self.single_sprite.scale_itself(4)
         posi_res_y_in_screen = ScalableGameScreen.DummyScreenHeight - 125
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, posi_res_y_in_screen))

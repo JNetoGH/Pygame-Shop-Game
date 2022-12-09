@@ -1,12 +1,12 @@
 import pygame
-from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
-from JNetoProductions_pygame_game_engine.components.text_render.text_render_component import TextRenderComponent
+from JNetoProductions_pygame_game_engine.components.key_tracker_component import KeyTrackerComponent
+from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
 from JNetoProductions_pygame_game_engine.systems.input_manager_system import InputManager
-from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
-from JNetoProductions_pygame_game_engine.components.animation.animation_clip import AnimationClip
-from JNetoProductions_pygame_game_engine.components.animation.animation_controller import AnimationController
-from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
+from JNetoProductions_pygame_game_engine.components.collider_component import ColliderComponent
+from JNetoProductions_pygame_game_engine.animation_clip import AnimationClip
+from JNetoProductions_pygame_game_engine.components.animation_controller_component import AnimationControllerComponent
+from JNetoProductions_pygame_game_engine.components.single_sprite_component import SingleSpriteComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from our_game.game_objects.inventories.craft_inventory import CraftablesInventory
 from our_game.game_objects.inventories.resource_inventory import ResInventory
@@ -27,10 +27,10 @@ class Player(GameObject):
         self.is_moving = False
 
         # default sprite
-        self.single_sprite = SingleSprite("our_game/game_res/graphics/player/down/0.png", self)
+        self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/player/down/0.png", self)
 
         # collider
-        self.collider = Collider(0, 30, 50, 20, self)
+        self.collider = ColliderComponent(0, 30, 50, 20, self)
 
         # used in animations holds the last direction the player faced while walking e.g. left, up...
         self.last_direction_before_stop = "down"
@@ -51,7 +51,7 @@ class Player(GameObject):
         animation_clips = [self.animation_idle_right, self.animation_idle_up, self.animation_idle_left, self.animation_idle_down,
                            self.animation_walk_right, self.animation_walk_up, self.animation_walk_left, self.animation_walk_down]
         # animation controller
-        self.animation_controller = AnimationController(animation_clips, self)
+        self.animation_controller = AnimationControllerComponent(animation_clips, self)
 
         self.money = 100
         self.exp = 1
@@ -68,9 +68,9 @@ class Player(GameObject):
         self.crafting_phase = None
         self.selling_phase = None
 
-        self.key_tracker_p = KeyTracker(pygame.K_p, self)
-        self.key_tracker_o = KeyTracker(pygame.K_o, self)
-        self.key_tracker_i = KeyTracker(pygame.K_i, self)
+        self.key_tracker_p = KeyTrackerComponent(pygame.K_p, self)
+        self.key_tracker_o = KeyTrackerComponent(pygame.K_o, self)
+        self.key_tracker_i = KeyTrackerComponent(pygame.K_i, self)
 
 
 

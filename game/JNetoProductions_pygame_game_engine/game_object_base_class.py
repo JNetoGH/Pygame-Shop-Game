@@ -1,5 +1,5 @@
 import pygame
-from JNetoProductions_pygame_game_engine.components.transform.transform import Transform
+from JNetoProductions_pygame_game_engine.components.transform_component import TransformComponent
 from abc import abstractmethod
 
 
@@ -22,8 +22,8 @@ class GameObject(pygame.sprite.Sprite):
         scene.all_game_obj.append(self)
 
         # sets the transform
-        # every game_loop object in JNeto Production GameLoop Engine must have a Transform
-        self.transform = Transform(self)
+        # every game_loop object in JNeto Production GameLoop Engine must have a TransformComponent
+        self.transform = TransformComponent(self)
 
         # sets the rendering layer, and adds itself to it
         self.rendering_layer = rendering_layer
@@ -57,14 +57,14 @@ class GameObject(pygame.sprite.Sprite):
         pass
 
     def remove_component(self, component):
-        if isinstance(component, Transform):
+        if isinstance(component, TransformComponent):
             return
         for c in self.components_list:
             if c == component:
                 self.components_list.remove(component)
 
     def add_component(self, component):
-        if isinstance(component, Transform):
+        if isinstance(component, TransformComponent):
             return
         self.components_list.append(component)
 

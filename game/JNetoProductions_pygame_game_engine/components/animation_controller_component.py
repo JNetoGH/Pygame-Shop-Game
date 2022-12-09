@@ -1,11 +1,11 @@
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
-from JNetoProductions_pygame_game_engine.components.animation.animation_clip import AnimationClip
-from JNetoProductions_pygame_game_engine.components.component_base_class.component import Component
+from JNetoProductions_pygame_game_engine.animation_clip import AnimationClip
+from JNetoProductions_pygame_game_engine.components.component_base_class.component_base_class import Component
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 
 
 # sets the current animation in a animation list and the current frame of the animation according to a speed
-class AnimationController(Component):
+class AnimationControllerComponent(Component):
 
     def __init__(self, animation_clips, game_object_owner: GameObject):
         super().__init__(game_object_owner)
@@ -17,8 +17,6 @@ class AnimationController(Component):
         self.current_frame_index = 0  # the current img of the animation clip
         self.animation_speed = 0
         self._stop_animation_clip = False
-
-
 
     def add_animation(self, *animations: AnimationClip) -> None:
         for animation in animations:
@@ -59,7 +57,7 @@ class AnimationController(Component):
             in_memory_animation_clips_names += clip.name + ", "
         in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
         in_memory_animation_clips_names = in_memory_animation_clips_names[:-1]
-        return f"COMPONENT(AnimationController)\n" \
+        return f"COMPONENT(AnimationControllerComponent)\n" \
                f"current animation clip: {self.current_animation_clip.name}\n" \
                f"current clip truncate index: {int(self.current_frame_index)}\n" \
                f"animation speed: {self.animation_speed}\n" \
