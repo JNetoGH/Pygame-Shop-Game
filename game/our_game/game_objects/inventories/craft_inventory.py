@@ -113,23 +113,39 @@ class CraftablesInventory(GameObject):
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, posi_res_y_in_screen))
 
         # craftables List
-        self.craftables: list[InventoryItem] = [
-            InventoryItem("esp_bronze", 10, 0, "our_game/game_res/graphics/craftables/espada_bronze.png", self.scene, self.rendering_layer),
-            InventoryItem("esp_ferro", 10, 0, "our_game/game_res/graphics/craftables/espada_ferro.png", self.scene, self.rendering_layer),
-            InventoryItem("esp_ouro", 2, 5, "our_game/game_res/graphics/craftables/espada_ouro.png", self.scene, self.rendering_layer),
-            InventoryItem("esp_rubi", 2, 5, "our_game/game_res/graphics/craftables/espada_rubi.png", self.scene, self.rendering_layer),
-            InventoryItem("esp_diamante", 15, 1, "our_game/game_res/graphics/craftables/espada_diamante.png", self.scene,self.rendering_layer),
-            InventoryItem("hammer_iron", 15, 1, "our_game/game_res/graphics/craftables/hammer_iron.png", self.scene, self.rendering_layer),
-            InventoryItem("bow", 15, 1, "our_game/game_res/graphics/craftables/bow.png", self.scene, self.rendering_layer),
+        esp_bronze_value = 10
+        esp_ferro_value = 10
+        esp_ouro_value = 2
+        esp_rubi_value = 2
+        esp_diamante_value = 15
+        hammer_iron_value = 15
+        bow_value = 15
+        bronze_feet_value = 15
+        diamante_helm_value = 15
+        iron_chest_value = 15
+        iron_helm_value = 15
+        leather_legs_value = 15
+        ouro_helm_value = 15
+        ouro_legs_value = 15
+        rubi_feet_value = 15
 
-            InventoryItem("bronze_feet", 15, 1, "our_game/game_res/graphics/craftables/bronze_feet.png", self.scene, self.rendering_layer),
-            InventoryItem("diamante_helm", 15, 1, "our_game/game_res/graphics/craftables/diamante_helm.png", self.scene, self.rendering_layer),
-            InventoryItem("iron_chest", 15, 1, "our_game/game_res/graphics/craftables/iron_chest.png", self.scene, self.rendering_layer),
-            InventoryItem("iron_hem", 15, 1, "our_game/game_res/graphics/craftables/iron_helm.png",  self.scene, self.rendering_layer),
-            InventoryItem("leather_legs", 15, 1, "our_game/game_res/graphics/craftables/leather_legs.png", self.scene, self.rendering_layer),
-            InventoryItem("ouro_helm", 15, 1, "our_game/game_res/graphics/craftables/ouro_helm.png", self.scene, self.rendering_layer),
-            InventoryItem("ouro_legs", 15, 1, "our_game/game_res/graphics/craftables/ouro_legs.png", self.scene, self.rendering_layer),
-            InventoryItem("rubi_feet", 15, 1, "our_game/game_res/graphics/craftables/rubi_feet.png", self.scene, self.rendering_layer),
+        self.craftables: list[InventoryItem] = [
+            InventoryItem("esp_bronze", esp_bronze_value, 0, "our_game/game_res/graphics/craftables/espada_bronze.png", self.scene, self.rendering_layer),
+            InventoryItem("esp_ferro", esp_ferro_value, 0, "our_game/game_res/graphics/craftables/espada_ferro.png", self.scene, self.rendering_layer),
+            InventoryItem("esp_ouro", esp_ouro_value, 5, "our_game/game_res/graphics/craftables/espada_ouro.png", self.scene, self.rendering_layer),
+            InventoryItem("esp_rubi", esp_rubi_value, 5, "our_game/game_res/graphics/craftables/espada_rubi.png", self.scene, self.rendering_layer),
+            InventoryItem("esp_diamante", esp_diamante_value, 1, "our_game/game_res/graphics/craftables/espada_diamante.png", self.scene,self.rendering_layer),
+            InventoryItem("hammer_iron", hammer_iron_value, 1, "our_game/game_res/graphics/craftables/hammer_iron.png", self.scene, self.rendering_layer),
+            InventoryItem("bow", bow_value, 1, "our_game/game_res/graphics/craftables/bow.png", self.scene, self.rendering_layer),
+
+            InventoryItem("bronze_feet", bronze_feet_value, 1, "our_game/game_res/graphics/craftables/bronze_feet.png", self.scene, self.rendering_layer),
+            InventoryItem("diamante_helm", diamante_helm_value, 1, "our_game/game_res/graphics/craftables/diamante_helm.png", self.scene, self.rendering_layer),
+            InventoryItem("iron_chest", iron_chest_value, 1, "our_game/game_res/graphics/craftables/iron_chest.png", self.scene, self.rendering_layer),
+            InventoryItem("iron_hem", iron_helm_value, 1, "our_game/game_res/graphics/craftables/iron_helm.png",  self.scene, self.rendering_layer),
+            InventoryItem("leather_legs", leather_legs_value, 1, "our_game/game_res/graphics/craftables/leather_legs.png", self.scene, self.rendering_layer),
+            InventoryItem("ouro_helm", ouro_helm_value, 1, "our_game/game_res/graphics/craftables/ouro_helm.png", self.scene, self.rendering_layer),
+            InventoryItem("ouro_legs", ouro_legs_value, 1, "our_game/game_res/graphics/craftables/ouro_legs.png", self.scene, self.rendering_layer),
+            InventoryItem("rubi_feet", rubi_feet_value, 1, "our_game/game_res/graphics/craftables/rubi_feet.png", self.scene, self.rendering_layer),
                                         ]
 
         # MAKING RECEPTS
@@ -140,7 +156,8 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("bronze", 0, 5, "our_game/game_res/graphics/crafting_resources/bronze.png", self.scene, overall_layer)
         item3 = InventoryItem("ferro", 0, 5, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("esp_bronze", 0, 1, "our_game/game_res/graphics/craftables/espada_bronze.png", self.scene, overall_layer)
+
+        output = InventoryItem("esp_bronze", esp_bronze_value, 1, "our_game/game_res/graphics/craftables/espada_bronze.png", self.scene, overall_layer)
         self.copper_sword_recept = Recipe("copper sword", 20, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita ferro sword
@@ -148,7 +165,8 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("ouro", 0, 2, "our_game/game_res/graphics/crafting_resources/ouro.png", self.scene, overall_layer)
         item3 = InventoryItem("ferro", 0, 5, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("esp_ferro", 0, 1, "our_game/game_res/graphics/craftables/espada_ferro.png", self.scene, overall_layer)
+
+        output = InventoryItem("esp_ferro", esp_ferro_value, 1, "our_game/game_res/graphics/craftables/espada_ferro.png", self.scene, overall_layer)
         self.iron_sword_recept = Recipe("iron sword", 30, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita bow
@@ -156,7 +174,8 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("ferro", 0, 2, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         item3 = InventoryItem("stick_madeira", 0, 5, "our_game/game_res/graphics/crafting_resources/stick_madeira.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("bow", 0, 1, "our_game/game_res/graphics/craftables/bow.png", self.scene, overall_layer)
+
+        output = InventoryItem("bow", bow_value, 1, "our_game/game_res/graphics/craftables/bow.png", self.scene, overall_layer)
         self.bow_recept = Recipe("bow", 5, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita ouro sword
@@ -164,7 +183,8 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("ferro", 0, 2, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         item3 = InventoryItem("ouro", 0, 5, "our_game/game_res/graphics/crafting_resources/ouro.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("esp_ouro", 0, 1, "our_game/game_res/graphics/craftables/espada_ouro.png", self.scene, overall_layer)
+
+        output = InventoryItem("esp_ouro", esp_ouro_value, 1, "our_game/game_res/graphics/craftables/espada_ouro.png", self.scene, overall_layer)
         self.ouro_sword_recept = Recipe("ouro sword", 20, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita diamante sword
@@ -172,7 +192,8 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("ferro", 0, 10, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         item3 = InventoryItem("diamante", 0, 5, "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("esp_diamante", 0, 1, "our_game/game_res/graphics/craftables/espada_diamante.png", self.scene, overall_layer)
+
+        output = InventoryItem("esp_diamante", esp_diamante_value, 1, "our_game/game_res/graphics/craftables/espada_diamante.png", self.scene, overall_layer)
         self.diamond_sword_recept = Recipe("diamond sword", 30, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita rubi sword
@@ -180,7 +201,8 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("diamante", 0, 10, "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, overall_layer)
         item3 = InventoryItem("rubi", 0, 5, "our_game/game_res/graphics/crafting_resources/rubi.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("esp_rubi", 0, 1, "our_game/game_res/graphics/craftables/espada_rubi.png", self.scene, overall_layer)
+
+        output = InventoryItem("esp_rubi", esp_rubi_value, 1, "our_game/game_res/graphics/craftables/espada_rubi.png", self.scene, overall_layer)
         self.rubi_sword_recept = Recipe("rubi sword", 40, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita iron hammer
@@ -189,7 +211,8 @@ class CraftablesInventory(GameObject):
         item3 = InventoryItem("stick_madeira", 0, 10, "our_game/game_res/graphics/crafting_resources/stick_madeira.png", self.scene, overall_layer)
         item4 = InventoryItem("ferro", 0, 5, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         required_items = [item1, item2, item3, item4]
-        output = InventoryItem("hammer_iron", 0, 1, "our_game/game_res/graphics/craftables/hammer_iron.png", self.scene, overall_layer)
+
+        output = InventoryItem("hammer_iron", hammer_iron_value, 1, "our_game/game_res/graphics/craftables/hammer_iron.png", self.scene, overall_layer)
         self.iron_hammer_recept = Recipe("iron hammer", 10, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita iron chest
@@ -198,7 +221,8 @@ class CraftablesInventory(GameObject):
         item3 = InventoryItem("ferro", 0, 10, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         item4 = InventoryItem("ferro", 0, 10, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         required_items = [item1, item2, item3, item4]
-        output = InventoryItem("iron_chest", 0, 1, "our_game/game_res/graphics/craftables/iron_chest.png", self.scene, overall_layer)
+
+        output = InventoryItem("iron_chest", iron_chest_value, 1, "our_game/game_res/graphics/craftables/iron_chest.png", self.scene, overall_layer)
         self.iron_chest_recept = Recipe("iron chest", 20, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita iron helm
@@ -206,14 +230,16 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("ferro", 0, 10, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         item3 = InventoryItem("ferro", 0, 10, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("iron_helm", 0, 1, "our_game/game_res/graphics/craftables/iron_helm.png", self.scene, overall_layer)
+
+        output = InventoryItem("iron_helm", iron_helm_value, 1, "our_game/game_res/graphics/craftables/iron_helm.png", self.scene, overall_layer)
         self.iron_helm_recept = Recipe("iron helm", 20, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita leather legs
         item1 = InventoryItem("leather", 0, 15, "our_game/game_res/graphics/crafting_resources/leather.png", self.scene, overall_layer)
         item2 = InventoryItem("iron", 0, 1, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         required_items = [item1, item2]
-        output = InventoryItem("leather_legs", 0, 1, "our_game/game_res/graphics/craftables/leather_legs.png", self.scene, overall_layer)
+
+        output = InventoryItem("leather_legs", leather_legs_value, 1, "our_game/game_res/graphics/craftables/leather_legs.png", self.scene, overall_layer)
         self.leather_legs_recept = Recipe("leather legs", 5, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita ouro helm
@@ -221,28 +247,32 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("ouro", 0, 10, "our_game/game_res/graphics/crafting_resources/ouro.png", self.scene, overall_layer)
         item3 = InventoryItem("ouro", 0, 10, "our_game/game_res/graphics/crafting_resources/ouro.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("ouro_helm", 0, 1, "our_game/game_res/graphics/craftables/ouro_helm.png", self.scene, overall_layer)
+
+        output = InventoryItem("ouro_helm", ouro_helm_value, 1, "our_game/game_res/graphics/craftables/ouro_helm.png", self.scene, overall_layer)
         self.ouro_helm_recept = Recipe("ouro helm", 15, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita ouro legs
         item1 = InventoryItem("ouro", 0, 15, "our_game/game_res/graphics/crafting_resources/ouro.png", self.scene, overall_layer)
         item2 = InventoryItem("iron", 0, 1, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, overall_layer)
         required_items = [item1, item2]
-        output = InventoryItem("ouro_legs", 0, 1, "our_game/game_res/graphics/craftables/ouro_legs.png", self.scene, overall_layer)
+
+        output = InventoryItem("ouro_legs", ouro_legs_value, 1, "our_game/game_res/graphics/craftables/ouro_legs.png", self.scene, overall_layer)
         self.ouro_legs_recept = Recipe("ouro legs", 15, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita rubi feet
         item1 = InventoryItem("rubi", 0, 15, "our_game/game_res/graphics/crafting_resources/rubi.png", self.scene, overall_layer)
         item2 = InventoryItem("rubi", 0, 15, "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, overall_layer)
         required_items = [item1, item2]
-        output = InventoryItem("rubi_feet", 0, 1, "our_game/game_res/graphics/craftables/rubi_feet.png", self.scene, overall_layer)
+
+        output = InventoryItem("rubi_feet", rubi_feet_value, 1, "our_game/game_res/graphics/craftables/rubi_feet.png", self.scene, overall_layer)
         self.rubi_feet_recept = Recipe("rubi feet", 45, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita bronze feet
         item1 = InventoryItem("bronze", 0, 15, "our_game/game_res/graphics/crafting_resources/bronze.png", self.scene, overall_layer)
         item2 = InventoryItem("bronze", 0, 15, "our_game/game_res/graphics/crafting_resources/bronze.png", self.scene, overall_layer)
         required_items = [item1, item2]
-        output = InventoryItem("bronze_feet", 0, 1, "our_game/game_res/graphics/craftables/bronze_feet.png", self.scene, overall_layer)
+
+        output = InventoryItem("bronze_feet", bronze_feet_value, 1, "our_game/game_res/graphics/craftables/bronze_feet.png", self.scene, overall_layer)
         self.bronze_feet_recept = Recipe("bronze feet", 10, 10, required_items, output, self.scene, self.rendering_layer)
 
         # receita diamante helm
@@ -250,7 +280,8 @@ class CraftablesInventory(GameObject):
         item2 = InventoryItem("diamante", 0, 10, "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, overall_layer)
         item3 = InventoryItem("diamante", 0, 10, "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
-        output = InventoryItem("diamond_helm", 0, 1, "our_game/game_res/graphics/craftables/diamante_helm.png", self.scene, overall_layer)
+
+        output = InventoryItem("diamond_helm", diamante_helm_value, 1, "our_game/game_res/graphics/craftables/diamante_helm.png", self.scene, overall_layer)
         self.diamond_helm_recept = Recipe("diamond helm", 30, 10, required_items, output, self.scene, self.rendering_layer)
 
         self.recipes = [self.copper_sword_recept, self.iron_sword_recept, self.bow_recept, self.ouro_sword_recept,
