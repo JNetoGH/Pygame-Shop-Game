@@ -45,8 +45,6 @@ class Scene:
                 component.component_update()
             gm.game_object_update()
 
-        # debugging info about the engine
-
     def scene_render(self):
         # updates just for easy access to the layers
         self.all_rendering_layers = self.main_camera.rendering_layers_list

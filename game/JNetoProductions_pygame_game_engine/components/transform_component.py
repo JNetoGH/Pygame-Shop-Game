@@ -63,6 +63,10 @@ class TransformComponent(Component):
 
                     this_game_object_collider = this_game_object_colliders_list[i]
                     projection_of_current_collider_rect_to_new_position = this_game_object_collider.collider_rect.copy()
+                    # I have to round it, because pygame is stupid and only treats rects with in variables
+                    # so, a 50.9 position, would be truncate to 50, removing the decimal part completely,
+                    # by rounding it I make 4.8 = 5, 3.2 => 3, still not perfect, you can see little gaps
+                    # but is way better than if I haven't done anything
                     projection_of_current_collider_rect_to_new_position.centerx = round(new_position.x + this_game_object_collider.offset_from_game_object_x)
                     projection_of_current_collider_rect_to_new_position.centery = round(new_position.y + this_game_object_collider.offset_from_game_object_y)
 

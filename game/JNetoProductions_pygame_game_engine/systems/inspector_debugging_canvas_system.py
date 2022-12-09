@@ -1,4 +1,6 @@
 import pygame
+
+from JNetoProductions_pygame_game_engine.components.rect_trigger_component import RectTriggerComponent
 from JNetoProductions_pygame_game_engine.systems.input_manager_system import InputManager
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
@@ -60,6 +62,8 @@ class InspectorDebuggingCanvas:
             """
             if gm_obj.has_collider:
                 InspectorDebuggingCanvas._render_gizmos_of_game_obj_colliders(gm_obj, "yellow", font, font_size)
+            if gm_obj.has_rect_trigger:
+                InspectorDebuggingCanvas._render_gizmos_of_game_obj_rect_triggers(gm_obj,"green", font, font_size)
 
     @staticmethod
     def _render_gizmos_of_game_obj_transform(game_obj, color: str, font: pygame.font.Font, font_size: int) -> None:
@@ -134,23 +138,66 @@ class InspectorDebuggingCanvas:
         for component in game_obj.components_list:
             if isinstance(component, ColliderComponent):
                 # render
+
+                # THE REPRESENTATION OF THE COLIDER AT SCREEN POSITION
                 # the position of the collider is at world position,
                 # so I have to treat its position for correct representation on screen
-                representative_collider_rect = component.collider_rect.copy()
-                representative_collider_rect.centerx = object_screen_pos.x + component.offset_from_game_object_x
-                representative_collider_rect.centery = object_screen_pos.y + component.offset_from_game_object_y
-                pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, color,
-                                 representative_collider_rect, 1)
+                representative_screen_collider_rect = component.collider_rect.copy()
+                representative_screen_collider_rect.centerx = object_screen_pos.x + component.offset_from_game_object_x
+                representative_screen_collider_rect.centery = object_screen_pos.y + component.offset_from_game_object_y
+
+                # render the rect
+                pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, color, representative_screen_collider_rect, 1)
+
                 # description
                 collider_text = f"{component.game_object_owner_read_only.name}'s collider\n" \
                                 f"offside.x: {component.offset_from_game_object_x} | offside.y: {component.offset_from_game_object_y}\n" \
-                                f"width: {component.width}  |  height: {component.height}\n" \
-                                f"world center position {component.collider_rect.center}"
+                                f"width: {component.width} | height: {component.height}\n" \
+                                f"world position ({component.world_position_get_only})"
+
                 # render description
                 TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
                                                   collider_text,
-                                                  (representative_collider_rect.centerx - representative_collider_rect.width // 2,
-                                      representative_collider_rect.centery - representative_collider_rect.height // 2 - font_size * 4 - 20),
+                                                  (representative_screen_collider_rect.centerx - representative_screen_collider_rect.width // 2,
+                                                   representative_screen_collider_rect.centery - representative_screen_collider_rect.height // 2 - font_size * 4 - 20),
                                                   font, color=pygame.Color(color))
-                pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, color,
-                                   representative_collider_rect.center, 5)
+
+                # renders the middle circle
+                pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, color, representative_screen_collider_rect.center, 5)
+
+    @staticmethod
+    def _render_gizmos_of_game_obj_rect_triggers(game_obj, color: str, font: pygame.font.Font, font_size: int):
+
+        object_screen_pos = game_obj.transform.screen_position_read_only
+
+        # COLLIDERS GIZMOS
+        for component in game_obj.components_list:
+            if isinstance(component, RectTriggerComponent):
+                # render
+
+                # THE REPRESENTATION OF THE COLIDER AT SCREEN POSITION
+                # the position of the collider is at world position,
+                # so I have to treat its position for correct representation on screen
+                representative_screen_rect_trigger = component.trigger_inner_rectangle.copy()
+                representative_screen_rect_trigger.centerx = object_screen_pos.x + component.offset_from_game_object_x
+                representative_screen_rect_trigger.centery = object_screen_pos.y + component.offset_from_game_object_y
+
+                # render the rect
+                pygame.draw.rect(ScalableGameScreen.GameScreenDummySurface, color, representative_screen_rect_trigger, 1)
+
+                # description
+                collider_text = f"{component.game_object_owner_read_only.name}'s rect-trigger\n" \
+                                f"offside.x: {component.offset_from_game_object_x} | offside.y: {component.offset_from_game_object_y}\n" \
+                                f"width: {component.width} | height: {component.height}\n" \
+                                f"world position ({component.world_position_get_only})"
+
+                # render description
+                TextRenderOverlaySystem.blit_text(ScalableGameScreen.GameScreenDummySurface, ScalableGameScreen.DummyScreenWidth,
+                                                  collider_text,
+                                                  (
+                                                  representative_screen_rect_trigger.centerx - representative_screen_rect_trigger.width // 2,
+                                                  representative_screen_rect_trigger.centery - representative_screen_rect_trigger.height // 2 - font_size * 4 - 20),
+                                                  font, color=pygame.Color(color))
+
+                # renders the middle circle
+                pygame.draw.circle(ScalableGameScreen.GameScreenDummySurface, color, representative_screen_rect_trigger.center, 5)

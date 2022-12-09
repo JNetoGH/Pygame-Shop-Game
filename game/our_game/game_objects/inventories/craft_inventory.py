@@ -45,7 +45,7 @@ class CraftablesInventory(GameObject):
             InventoryItem("bronze_feet", bronze_feet_value, 1, "our_game/game_res/graphics/craftables/bronze_feet.png", self.scene, self.rendering_layer),
             InventoryItem("diamante_helm", diamante_helm_value, 1, "our_game/game_res/graphics/craftables/diamante_helm.png", self.scene, self.rendering_layer),
             InventoryItem("iron_chest", iron_chest_value, 1, "our_game/game_res/graphics/craftables/iron_chest.png", self.scene, self.rendering_layer),
-            InventoryItem("iron_hem", iron_helm_value, 1, "our_game/game_res/graphics/craftables/iron_helm.png",  self.scene, self.rendering_layer),
+            InventoryItem("iron_helm", iron_helm_value, 1, "our_game/game_res/graphics/craftables/iron_helm.png",  self.scene, self.rendering_layer),
             InventoryItem("leather_legs", leather_legs_value, 1, "our_game/game_res/graphics/craftables/leather_legs.png", self.scene, self.rendering_layer),
             InventoryItem("ouro_helm", ouro_helm_value, 1, "our_game/game_res/graphics/craftables/ouro_helm.png", self.scene, self.rendering_layer),
             InventoryItem("ouro_legs", ouro_legs_value, 1, "our_game/game_res/graphics/craftables/ouro_legs.png", self.scene, self.rendering_layer),
@@ -185,7 +185,7 @@ class CraftablesInventory(GameObject):
         item3 = InventoryItem("diamante", 0, 10, "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, overall_layer)
         required_items = [item1, item2, item3]
 
-        output = InventoryItem("diamond_helm", diamante_helm_value, 1, "our_game/game_res/graphics/craftables/diamante_helm.png", self.scene, overall_layer)
+        output = InventoryItem("diamante_helm", diamante_helm_value, 1, "our_game/game_res/graphics/craftables/diamante_helm.png", self.scene, overall_layer)
         self.diamond_helm_recept = CraftableRecipe("diamond helm", 30, 10, required_items, output, self.scene, self.rendering_layer)
 
         self.recipes = [self.copper_sword_recept, self.iron_sword_recept, self.bow_recept, self.ouro_sword_recept,
