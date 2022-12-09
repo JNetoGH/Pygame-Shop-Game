@@ -10,6 +10,7 @@ from JNetoProductions_pygame_game_engine.components.single_sprite_component impo
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from our_game.game_objects.inventories.craft_inventory import CraftablesInventory
 from our_game.game_objects.inventories.resource_inventory import ResInventory
+from our_game.game_objects.phases.phase_controller import PhaseController
 
 
 class Player(GameObject):

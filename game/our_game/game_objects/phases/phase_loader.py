@@ -71,10 +71,7 @@ class PhaseLoader(GameObject):
         self.player: Player = self.scene.get_game_object_by_name("player")
         self.register_book = RegisterBook("register_book", self.scene, self.rendering_layer)
 
-
-
-
-    def _stop_showing_loader_on_screen(self):
+    def _stop_loader(self):
         self.is_being_displayed = False
         self.stop_rendering_this_game_object()
         self.text_holder.stop_rendering_this_game_object()
@@ -89,14 +86,33 @@ class PhaseLoader(GameObject):
         self.translucent_square.start_rendering_this_game_object()
 
     def game_object_update(self) -> None:
-        if self.is_being_displayed:
+
+        if self.player.win:
+            self._change_phase(PhaseController.PhaseCode.End)
+            self._stop_loader()
+
+        if self.is_being_displayed and not self.player.win:
 
             print("loadeeeeer")
 
             is_player_at_book_area = self.register_book.book_rect_trigger.is_there_a_point_inside(self.player.collider.world_position_get_only)
-            if self.key_tracker_e.has_key_been_fired_at_this_frame and is_player_at_book_area:
-                self._stop_showing_loader_on_screen()
-                self._change_phase(self.change_code)
+            if is_player_at_book_area:
+                # changes book color to green
+                self.register_book.text_render1.change_color(pygame.Color(50, 205, 50))
+                self.register_book.text_render2.change_color(pygame.Color(50, 205, 50))
+
+                # changes to the netx phase
+                if self.key_tracker_e.has_key_been_fired_at_this_frame:
+                    self._stop_loader()
+                    self._change_phase(self.change_code)
+                    # changes book color to gray
+                    self.register_book.text_render1.change_color(pygame.Color(200, 200, 200))
+                    self.register_book.text_render2.change_color(pygame.Color(200, 200, 200))
+
+            else:
+                # change book color to yellow
+                self.register_book.text_render1.change_color(pygame.Color(253, 253, 150))
+                self.register_book.text_render2.change_color(pygame.Color(253, 253, 150))
 
 
     @staticmethod
