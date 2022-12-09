@@ -29,10 +29,9 @@ class GameObject(pygame.sprite.Sprite):
         self.rendering_layer = rendering_layer
         self.rendering_layer.add_game_object(self)
 
-        # makes a default img to the object, it's just a rectangle filled with some color
+        # makes a default img to the object, it's invisible
         # sprites or animation override it
-        self.image = pygame.Surface((64, 32))
-        self.image.fill((255, 255, 255))
+        self.image = pygame.Surface((0, 0))
 
         # used by the camera to ignore the world position when rendering the GameObject,
         # by using the fixed_position_on_screen

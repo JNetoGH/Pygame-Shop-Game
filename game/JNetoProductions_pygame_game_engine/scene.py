@@ -9,6 +9,8 @@ class Scene:
         self.all_game_obj = []
         # main camera will render the rendering layers
         self.main_camera = camera
+        # they are here just to be accessed by the GameObjects
+        self.all_rendering_layers = self.main_camera.rendering_layers
 
         # called once if i want to start stuff in here
         self.scene_start()

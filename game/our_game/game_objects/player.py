@@ -8,98 +8,15 @@ from JNetoProductions_pygame_game_engine.components.animation.animation_clip imp
 from JNetoProductions_pygame_game_engine.components.animation.animation_controller import AnimationController
 from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
-from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-
-
-class Resource(GameObject):
-
-    def __init__(self, name, price, initial_amount, img_path, scene, rendering_layer):
-        super().__init__(name, scene, rendering_layer)
-        self.name = name
-        self.price = price
-        self.amount = initial_amount
-        self.single_sprite = SingleSprite(img_path, self)
-        self.single_sprite.scale_itself(3)
-        self.amount_text_render = TextRenderComponent(f"{self.amount}", 15, pygame.Color(0,0,0), 15, 13, self)
-
-    def game_object_update(self) -> None:
-        # updates their amount each frame
-        self.amount_text_render.change_text(f"{self.amount}")
-
-    def add_amount(self, quantity):
-        if quantity <= 0:
-            return
-        self.amount += quantity
-
-    def remove_amount(self, quantity):
-        if quantity <= 0:
-            return
-        if self.amount - quantity < 0:
-            return
-        self.amount -= quantity
-
-    def to_string(self) -> str:
-        return f"name: {self.name}\n" \
-               f"amount: {self.amount}\n" \
-               f"price: {self.price}\n"
-
-
-class ResInventory(GameObject):
-
-    def __init__(self, name: str, scene, rendering_layer):
-        super().__init__(name, scene, rendering_layer)
-
-        self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/inventory.png", self)
-        self.single_sprite.scale_itself(4)
-        posi_res_y_in_screen = ScalableGameScreen.DummyScreenHeight - 38
-        self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, posi_res_y_in_screen))
-
-        # Res List
-        self.key_tracker_p = KeyTracker(pygame.K_p, self)
-        self.resources: list[Resource] = [
-            Resource("stick_madeira", 10, 0, "our_game/game_res/graphics/crafting_resources/stick_madeira.png", self.scene, self.rendering_layer),
-            Resource("stick_pedra", 10, 0, "our_game/game_res/graphics/crafting_resources/stick_pedra.png", self.scene, self.rendering_layer),
-            Resource("bronze", 2, 5, "our_game/game_res/graphics/crafting_resources/bronze.png", self.scene, self.rendering_layer),
-            Resource("ferro", 2, 5, "our_game/game_res/graphics/crafting_resources/ferro.png", self.scene, self.rendering_layer),
-            Resource("ouro", 15, 1,"our_game/game_res/graphics/crafting_resources/ouro.png", self.scene, self.rendering_layer),
-            Resource("rubi", 10, 0, "our_game/game_res/graphics/crafting_resources/rubi.png", self.scene, self.rendering_layer),
-            Resource("esmeralda", 10, 0, "our_game/game_res/graphics/crafting_resources/esmeralda.png", self.scene, self.rendering_layer),
-            Resource("diamante", 15, 1,  "our_game/game_res/graphics/crafting_resources/diamante.png", self.scene, self.rendering_layer),
-                                        ]
-
-    def add_amount(self, quantity, res_name):
-        for res in self.resources:
-            if res.name == res_name:
-                res.add_amount(quantity)
-
-    def remove_amount(self, quantity, res_name):
-        for res in self.resources:
-            if res.name == res_name:
-                res.remove_amount(quantity)
-
-    def game_object_update(self) -> None:
-        # aligns the existing itens sprite with the inventory
-        posi_res_y_in_screen = ScalableGameScreen.DummyScreenHeight - 30
-        inital_x = ScalableGameScreen.HalfDummyScreenWidth - 195
-        posi_res_x_is_screen = inital_x
-        espacamento = 56
-
-        for res in self.resources:
-            res.fix_game_object_on_screen(pygame.Vector2(posi_res_x_is_screen, posi_res_y_in_screen))
-            # last step
-            posi_res_x_is_screen += espacamento
-
-    def see_res_status(self):
-        for res in self.resources:
-            print(res.to_string())
-            print()
-            print()
+from our_game.game_objects.craft_inventory import CraftablesInventory
+from our_game.game_objects.resource_inventory import ResInventory
 
 
 class Player(GameObject):
 
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
+
 
         # movement related
         self.move_speed = 200
@@ -109,7 +26,7 @@ class Player(GameObject):
         # used everywhere
         self.is_moving = False
 
-        # game_loop object default sprite
+        # default sprite
         self.single_sprite = SingleSprite("our_game/game_res/graphics/player/down/0.png", self)
 
         # collider
@@ -118,13 +35,13 @@ class Player(GameObject):
         # used in animations holds the last direction the player faced while walking e.g. left, up...
         self.last_direction_before_stop = "down"
 
-        # walk
+        # walk animation
         self.animation_walk_down = AnimationClip("walk_down", 4, "our_game/game_res/graphics/player/down")
         self.animation_walk_right = AnimationClip("walk_right", 4, "our_game/game_res/graphics/player/right")
         self.animation_walk_up = AnimationClip("walk_up", 4, "our_game/game_res/graphics/player/up")
         self.animation_walk_left = AnimationClip("walk_left", 5, "our_game/game_res/graphics/player/left")
 
-        # idle
+        # idle "animation"
         self.animation_idle_down = AnimationClip("idle_down", 2, "our_game/game_res/graphics/player/downIdle")
         self.animation_idle_right = AnimationClip("idle_right", 2, "our_game/game_res/graphics/player/rightIdle")
         self.animation_idle_up = AnimationClip("idle_up", 2, "our_game/game_res/graphics/player/upIdle")
@@ -136,20 +53,28 @@ class Player(GameObject):
         # animation controller
         self.animation_controller = AnimationController(animation_clips, self)
 
-        # res_inventory
+        self.money = 100
+        self.exp = 1
+        self.exp_enhancement_per_success_in_craft = 0.5
+
+        self.money_text_render = TextRenderComponent(f"${self.money}", 20, pygame.Color(50, 205, 50), 0, -40, self)
+        self.exp_text_render = TextRenderComponent(f"xp{self.exp}", 20, pygame.Color(253, 253, 150), 0, -60, self)
+
+        # inventories
         self.res_inventory = ResInventory("res_inventory", self.scene, self.rendering_layer)
+        self.craft_inventory = CraftablesInventory("craftables_inventory", self.scene, self.rendering_layer)
 
         self.key_tracker_p = KeyTracker(pygame.K_p, self)
         self.key_tracker_o = KeyTracker(pygame.K_o, self)
         self.key_tracker_i = KeyTracker(pygame.K_i, self)
 
-        self.money = 100
-        self.money_text_render = TextRenderComponent(f"${self.money}", 20, pygame.Color(50, 205, 50), 0, -40, self)
+
 
     def game_object_update(self) -> None:
 
-        # update money text
+        # update money text and the exp text
         self.money_text_render.change_text(f"${self.money}")
+        self.exp_text_render.change_text(f"xp{self.exp}")
 
         # MOVE
         # updates the is_moving field for the animations and its other dependencies
@@ -161,7 +86,8 @@ class Player(GameObject):
             self.kill_player_directions()
 
         if self.key_tracker_p.has_key_been_fired_at_this_frame:
-            self.res_inventory.see_res_status()
+            self.res_inventory.see_status()
+            self.craft_inventory.see_status()
 
         # buying phase
         if self.key_tracker_o.has_key_been_released_at_this_frame:
@@ -169,11 +95,11 @@ class Player(GameObject):
             buying_phase = self.scene.get_game_object_by_name("buying_phase")
             buying_phase.run_phase()
 
-            #self.res_inventory.add_amount(1, "bronze")
-            #self.money += 1
-        #if self.key_tracker_i.has_key_been_fired_at_this_frame:
-            #self.res_inventory.remove_amount(1, "bronze")
+        # crafting phase
+        elif self.key_tracker_i.has_key_been_fired_at_this_frame:
 
+            crafting_phase = self.scene.get_game_object_by_name("crafting_phase")
+            crafting_phase.run_phase()
 
         # ANIMATES THE PLAYER
         self.animate_player()

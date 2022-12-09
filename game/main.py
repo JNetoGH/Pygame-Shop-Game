@@ -3,8 +3,10 @@ from JNetoProductions_pygame_game_engine.game_loop import GameLoop
 from JNetoProductions_pygame_game_engine.rendering_layer import RenderingLayer
 from JNetoProductions_pygame_game_engine.scene import Scene
 from our_game.game_objects.buying_phase import BuyingPhase
+from our_game.game_objects.crafting_phase import CraftingPhase
 from our_game.game_objects.map import Map
 from our_game.game_objects.player import Player
+
 
 class Game:
 
@@ -18,8 +20,9 @@ class Game:
         self.rendering_layer_test = RenderingLayer()
         self.rendering_layer_player = RenderingLayer()
         self.rendering_layer_phases = RenderingLayer()
+        self.rendering_layer_over_all = RenderingLayer()
         self.main_camera = Camara(self.rendering_layer_map, self.rendering_layer_test, self.rendering_layer_player,
-                                  self.rendering_layer_phases)
+                                  self.rendering_layer_phases, self.rendering_layer_over_all)
 
         # the scene
         self.shop_scene = Scene(self.main_camera)
@@ -28,6 +31,7 @@ class Game:
         self.game_map = Map(self, "map", self.shop_scene, self.rendering_layer_map)
         self.player = Player("player", self.shop_scene, self.rendering_layer_player)
         self.buying_phase = BuyingPhase("buying_phase", self.player, self.shop_scene, self.rendering_layer_phases)
+        self.crafting_phase = CraftingPhase("crafting_phase", self.player, self.shop_scene, self.rendering_layer_phases)
 
         # sets the camera to follow the payer
         self.main_camera.follow_game_object(self.player)
@@ -35,5 +39,6 @@ class Game:
         # GAME LOOP
         self.game_loop.set_current_scene(self.shop_scene)
         self.game_loop.run_game_loop()
+
 
 Game()

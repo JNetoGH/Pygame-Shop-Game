@@ -6,8 +6,9 @@ from JNetoProductions_pygame_game_engine.components.text_render.text_render_comp
 from JNetoProductions_pygame_game_engine.components.timer.timer import Timer
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-from our_game.game_objects.player import Resource
+from our_game.game_objects.inventory_item import InventoryItem
 
+mexida = 70
 
 class MiddleBlock(GameObject):
     def __init__(self, name: str, scene, rendering_layer):
@@ -18,7 +19,7 @@ class MiddleBlock(GameObject):
         self.single_sprite = SingleSprite("our_game/game_res/graphics/ui/buying_phase.png", self)
         self.single_sprite.scale_itself(4)
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth,
-                                                      ScalableGameScreen.HalfDummyScreenHeight))
+                                                      ScalableGameScreen.HalfDummyScreenHeight-mexida))
 
 
 class RepresentationOfTheCurrentItemAtBuyingPhase(GameObject):
@@ -28,7 +29,7 @@ class RepresentationOfTheCurrentItemAtBuyingPhase(GameObject):
         self.stop_rendering_this_game_object()
 
         self.single_sprite = SingleSprite("our_game/game_res/graphics/crafting_resources/bronze.png", self)
-        self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280))
+        self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280-mexida))
         self.single_sprite.scale_itself(8)
 
 
@@ -69,21 +70,21 @@ class BuyingPhaseTextHolder(GameObject):
         self.text_render_confirm = TextRenderComponent("Press K to end the buying phase", explain_size, pygame.Color(255, 255, 255), x_axis, 60, self)
 
         # money and amount texts
-        self.text_render_of_purchase_price = TextRenderComponent("$0000000", 30, pygame.Color(128, 0, 0), -5, 165, self)
-        self.text_render_of_purchase_amount = TextRenderComponent("00000000", 30, pygame.Color(0, 0, 0), -5, 40, self)
+        self.text_render_of_purchase_price = TextRenderComponent("$0000000", 30, pygame.Color(128, 0, 0), -5, 165-mexida, self)
+        self.text_render_of_purchase_amount = TextRenderComponent("00000000", 30, pygame.Color(0, 0, 0), -5, 40-mexida, self)
 
         # labels
-        self.text_render_available_money = TextRenderComponent("money: $0000000", 30,  pygame.Color(0, 128, 0), -5, -195, self)
+        self.text_render_available_money = TextRenderComponent("money: $0000000", 30,  pygame.Color(0, 128, 0), -5, -195-mexida, self)
 
         # total label
-        self.text_render_total_label = TextRenderComponent("total", 30, pygame.Color(0,0,0), -5, 100, self)
+        self.text_render_total_label = TextRenderComponent("total", 30, pygame.Color(0,0,0), -5, 100-mexida, self)
 
         # + an - buttons
         self.pressing_time_in_ms = 500
         self.unpressed_button_color = pygame.Color(177, 78, 5)
         self.pressed_button_color = pygame.Color(91, 43, 42)
-        self.text_render_of_option_minus = TextRenderComponent("-", 40, self.unpressed_button_color, -113, 37, self)
-        self.text_render_of_option_plus = TextRenderComponent("+", 40, self.unpressed_button_color, 107, 37, self)
+        self.text_render_of_option_minus = TextRenderComponent("-", 40, self.unpressed_button_color, -113, 37-mexida, self)
+        self.text_render_of_option_plus = TextRenderComponent("+", 40, self.unpressed_button_color, 107, 37-mexida, self)
 
     def press_plus_button(self):
         self.text_render_of_option_plus.change_color(self.pressed_button_color)
@@ -109,11 +110,14 @@ class BuyingPhase(GameObject):
 
         self.stop_rendering_this_game_object()
 
-        self.image = pygame.Surface((0, 0))
+        self.player = player
+        self.is_running = False
 
-        self.fixed_position_on_screen = pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, 50)
+        # position on screen
+        self.fixed_position_on_screen = pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, 50-mexida)
         self.fix_game_object_on_screen(self.fixed_position_on_screen)
 
+        # key trackers
         self.key_tracker_arrow_left = KeyTracker(pygame.K_LEFT, self)
         self.key_tracker_arrow_right = KeyTracker(pygame.K_RIGHT, self)
         self.key_tracker_arrow_up = KeyTracker(pygame.K_UP, self)
@@ -121,14 +125,12 @@ class BuyingPhase(GameObject):
         self.key_tracker_enter = KeyTracker(pygame.K_RETURN, self)
         self.key_tracker_k = KeyTracker(pygame.K_k, self)
 
+        # buy related stuff
         self.current_item_index = 0
         self.purchase_amount = 1
-
         self.max_allowed_amount_for_purchase = 100
 
-        self.player = player
-        self.is_running = False
-
+        # ui
         self.middle_block = MiddleBlock("buying_phase_middle_block", self.scene, self.rendering_layer)
         self.representation_of_the_current_item_at_buying_phase = RepresentationOfTheCurrentItemAtBuyingPhase(
             "representation_of_the_current_item_at_buying_phase", self.scene, self.rendering_layer)
@@ -166,7 +168,7 @@ class BuyingPhase(GameObject):
     def game_object_update(self) -> None:
         if self.is_running:
 
-            current_item: Resource = self.player.res_inventory.resources[self.current_item_index]
+            current_item: InventoryItem = self.player.res_inventory.resources[self.current_item_index]
             purchase_value: float = current_item.price * self.purchase_amount
             has_enough_money = self.player.money >= purchase_value
 
@@ -189,7 +191,7 @@ class BuyingPhase(GameObject):
 
             # switch between resources
             if self.key_tracker_arrow_right.has_key_been_fired_at_this_frame:
-                if not self.current_item_index == len(self.player.res_inventory.resources)-1:
+                if not self.current_item_index == len(self.player.res_inventory.resources) - 1:
                     self.current_item_index += 1
                     self.purchase_amount = 1
             elif self.key_tracker_arrow_left.has_key_been_fired_at_this_frame:
