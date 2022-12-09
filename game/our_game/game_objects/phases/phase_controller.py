@@ -40,20 +40,3 @@ class PhaseController(GameObject):
             self.selling_phase.run_phase()
         elif self.player.win:
             PhaseController.CurrentPhase = PhaseController.PhaseCode.NullPhase
-
-"""
-# used to block run another phase when a phase is already running, or if the player has won
-is_there_any_scene_running = self.crafting_phase.is_running or self.buying_phase.is_running or self.selling_phase.is_running
-
-# run buying phase
-if self.key_tracker_i.has_key_been_released_at_this_frame and not is_there_any_scene_running and not self.win:
-    self.buying_phase.run_phase()
-
-# run crafting phase
-elif self.key_tracker_o.has_key_been_fired_at_this_frame and not is_there_any_scene_running and not self.win:
-    self.crafting_phase.run_phase()
-
-# run selling phase
-elif self.key_tracker_p.has_key_been_fired_at_this_frame and not is_there_any_scene_running and not self.win:
-    self.selling_phase.run_phase()
-"""

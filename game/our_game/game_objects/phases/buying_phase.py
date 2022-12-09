@@ -150,6 +150,8 @@ class BuyingPhase(GameObject):
         ))
 
     def stop_phase(self):
+        print("Entered in BuyingPhase")
+
         self.is_running = False
 
         self.stop_rendering_this_game_object()
@@ -220,5 +222,4 @@ class BuyingPhase(GameObject):
 
             # quit the phase
             elif self.key_tracker_k.has_key_been_fired_at_this_frame:
-                print("k")
                 self.stop_phase()

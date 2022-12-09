@@ -78,6 +78,7 @@ class PhaseLoader(GameObject):
         self.translucent_square.stop_rendering_this_game_object()
 
     def load_phase(self, phase_code: PhaseController.PhaseCode):
+        print("\nEntered in PhaseLoader\n")
         self._change_phase(PhaseController.PhaseCode.NullPhase)
         self.change_code = phase_code
         self.is_being_displayed = True
@@ -92,8 +93,6 @@ class PhaseLoader(GameObject):
             self._stop_loader()
 
         if self.is_being_displayed and not self.player.win:
-
-            print("loadeeeeer")
 
             is_player_at_book_area = self.register_book.book_rect_trigger.is_there_a_point_inside(self.player.collider.world_position_get_only)
             if is_player_at_book_area:

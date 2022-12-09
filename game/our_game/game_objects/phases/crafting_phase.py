@@ -62,6 +62,8 @@ class CraftingPhase(GameObject):
         self.fix_game_object_on_screen(self.fixed_position_on_screen)
 
     def run_phase(self):
+        print("\nEntered in CraftingPhase\n")
+
         self.is_running = True
         self.current_item_index = 0
 
@@ -91,12 +93,8 @@ class CraftingPhase(GameObject):
         # PhaseController.CurrentPhase = PhaseController.PhaseCode.SellingPhase
         self.scene.get_game_object_by_name("phase_loader").load_phase(PhaseController.PhaseCode.SellingPhase)
 
-
     def game_object_update(self) -> None:
         if self.is_running:
-
-            # FOR DEBUGGING
-            # print("running crafting phase")
 
             current_recipe: Recipe = self.player.craft_inventory.recipes[self.current_item_index]
             current_recipe.show_recipe_recept_on_screen()

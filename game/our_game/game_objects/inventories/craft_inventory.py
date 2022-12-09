@@ -16,7 +16,7 @@ class CraftablesInventory(GameObject):
         posi_res_y_in_screen = ScalableGameScreen.DummyScreenHeight - 41
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth, posi_res_y_in_screen))
 
-        # craftables List
+        # craftables prices List
         esp_bronze_value = 10
         esp_ferro_value = 10
         esp_ouro_value = 2

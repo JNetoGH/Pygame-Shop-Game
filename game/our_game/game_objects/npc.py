@@ -9,6 +9,7 @@ from JNetoProductions_pygame_game_engine.game_object_base_class import GameObjec
 from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
 from our_game.game_objects.inventories.recipe import Recipe
 from our_game.game_objects.inventories.inventory_item import InventoryItem
+from our_game.game_objects.phases.demand_enum import Demand
 
 
 class ItemImgHolder(GameObject):
@@ -65,11 +66,25 @@ class Npc(GameObject):
         # generates a recipe
         self.player = player
         self.recipes: list[Recipe] = player.craft_inventory.recipes
-        self.chosen_recipe: Recipe = self.recipes[random.randint(0, len(self.recipes) - 1)]
+        self.chosen_craftable_index = random.randint(0, len(self.recipes) - 1)
+        self.chosen_recipe: Recipe = self.recipes[self.chosen_craftable_index]
         self.chosen_recipe_output: InventoryItem = self.chosen_recipe.craftable_output
 
-        # can variate
+        # DEMAND AND PRICE WILLING TO PAY
+        # can variate according to demand
+        self.selling_phase = self.scene.get_game_object_by_name("selling_phase")
         self.price_willing_to_pay = self.chosen_recipe_output.price
+        self.demand_status_of_craftable: Demand = Demand.Null
+        if self.selling_phase.demand_per_craftable_list[self.chosen_craftable_index] == Demand.Low:
+            # -1/3 <=> -1/5
+            self.price_willing_to_pay -= round(self.price_willing_to_pay/random.randint(3, 5))
+            self.demand_status_of_craftable = Demand.Low
+        elif self.selling_phase.demand_per_craftable_list[self.chosen_craftable_index] == Demand.Normal:
+            self.demand_status_of_craftable = Demand.Normal
+        elif self.selling_phase.demand_per_craftable_list[self.chosen_craftable_index] == Demand.High:
+            # +1/3 <=> +1/5
+            self.price_willing_to_pay += round(self.price_willing_to_pay/random.randint(3, 5))
+            self.demand_status_of_craftable = Demand.High
 
         # used to get when the player can interact with the NPC
         self.trigger_rect = RectTriggerComponent(0, 30, 150, 80, self)
