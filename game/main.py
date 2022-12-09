@@ -2,6 +2,8 @@ from JNetoProductions_pygame_game_engine.camera import Camara
 from JNetoProductions_pygame_game_engine.game_loop import GameLoop
 from JNetoProductions_pygame_game_engine.rendering_layer import RenderingLayer
 from JNetoProductions_pygame_game_engine.scene import Scene
+from our_game.game_objects.phases.phase_controller import PhaseController
+from our_game.game_objects.phases.phase_loader import PhaseLoader
 from our_game.game_objects.phases.buying_phase import BuyingPhase
 from our_game.game_objects.phases.crafting_phase import CraftingPhase
 from our_game.game_objects.map import Map
@@ -23,7 +25,6 @@ class Game:
         self.rendering_layer_player = RenderingLayer("rendering_layer_player")
         self.rendering_layer_ballons = RenderingLayer("rendering_layer_ballon")
         self.rendering_layer_inventories = RenderingLayer("rendering_layer_inventories")
-
         self.rendering_layer_phases = RenderingLayer("rendering_layer_phases")
         self.rendering_layer_over_all = RenderingLayer("rendering_layer_over_all")
         self.main_camera = Camara(self.rendering_layer_map, self.rendering_layer_test,
@@ -40,6 +41,9 @@ class Game:
         self.buying_phase = BuyingPhase("buying_phase", self.player, self.shop_scene, self.rendering_layer_phases)
         self.crafting_phase = CraftingPhase("crafting_phase", self.player, self.shop_scene, self.rendering_layer_phases)
         self.selling_phase = SellingPhase("selling_phase", self.player, self.shop_scene, self.rendering_layer_phases)
+
+        self.phase_loader = PhaseLoader("phase_loader",  self.shop_scene, self.rendering_layer_phases)
+        self.phase_controller = PhaseController("phase_controller", self.shop_scene, self.rendering_layer_phases)
 
         # sets the camera to follow the payer
         self.main_camera.follow_game_object(self.player)

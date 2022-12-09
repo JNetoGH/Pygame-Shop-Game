@@ -1,7 +1,5 @@
 import random
-
 import pygame
-
 from JNetoProductions_pygame_game_engine.components.single_sprite_component import SingleSpriteComponent
 from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
@@ -9,14 +7,16 @@ from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system imp
 from our_game.game_objects.inventories.inventory_item import InventoryItem
 
 
-class CraftableRecipe(GameObject):
+class Recipe(GameObject):
 
-    def __init__(self, name:str, success_rating, buying_price,
+    def __init__(self, name:str, player_has_me: bool, success_rating, buying_price,
                  list_of_resources_for_crafting: list[InventoryItem], craftable_out_put, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
 
         self.buying_price = buying_price
         self.success_rating = success_rating
+
+        self.player_has_me: bool = player_has_me
 
         self.list_of_resources_for_crafting = list_of_resources_for_crafting
         self.craftable_output = craftable_out_put

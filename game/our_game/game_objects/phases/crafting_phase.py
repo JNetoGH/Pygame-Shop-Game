@@ -4,7 +4,9 @@ from JNetoProductions_pygame_game_engine.components.key_tracker_component import
 from JNetoProductions_pygame_game_engine.components.text_render_component import TextRenderComponent
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
-from our_game.game_objects.inventories.craftable_recipe import CraftableRecipe
+from our_game.game_objects.inventories.recipe import Recipe
+from our_game.game_objects.phases.phase_controller import PhaseController
+from our_game.game_objects.phases.phase_loader import PhaseLoader
 from our_game.game_objects.translucent_square import TrasnlucentSquare
 
 
@@ -28,7 +30,7 @@ class CraftingTextHolder(GameObject):
         # 🡸🡺 change current recipe
         self.text_render_confirm = TextRenderComponent("Press ← or → to change current recipe", explain_size, pygame.Color(255, 255, 255), x_axis, 140 + mexida_y_txt, self)
         # enter confirm a crafting
-        self.text_render_confirm = TextRenderComponent("Press Enter to confirm a crafting", explain_size, pygame.Color(255, 255, 255), x_axis, 160 + mexida_y_txt, self)
+        self.text_render_confirm = TextRenderComponent("Press E to confirm a crafting", explain_size, pygame.Color(255, 255, 255), x_axis, 160 + mexida_y_txt, self)
         # k ends the crafting phase
         self.text_render_confirm = TextRenderComponent("Press K to end the crafting phase", explain_size, pygame.Color(255, 255, 255), x_axis, 180 + mexida_y_txt, self)
 
@@ -52,7 +54,7 @@ class CraftingPhase(GameObject):
         self.key_tracker_arrow_right = KeyTrackerComponent(pygame.K_RIGHT, self)
         self.key_tracker_arrow_up = KeyTrackerComponent(pygame.K_UP, self)
         self.key_tracker_arrow_down = KeyTrackerComponent(pygame.K_DOWN, self)
-        self.key_tracker_enter = KeyTrackerComponent(pygame.K_RETURN, self)
+        self.key_tracker_e = KeyTrackerComponent(pygame.K_e, self)
         self.key_tracker_k = KeyTrackerComponent(pygame.K_k, self)
 
         # position on screen
@@ -85,27 +87,38 @@ class CraftingPhase(GameObject):
 
         self.scene.main_camera.follow_game_object(self.player)
 
+        # runs the SellingPhase
+        # PhaseController.CurrentPhase = PhaseController.PhaseCode.SellingPhase
+        self.scene.get_game_object_by_name("phase_loader").load_phase(PhaseController.PhaseCode.SellingPhase)
+
+
     def game_object_update(self) -> None:
         if self.is_running:
 
             # FOR DEBUGGING
             # print("running crafting phase")
 
-            current_recipe: CraftableRecipe = self.player.craft_inventory.recipes[self.current_item_index]
+            current_recipe: Recipe = self.player.craft_inventory.recipes[self.current_item_index]
             current_recipe.show_recipe_recept_on_screen()
 
             # switch between resources
             if self.key_tracker_arrow_right.has_key_been_fired_at_this_frame:
                 if not self.current_item_index == len(self.player.craft_inventory.recipes) - 1:
-                    current_recipe.stop_showing_recipe_on_screen()
-                    self.current_item_index += 1
+                    next_recipe: Recipe = self.player.craft_inventory.recipes[self.current_item_index + 1]
+                    if next_recipe.player_has_me:
+                        # changes to the next one as long as player has it
+                        current_recipe.stop_showing_recipe_on_screen()
+                        self.current_item_index += 1
             elif self.key_tracker_arrow_left.has_key_been_fired_at_this_frame:
                 if not self.current_item_index <= 0:
-                    self.current_item_index -= 1
-                    current_recipe.stop_showing_recipe_on_screen()
+                    previous_recipe: Recipe = self.player.craft_inventory.recipes[self.current_item_index - 1]
+                    if previous_recipe.player_has_me:
+                        # changes to the previous one as long as player has it
+                        self.current_item_index -= 1
+                        current_recipe.stop_showing_recipe_on_screen()
 
             # craft
-            elif self.key_tracker_enter.has_key_been_fired_at_this_frame:
+            elif self.key_tracker_e.has_key_been_fired_at_this_frame:
                 current_recipe.craft(self.player,
                                      self.player.res_inventory.resources,
                                      self.player.craft_inventory.craftables)

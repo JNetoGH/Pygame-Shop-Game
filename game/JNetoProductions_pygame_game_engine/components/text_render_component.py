@@ -46,7 +46,6 @@ class TextRenderComponent(Component):
     def start_rendering_text(self):
         self.should_be_rendered = True
 
-
     def change_off_set_from_game_object(self, offset_from_game_object_x, offset_from_game_object_y):
         self.offset_from_game_object_x = offset_from_game_object_x
         self.offset_from_game_object_y = offset_from_game_object_y

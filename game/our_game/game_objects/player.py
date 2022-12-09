@@ -54,6 +54,8 @@ class Player(GameObject):
         self.animation_controller = AnimationControllerComponent(animation_clips, self)
 
         self.money = 100
+        self.target_money_for_winning = 1000
+        self.win = False
         self.exp = 1
         self.exp_enhancement_per_success_in_craft = 0.5
 
@@ -64,25 +66,14 @@ class Player(GameObject):
         self.res_inventory = ResInventory("res_inventory", self.scene, self.scene.get_rendering_layer_by_name("rendering_layer_inventories"))
         self.craft_inventory = CraftablesInventory("craftables_inventory", self.scene, self.scene.get_rendering_layer_by_name("rendering_layer_inventories"))
 
-        self.buying_phase = None
-        self.crafting_phase = None
-        self.selling_phase = None
-
-        self.key_tracker_p = KeyTrackerComponent(pygame.K_p, self)
-        self.key_tracker_o = KeyTrackerComponent(pygame.K_o, self)
-        self.key_tracker_i = KeyTrackerComponent(pygame.K_i, self)
-
-
+        # cheat for more money
+        self.key_tracker_m = KeyTrackerComponent(pygame.K_m, self)
 
     def game_object_update(self) -> None:
 
         # update money text and the exp text
         self.money_text_render.change_text(f"${self.money}")
         self.exp_text_render.change_text(f"xp{self.exp}")
-
-        self.buying_phase = self.scene.get_game_object_by_name("buying_phase")
-        self.crafting_phase = self.scene.get_game_object_by_name("crafting_phase")
-        self.selling_phase = self.scene.get_game_object_by_name("selling_phase")
 
         # MOVE
         # updates the is_moving field for the animations and its other dependencies
@@ -93,22 +84,12 @@ class Player(GameObject):
         else:
             self.kill_player_directions()
 
-        # used to block run another phase when a phase is already running
-        is_there_any_scene_running = self.crafting_phase.is_running or self.buying_phase.is_running or self.selling_phase.is_running
+        if self.key_tracker_m.has_key_been_fired_at_this_frame:
+            self.money += 100
 
-        # run buying phase
-        if self.key_tracker_i.has_key_been_released_at_this_frame and not is_there_any_scene_running:
-            self.buying_phase.run_phase()
-
-        # run crafting phase
-        elif self.key_tracker_o.has_key_been_fired_at_this_frame and not is_there_any_scene_running:
-            self.crafting_phase.run_phase()
-
-        # run selling phase
-        elif self.key_tracker_p.has_key_been_fired_at_this_frame and not is_there_any_scene_running:
-            self.selling_phase.run_phase()
-
-
+        if self.money >= self.target_money_for_winning and not self.win:
+            winning_text = TextRenderComponent("YOU WIN", 100, pygame.Color(255, 255, 255), 0, 0, self)
+            self.win = True
 
         # ANIMATES THE PLAYER
         self.animate_player()

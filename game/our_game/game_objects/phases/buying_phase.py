@@ -7,6 +7,8 @@ from JNetoProductions_pygame_game_engine.components.timer_component import Timer
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
 from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
 from our_game.game_objects.inventories.inventory_item import InventoryItem
+from our_game.game_objects.phases.phase_controller import PhaseController
+from our_game.game_objects.phases.phase_loader import PhaseLoader
 from our_game.game_objects.translucent_square import TrasnlucentSquare
 
 mexida = 70
@@ -16,6 +18,7 @@ class MiddleBlock(GameObject):
         super().__init__(name, scene, rendering_layer)
 
         self.stop_rendering_this_game_object()
+        self.remove_default_rect_image()
 
         self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/ui/buying_phase.png", self)
         self.single_sprite.scale_itself(4)
@@ -28,6 +31,7 @@ class RepresentationOfTheCurrentItemAtBuyingPhase(GameObject):
         super().__init__(name, scene, rendering_layer)
 
         self.stop_rendering_this_game_object()
+        self.remove_default_rect_image()
 
         self.single_sprite = SingleSpriteComponent("our_game/game_res/graphics/crafting_resources/bronze.png", self)
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth-5, 280-mexida))
@@ -39,6 +43,7 @@ class BuyingPhaseTextHolder(GameObject):
         super().__init__(name, scene, rendering_layer)
 
         self.stop_rendering_this_game_object()
+        self.remove_default_rect_image()
 
         self.image = pygame.Surface((0, 0))
         self.fix_game_object_on_screen(self.transform.world_position)
@@ -54,7 +59,7 @@ class BuyingPhaseTextHolder(GameObject):
         # 🡹🡻 change amout for purchase
         self.text_render_confirm = TextRenderComponent("Press ↑ or ↓ to change amount for purchase", explain_size, pygame.Color(255, 255, 255), x_axis, 20, self)
         # enter confirm a purchase
-        self.text_render_confirm = TextRenderComponent("Press Enter to confirm a purchase", explain_size, pygame.Color(255, 255, 255), x_axis, 40, self)
+        self.text_render_confirm = TextRenderComponent("Press E to confirm a purchase", explain_size, pygame.Color(255, 255, 255), x_axis, 40, self)
         # k ends the buying phase
         self.text_render_confirm = TextRenderComponent("Press K to end the buying phase", explain_size, pygame.Color(255, 255, 255), x_axis, 60, self)
 
@@ -98,6 +103,7 @@ class BuyingPhase(GameObject):
         super().__init__(name, scene, rendering_layer)
 
         self.stop_rendering_this_game_object()
+        self.remove_default_rect_image()
 
         self.player = player
         self.is_running = False
@@ -111,7 +117,7 @@ class BuyingPhase(GameObject):
         self.key_tracker_arrow_right = KeyTrackerComponent(pygame.K_RIGHT, self)
         self.key_tracker_arrow_up = KeyTrackerComponent(pygame.K_UP, self)
         self.key_tracker_arrow_down = KeyTrackerComponent(pygame.K_DOWN, self)
-        self.key_tracker_enter = KeyTrackerComponent(pygame.K_RETURN, self)
+        self.key_tracker_e = KeyTrackerComponent(pygame.K_e, self)
         self.key_tracker_k = KeyTrackerComponent(pygame.K_k, self)
 
         # buy related stuff
@@ -153,6 +159,11 @@ class BuyingPhase(GameObject):
         self.translucent_square.stop_rendering_this_game_object()
 
         self.scene.main_camera.follow_game_object(self.player)
+
+        # runs the CratingPhase
+        # PhaseController.CurrentPhase = PhaseController.PhaseCode.CraftingPhase
+        self.scene.get_game_object_by_name("phase_loader").load_phase(PhaseController.PhaseCode.CraftingPhase)
+
 
     def game_object_update(self) -> None:
         if self.is_running:
@@ -202,11 +213,12 @@ class BuyingPhase(GameObject):
                     self.purchase_amount -= 1
 
             # try to make the purchase
-            elif self.key_tracker_enter.has_key_been_fired_at_this_frame:
+            elif self.key_tracker_e.has_key_been_fired_at_this_frame:
                 if has_enough_money:
                     self.player.money -= purchase_value
                     current_item.amount += self.purchase_amount
 
             # quit the phase
             elif self.key_tracker_k.has_key_been_fired_at_this_frame:
+                print("k")
                 self.stop_phase()
