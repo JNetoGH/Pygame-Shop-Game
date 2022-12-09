@@ -2,10 +2,12 @@ import random
 
 import pygame
 
+from JNetoProductions_pygame_game_engine.components.collider.collider import Collider
 from JNetoProductions_pygame_game_engine.components.key_tracker.key_tracker import KeyTracker
 from JNetoProductions_pygame_game_engine.components.single_sprite.single_sprite import SingleSprite
+from JNetoProductions_pygame_game_engine.components.timer.timer import Timer
 from JNetoProductions_pygame_game_engine.game_object_base_class import GameObject
-from JNetoProductions_pygame_game_engine.systems.scalable_game_screen_system import ScalableGameScreen
+from JNetoProductions_pygame_game_engine.systems.game_time_system import GameTime
 
 
 class Npc(GameObject):
@@ -13,13 +15,34 @@ class Npc(GameObject):
     TotalAvailableCompleteNpcsSpriteSet = 3
     AvailableNpcsPaths = ["our_game/game_res/graphics/npcs/npc_0/down/0.png",
                           "our_game/game_res/graphics/npcs/npc_1/down/0.png",
-                          "our_game/game_res/graphics/npcs/npc_2/down/0.png"] 
+                          "our_game/game_res/graphics/npcs/npc_2/down/0.png"]
 
     def __init__(self, name: str, scene, rendering_layer):
         super().__init__(name, scene, rendering_layer)
 
         self.sprite_set = random.randint(0, Npc.TotalAvailableCompleteNpcsSpriteSet-1)
         self.single_sprite = SingleSprite(Npc.AvailableNpcsPaths[self.sprite_set], self)
+        self.collider = Collider(0, 0, 55, 70, self)
+
+        self.max_alpha_level = 255
+        self.current_alpha_level = 1
+        self.appearing_speed = 200
+        self.is_in_appearing_animation = False
+        self.appear_animation()
+
+    def appear_animation(self):
+        self.image.set_alpha(1)
+        self.is_in_appearing_animation = True
+
+    def game_object_update(self) -> None:
+        if self.is_in_appearing_animation:
+            self.current_alpha_level = self.current_alpha_level + self.appearing_speed * GameTime.DeltaTime
+            if self.current_alpha_level <= self.max_alpha_level:
+                self.image.set_alpha(self.current_alpha_level)
+            else:
+                self.image.set_alpha(self.max_alpha_level)
+                self.is_in_appearing_animation = False
+            print(f"alpha: {self.current_alpha_level}")
 
 
 class SellingPhase(GameObject):
@@ -38,11 +61,14 @@ class SellingPhase(GameObject):
         self.remove_default_rect_image()
 
         # npc generation: its static, a copy  of it is manipulated
-        self.available_points: list[pygame.Vector2] = [pygame.Vector2(200,200), pygame.Vector2(300,300),
-                                                       pygame.Vector2(400,400), pygame.Vector2(500,500),
-                                                       pygame.Vector2(600,600)]
+        #points = (400, 400)(600,800)(500, 600)(800, 300)(700, 700)(200, 500)(100, 850)(900, 300)(850, 650)(650, 550)(700, 200)(890, 100)(1000, 500)(1020, 700)(1050, 800)
+        self.available_points: list[pygame.Vector2] = [pygame.Vector2(400,400), pygame.Vector2(600,800), pygame.Vector2(500,600),
+                                                       pygame.Vector2(800,300), pygame.Vector2(700,700), pygame.Vector2(200,500),
+                                                       pygame.Vector2(100,850), pygame.Vector2(900,300), pygame.Vector2(850,650),
+                                                       pygame.Vector2(650,550), pygame.Vector2(700,200), pygame.Vector2(890,100),
+                                                       pygame.Vector2(100,500), pygame.Vector2(1020,700), pygame.Vector2(1050,800)]
 
-        self.amount_of_npcs_to_be_instantiated = 2
+        self.amount_of_npcs_to_be_instantiated = 7
 
         self.rendering_layer_of_npcs = self.scene.get_rendering_layer_by_name("rendering_layer_npcs")
         # holds the npcs instantiated for this run of the phase, its cleaned when the phase stops

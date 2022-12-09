@@ -16,6 +16,7 @@ class CraftingTextHolder(GameObject):
         self.stop_rendering_this_game_object()
 
         self.fix_game_object_on_screen(pygame.Vector2(ScalableGameScreen.HalfDummyScreenWidth - 5, 280 - mexida))
+        self.remove_default_rect_image()
 
         # explanatory texts
         x_axis = -405
@@ -41,7 +42,7 @@ class CraftingPhase(GameObject):
         self.player = player
         self.is_running = False
         self.current_item_index = 0
-
+        self.remove_default_rect_image()
 
         self.translucent_square = TrasnlucentSquare("crafting_phase_translucent_square", self.scene,self.rendering_layer)
         self.text_holder = CraftingTextHolder("text_holder", self.scene, self.rendering_layer)
