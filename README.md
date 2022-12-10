@@ -72,7 +72,7 @@ Esta fase funciona de forma mais complexa, pois seu funcionamento gera um subsis
 Ao terminar da geração de demandas para cada tipo de produto, um número aleatório de NPCS são gerados no mapa, quando o player chega em seus retangulos de interção, caso o player possua o item que eles desejam, pode vende-lo pressionando E:
   ![image](https://user-images.githubusercontent.com/24737993/206813108-e6e38d64-a8e5-489f-abf0-7070525be5ac.png)
 
-Cada Npc spawndado faz sua oferta de compra de acordo com o sistema de demanda já mencianado, e sua posição no mundo é gerada aleatóriamente dentro de uam lista pré-definida, sendo a mesma tratada de forma a que nenhum NPC seja instanciado na mesma posição.
+Cada Npc spawndado faz sua oferta de compra de acordo com o sistema de demanda já mencianado, e sua posição no mundo é gerada aleatóriamente dentro de uma lista pré-definida, sendo a mesma tratada de forma a que nenhum NPC seja instanciado na mesma posição.
 O número de Npcs gerado é de 5 a 8
 ![image](https://user-images.githubusercontent.com/24737993/206813441-197b956d-0ae4-43e6-8093-4d3e7d651e4d.png)
 
