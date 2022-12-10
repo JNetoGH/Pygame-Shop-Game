@@ -15,7 +15,7 @@ Margarida Teles (a22204247):
 
 
 ## GAME-ENGINE
-O jogo está seprado em duas pastas princiapais, a game engine criada por João Neto usando o pygame e o jogo em sí
+O jogo está separado em duas pastas principais, a game engine criada por João Neto usando a biblioteca pygame
 O jogo deve ser rodado pelo main.py
 
 ![image](https://user-images.githubusercontent.com/24737993/206813666-cb213cbe-fb15-4cb6-be44-aa9d5d06cde8.png)
