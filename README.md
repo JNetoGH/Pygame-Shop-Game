@@ -41,8 +41,8 @@ PhaseLoader:
 ![image](https://user-images.githubusercontent.com/24737993/206812259-bb08fbbb-35dd-4875-aa36-3724feb488e5.png)
 
 
-## CRAFITING PHASE
-- A fase de crafting permite que o jogador faça itens a partir de receitas, cada craft possui uma taxa de sucesso e a tentativa do jogador é calculada tendo em base o nível dele * um número aleatório de 1 a 6.
+## CRAFTING PHASE
+- A fase de crafting permite que o jogador faça itens a partir de receitas, cada craft possui uma taxa de sucesso, o valor da tentativa do jogador é calculado tendo em base o nível dele * um número aleatório de 1 a 6.
 - Caso o craft falhe, os itens serão consumidos da mesma forma.
 Caso tenha sucesso, o jogador ganha mais experiência
 - Craft() é um método pertencente ao game Object Recipe que funciona da seguinte forma:
