@@ -35,17 +35,17 @@ PhaseLoader:
 ![image](https://user-images.githubusercontent.com/24737993/206810769-d1908a96-f739-414c-90b1-5932ccde436e.png)
 
 # BUYING PHASE
-- A explicação do funcionamento é simples, caso o player tenha dinheiro o suficiente, a quantidade comprada é adicionada ao item no inventário de recursos do jogador.
+- A explicação do funcionamento é simples, caso o player tenha dinheiro suficiente, a quantidade comprada é adicionada ao item no inventário de recursos do jogador.
 
 
 ![image](https://user-images.githubusercontent.com/24737993/206812259-bb08fbbb-35dd-4875-aa36-3724feb488e5.png)
 
 
 ## CRAFITING PHASE
-- A fase de crafting permite que o jogador faça itens a partir de receitas, cada craft possui uma taxa de sucesso e a tentativa do jogador é caculada tendo em base o nível dele * um número aleatório de 1 a 6.
+- A fase de crafting permite que o jogador faça itens a partir de receitas, cada craft possui uma taxa de sucesso e a tentativa do jogador é calculada tendo em base o nível dele * um número aleatório de 1 a 6.
 - Caso o craft falhe, os itens serão consumidos da mesma forma.
 Caso tenha sucesso, o jogador ganha mais experiência
-- Craft() é um método pertencente ao game Object Recipe que funcina da seguinte forma:
+- Craft() é um método pertencente ao game Object Recipe que funciona da seguinte forma:
   - checks if there is enough of all the required resources in case not, just returns
   - reduces the amount of the required resource at the player's inventory
   - if player attempt fails, those resources are consumed anymay, but the output crafting item is not generated
@@ -58,8 +58,8 @@ Caso tenha sucesso, o jogador ganha mais experiência
 Esta fase funciona de forma mais complexa, pois seu funcionamento gera um subsistema de demanda para os produtos que o player pode vender, alterando os valores que os compradores estão dispostos a dar, a sua ordem de execução é a seguinte:
 
 ### Sistema de damanda
-- Gera uma lista com um valor de enumarator Demand para cada item que o jogador pode vender
-- A demanda pode ser de valor Demand.Low, Demand.Normal, Demand.High
+- Gera uma lista com um valor de enumerator Demand para cada item que o jogador pode vender
+- A demanda pode ser de valor Demand.Low, Demand.Normal ou Demand.High
 - Em cada Selling Phase uma nova onda de demandas para cada produto é gerada de foma aleatória
 - caso a demanda para aquele tipo de item seja Demand.Low: os Npcs pagarão entre 1/3 á 1/5 (gerado aleatóriamente) a MENOS pelo produto
 - caso a demanda para aquele tipo de item seja Demand.Normal: os Npcs pagarão o valor base do produto
@@ -72,12 +72,12 @@ Esta fase funciona de forma mais complexa, pois seu funcionamento gera um subsis
 Ao terminar da geração de demandas para cada tipo de produto, um número aleatório de NPCS são gerados no mapa, quando o player chega em seus retangulos de interção, caso o player possua o item que eles desejam, pode vende-lo pressionando E:
   ![image](https://user-images.githubusercontent.com/24737993/206813108-e6e38d64-a8e5-489f-abf0-7070525be5ac.png)
 
-Cada Npc spawndado faz sua oferta de compra de acordo com o sistema de demanda já mencianado, e sua posição no mundo é gerada aleatóriamente dentro de uma lista pré-definida, sendo a mesma tratada de forma a que nenhum NPC seja instanciado na mesma posição.
+Cada Npc spawnado faz sua oferta de compra de acordo com o sistema de demanda já mencionado, e sua posição no mundo é gerada aleatóriamente dentro de uma lista pré-definida, sendo a mesma tratada de forma a que nenhum NPC seja instanciado na mesma posição.
 O número de Npcs gerado é de 5 a 8
 ![image](https://user-images.githubusercontent.com/24737993/206813441-197b956d-0ae4-43e6-8093-4d3e7d651e4d.png)
 
 ## CONDIÇÃO DE VITÓRIA
-ao chegar em 1000 moedas o player vence o jogo, (pro-tip: toda vez que se pressionar m ganha-se 100 moeda, é para debuggin)
+ao chegar em 1000 moedas o player vence o jogo, (pro-tip: toda vez que se pressionar M ganha-se 100 moedas, é para debugging)
 ![image](https://user-images.githubusercontent.com/24737993/206813548-9f6a2a64-f3f7-40f2-a58f-a4d34c43a660.png)
 
 
