@@ -15,7 +15,8 @@ Margarida Teles (a22204247):
 
 
 ## GAME-ENGINE
-O jogo está separado em duas pastas principais, a game engine criada por João Neto usando a biblioteca pygame
+O jogo está separado em duas pastas principais, a game engine, criada por João Neto usando a biblioteca pygame e a pasta jogo de fato, criado usando GameObjects
+
 O jogo deve ser rodado pelo main.py
 
 ![image](https://user-images.githubusercontent.com/24737993/206813666-cb213cbe-fb15-4cb6-be44-aa9d5d06cde8.png)
@@ -57,7 +58,7 @@ Caso tenha sucesso, o jogador ganha mais experiência
 ## SELLING PHASE
 Esta fase funciona de forma mais complexa, pois seu funcionamento gera um subsistema de demanda para os produtos que o player pode vender, alterando os valores que os compradores estão dispostos a dar, a sua ordem de execução é a seguinte:
 
-### Sistema de damanda
+### Sistema de Demanda
 - Gera uma lista com um valor de enumerator Demand para cada item que o jogador pode vender
 - A demanda pode ser de valor Demand.Low, Demand.Normal ou Demand.High
 - Em cada Selling Phase uma nova onda de demandas para cada produto é gerada de foma aleatória
